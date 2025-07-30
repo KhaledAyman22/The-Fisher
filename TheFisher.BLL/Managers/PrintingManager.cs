@@ -9,16 +9,21 @@ public class PrintingManager
 
     public PrintingManager()
     {
+        // Strategies for single items
         _strategies[typeof(OrderDto)] = new OrderPrintStrategy();
-        _strategies[typeof(PurchaseDto)] = new PurchasePrintStrategy();
+        // You would create a PurchasePrintStrategy for a single purchase if needed
+
+        // Strategies for lists (reports)
+        _strategies[typeof(List<PurchaseDto>)] = new PurchaseListPrintStrategy();
+        _strategies[typeof(List<CollectionDto>)] = new CollectionListPrintStrategy();
     }
 
     public void Print(object dto)
     {
         var type = dto.GetType();
-        if (_strategies.ContainsKey(type))
+        if (_strategies.TryGetValue(type, out var strategy))
         {
-            _strategies[type].Print(dto); // This now calls the void Print method
+            strategy.Print(dto);
         }
         else
         {

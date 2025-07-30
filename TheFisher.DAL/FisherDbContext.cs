@@ -15,6 +15,8 @@ public class FisherDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("");
+        // Remember to replace this with your actual connection string, 
+        // perhaps from a configuration file.
+        optionsBuilder.UseSqlServer("Server=.;Database=TheFisher;Trusted_Connection=True;TrustServerCertificate=True;");
     }
 }

@@ -80,16 +80,33 @@ public class CollectionManager(FisherDbContext context)
     // GetTodaysCollections method remains the same
     public List<CollectionDto> GetTodaysCollections()
     {
-        return context.Collections
+        var collections = context.Collections
             .Include(c => c.Client)
             .Where(c => c.Date.Date == DateTime.UtcNow.Date)
-            .Select(c => new CollectionDto
-            {
-                Id = c.Id,
-                ClientName = c.Client.Name,
-                Amount = c.Amount,
-                Date = c.Date
-            })
             .ToList();
+
+        return collections.Select(c => new CollectionDto
+        {
+            Id = c.Id,
+            ClientName = c.Client?.Name ?? throw new Exception("Unknown Client"),
+            Amount = c.Amount,
+            Date = c.Date
+        }).ToList();
+    }
+    
+    public List<CollectionDto> GetCollectionsByClient(int clientId)
+    {
+        var collections = context.Collections
+            .Where(c => c.ClientId == clientId)
+            .Include(c => c.Client)
+            .ToList();
+
+        return collections.Select(c => new CollectionDto
+        {
+            Id = c.Id,
+            ClientName = c.Client?.Name ?? throw new Exception("Unknown Client"),
+            Amount = c.Amount,
+            Date = c.Date
+        }).ToList();
     }
 }

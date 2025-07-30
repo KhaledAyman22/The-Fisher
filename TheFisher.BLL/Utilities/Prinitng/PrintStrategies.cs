@@ -40,3 +40,61 @@ public class OrderPrintStrategy : IPrintStrategy
         e.Graphics.DrawString(sb.ToString(), font, brush, new PointF(10, y));
     }
 }
+
+// Add this class to PrintStrategies.cs
+public class PurchaseListPrintStrategy : IPrintStrategy
+{
+    [SupportedOSPlatform("windows")]
+    public void Print(object data)
+    {
+        var purchases = (List<PurchaseDto>)data;
+        var printDocument = new PrintDocument();
+        
+        printDocument.PrintPage += (sender, e) =>
+        {
+            var font = new Font("Arial", 10);
+            var brush = Brushes.Black;
+            float y = 10;
+
+            e.Graphics.DrawString("--- Purchase Report ---", new Font("Arial", 14, FontStyle.Bold), brush, new PointF(10, y));
+            y += 30;
+
+            foreach (var purchase in purchases)
+            {
+                var text = $"Date: {purchase.Date:d} | Provider: {purchase.ProviderName} | Item: {purchase.ItemName} | Total: {purchase.Total:C}";
+                e.Graphics.DrawString(text, font, brush, new PointF(10, y));
+                y += 20;
+            }
+        };
+        printDocument.Print();
+    }
+}
+
+// Add this class to PrintStrategies.cs
+public class CollectionListPrintStrategy : IPrintStrategy
+{
+    [SupportedOSPlatform("windows")]
+    public void Print(object data)
+    {
+        var collections = (List<CollectionDto>)data;
+        var printDocument = new PrintDocument();
+        
+        printDocument.PrintPage += (sender, e) =>
+        {
+            var font = new Font("Arial", 10);
+            var brush = Brushes.Black;
+            float y = 10;
+            
+            e.Graphics.DrawString("--- Collection Report ---", new Font("Arial", 14, FontStyle.Bold), brush, new PointF(10, y));
+            y += 30;
+
+            foreach (var collection in collections)
+            {
+                var text = $"Date: {collection.Date:d} | Client: {collection.ClientName} | Amount: {collection.Amount:C}";
+                e.Graphics.DrawString(text, font, brush, new PointF(10, y));
+                y += 20;
+            }
+        };
+        printDocument.Print();
+    }
+}

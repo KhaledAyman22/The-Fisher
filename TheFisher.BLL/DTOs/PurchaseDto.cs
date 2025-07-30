@@ -3,8 +3,8 @@
 public class PurchaseDto
 {
     public int Id { get; set; }
-    public string ProviderName { get; set; }
-    public string ItemName { get; set; }
+    public required string ProviderName { get; set; }
+    public required string ItemName { get; set; }
     public int Units { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal Total { get; set; }

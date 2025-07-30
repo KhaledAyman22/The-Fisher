@@ -29,20 +29,21 @@ public class PurchasesManager(FisherDbContext context)
 
     public List<PurchaseDto> GetTodaysPurchases()
     {
-        return context.Purchases
+        var purchases = context.Purchases
             .Include(p => p.Provider)
             .Include(p => p.Item)
             .Where(p => p.Date.Date == DateTime.UtcNow.Date)
-            .Select(p => new PurchaseDto
-            {
-                Id = p.Id,
-                ProviderName = p.Provider.Name,
-                ItemName = p.Item.Name,
-                Units = p.Units,
-                UnitPrice = p.UnitPrice,
-                Total = p.Units * p.UnitPrice,
-                Date = p.Date
-            })
             .ToList();
+
+        return purchases.Select(p => new PurchaseDto
+        {
+            Id = p.Id,
+            ProviderName = p.Provider?.Name ?? throw new Exception("Unknown Provider"),
+            ItemName = p.Item?.Name ?? throw new Exception("Unknown Item"),
+            Units = p.Units,
+            UnitPrice = p.UnitPrice,
+            Total = p.Units * p.UnitPrice,
+            Date = p.Date
+        }).ToList();
     }
 }

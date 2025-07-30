@@ -39,21 +39,22 @@ public class OrderManager(FisherDbContext context)
 
     public List<OrderDto> GetTodaysOrders()
     {
-        return context.Orders
+        var orders = context.Orders
             .Include(o => o.Client)
             .Include(o => o.Item)
             .Where(o => o.Date.Date == DateTime.UtcNow.Date)
-            .Select(o => new OrderDto
-            {
-                Id = o.Id,
-                ClientName = o.Client.Name,
-                ItemName = o.Item.Name,
-                Units = o.Units,
-                UnitPrice = o.UnitPrice,
-                Total = o.Total,
-                Collected = o.Collected,
-                Date = o.Date
-            })
             .ToList();
+
+        return orders.Select(o => new OrderDto
+        {
+            Id = o.Id,
+            ClientName = o.Client?.Name ?? throw new Exception("Unknown Client"),
+            ItemName = o.Item?.Name ?? throw new Exception("Unknown Item"),
+            Units = o.Units,
+            UnitPrice = o.UnitPrice,
+            Total = o.Total,
+            Collected = o.Collected,
+            Date = o.Date
+        }).ToList();
     }
 }

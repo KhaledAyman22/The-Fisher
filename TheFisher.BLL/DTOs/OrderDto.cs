@@ -3,8 +3,8 @@
 public class OrderDto
 {
     public int Id { get; set; }
-    public string ClientName { get; set; }
-    public string ItemName { get; set; }
+    public required string ClientName { get; set; }
+    public required string ItemName { get; set; }
     public int Units { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal Total { get; set; }
