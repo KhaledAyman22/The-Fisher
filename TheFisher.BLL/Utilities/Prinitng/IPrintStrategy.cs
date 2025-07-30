@@ -2,5 +2,5 @@
 
 public interface IPrintStrategy
 {
-    string Print(object data);
+    void Print(object data);
 }

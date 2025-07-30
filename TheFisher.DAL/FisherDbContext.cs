@@ -11,6 +11,7 @@ public class FisherDbContext : DbContext
     public DbSet<Collection> Collections { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Purchase> Purchases { get; set; }
+    public DbSet<CollectionDetail> CollectionDetails { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

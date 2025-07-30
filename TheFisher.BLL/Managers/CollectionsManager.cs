@@ -6,7 +6,7 @@ using TheFisher.DAL.Entities;
 
 namespace TheFisher.BLL.Managers;
 
-public class CollectionsManager(FisherDbContext context)
+public class CollectionManager(FisherDbContext context)
 {
     public void AddCollection(CreateCollectionDto collectionDto)
     {
@@ -20,20 +20,64 @@ public class CollectionsManager(FisherDbContext context)
         {
             throw new ValidationException("Invalid Client ID.");
         }
+            
+        using var transaction = context.Database.BeginTransaction();
 
-        client.OutstandingBalance -= collectionDto.Amount;
-
-        var collection = new Collection
+        try
         {
-            ClientId = collectionDto.ClientId,
-            Amount = collectionDto.Amount,
-            Date = DateTime.UtcNow
-        };
-        context.Collections.Add(collection);
-        //TODO Update Collection details to reflect the collection on orders
-        context.SaveChanges();
-    }
+            // 1. Create the main collection record
+            var collection = new Collection
+            {
+                ClientId = collectionDto.ClientId,
+                Amount = collectionDto.Amount,
+                Date = DateTime.UtcNow
+            };
+            context.Collections.Add(collection);
+            context.SaveChanges(); // Save to get the collection ID
 
+            // 2. Find unpaid orders for the client, oldest first
+            var unpaidOrders = context.Orders
+                .Where(o => o.ClientId == collectionDto.ClientId && o.Total > o.Collected)
+                .OrderBy(o => o.Date)
+                .ToList();
+
+            var amountToApply = collectionDto.Amount;
+
+            // 3. Distribute the collection amount across unpaid orders
+            foreach (var order in unpaidOrders)
+            {
+                if (amountToApply <= 0) break;
+
+                var dueAmount = order.Total - order.Collected;
+                var payment = Math.Min(amountToApply, dueAmount);
+
+                var detail = new CollectionDetail
+                {
+                    CollectionId = collection.Id,
+                    OrderId = order.Id,
+                    Amount = payment
+                };
+                context.CollectionDetails.Add(detail);
+                    
+                order.Collected += payment;
+                amountToApply -= payment;
+            }
+
+            // 4. Update client's balance and save all changes
+            client.OutstandingBalance -= collectionDto.Amount;
+            context.SaveChanges();
+                
+            transaction.Commit();
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            // Consider logging the exception
+            throw new Exception("An error occurred while processing the collection.", ex);
+        }
+    }
+        
+    // GetTodaysCollections method remains the same
     public List<CollectionDto> GetTodaysCollections()
     {
         return context.Collections

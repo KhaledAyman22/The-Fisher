@@ -13,13 +13,16 @@ public class PrintingManager
         _strategies[typeof(PurchaseDto)] = new PurchasePrintStrategy();
     }
 
-    public string Print(object dto)
+    public void Print(object dto)
     {
         var type = dto.GetType();
-        if (_strategies.TryGetValue(type, out var strategy))
+        if (_strategies.ContainsKey(type))
         {
-            return strategy.Print(dto);
+            _strategies[type].Print(dto); // This now calls the void Print method
         }
-        throw new NotSupportedException($"Printing for type {type.Name} is not supported.");
+        else
+        {
+            throw new NotSupportedException($"Printing for type {type.Name} is not supported.");
+        }
     }
 }
