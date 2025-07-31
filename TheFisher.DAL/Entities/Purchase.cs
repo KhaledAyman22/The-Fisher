@@ -1,13 +1,21 @@
-﻿namespace TheFisher.DAL.Entities;
+﻿using TheFisher.DAL.enums;
+
+namespace TheFisher.DAL.Entities;
 
 public class Purchase
 {
-    public int Id { get; set; }
-    public int ProviderId { get; set; }
-    public Provider? Provider { get; set; }
+    public Ulid Id { get; set; }
+    public int DealerId { get; set; }
     public int ItemId { get; set; }
-    public Item? Item { get; set; }
-    public int Units { get; set; }
-    public decimal UnitPrice { get; set; }
+    public int TotalUnits { get; set; }
+    public decimal? UnitPrice { get; set; }
+    public decimal TotalWeight { get; set; }
+    public decimal WeightAvailable { get; set; }
+    public PurchaseType Type { get; set; } = PurchaseType.Direct; // Direct or Commission
     public DateTime Date { get; set; }
+    public decimal CommissionPercent { get; set; }
+
+    public virtual Dealer Dealer { get; set; } = null!;
+    public virtual Item Item { get; set; } = null!;
+    public virtual ICollection<OrderPurchase> OrderPurchases { get; set; } = new List<OrderPurchase>();
 }

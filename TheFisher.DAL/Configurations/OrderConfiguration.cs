@@ -6,21 +6,48 @@ namespace TheFisher.DAL.Configurations;
 
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<Order> entity)
+    public void Configure(EntityTypeBuilder<Order> builder)
     {
-        entity.HasKey(e => e.Id);
-        entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-        entity.Property(e => e.Collected).HasColumnType("decimal(18, 2)");
-        entity.Ignore(e => e.Total); // Calculated property, not stored in DB
-
-        // Relationship: An Order has one Client, a Client has many Orders
-        entity.HasOne(d => d.Client)
-              .WithMany(p => p.Orders)
-              .HasForeignKey(d => d.ClientId);
-
-        // Relationship: An Order has one Item, an Item has many Orders
-        entity.HasOne(d => d.Item)
-              .WithMany(p => p.Orders)
-              .HasForeignKey(d => d.ItemId);
+        builder.HasKey(o => o.Id);
+        
+        builder.Property(o => o.Id)
+            .HasColumnType("nvarchar(26)")
+            .HasConversion(new UlidToStringConverter());
+        
+        builder.Property(o => o.Weight)
+            .HasColumnType("decimal(18,3)")
+            .HasDefaultValue(0m);
+            
+        builder.Property(o => o.KiloPrice)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.Property(o => o.Total)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.Property(o => o.Collected)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.HasOne(o => o.Client)
+            .WithMany(c => c.Orders)
+            .HasForeignKey(o => o.ClientId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasOne(o => o.Item)
+            .WithMany(i => i.Orders)
+            .HasForeignKey(o => o.ItemId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasMany(o => o.CollectionDetails)
+            .WithOne(cd => cd.Order)
+            .HasForeignKey(cd => cd.OrderId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasMany(o => o.OrderPurchases)
+            .WithOne(op => op.Order)
+            .HasForeignKey(op => op.OrderId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 } 

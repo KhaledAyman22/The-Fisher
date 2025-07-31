@@ -6,17 +6,34 @@ namespace TheFisher.DAL.Configurations;
 
 public class CollectionDetailConfiguration : IEntityTypeConfiguration<CollectionDetail>
 {
-    public void Configure(EntityTypeBuilder<CollectionDetail> entity)
+    public void Configure(EntityTypeBuilder<CollectionDetail> builder)
     {
-        entity.HasKey(e => e.Id);
-        entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
-
-        entity.HasOne(d => d.Collection)
-              .WithMany() // No navigation property back from Collection
-              .HasForeignKey(d => d.CollectionId);
+        builder.HasKey(cd => cd.Id);
         
-        entity.HasOne(d => d.Order)
-              .WithMany() // No navigation property back from Order
-              .HasForeignKey(d => d.OrderId);
+        builder.Property(cd => cd.Id)
+            .HasColumnType("nvarchar(26)")
+            .HasConversion(new UlidToStringConverter());
+            
+        builder.Property(cd => cd.CollectionId)
+            .HasColumnType("nvarchar(26)")
+            .HasConversion(new UlidToStringConverter());
+            
+        builder.Property(cd => cd.OrderId)
+            .HasColumnType("nvarchar(26)")
+            .HasConversion(new UlidToStringConverter());
+        
+        builder.Property(cd => cd.Amount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.HasOne(cd => cd.Collection)
+            .WithMany(c => c.CollectionDetails)
+            .HasForeignKey(cd => cd.CollectionId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasOne(cd => cd.Order)
+            .WithMany(o => o.CollectionDetails)
+            .HasForeignKey(cd => cd.OrderId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 } 

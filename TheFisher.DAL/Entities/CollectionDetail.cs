@@ -2,10 +2,11 @@
 
 public class CollectionDetail
 {
-    public int Id { get; set; }
-    public int CollectionId { get; set; }
-    public Collection? Collection { get; set; }
-    public int OrderId { get; set; }
-    public Order? Order { get; set; }
+    public Ulid Id { get; set; }
+    public Ulid CollectionId { get; set; }
+    public Ulid OrderId { get; set; }
     public decimal Amount { get; set; }
+
+    public virtual Collection Collection { get; set; } = null!;
+    public virtual Order Order { get; set; } = null!;
 }

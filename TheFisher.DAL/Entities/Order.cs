@@ -2,14 +2,18 @@
 
 public class Order
 {
-    public int Id { get; set; }
+    public Ulid Id { get; set; }
     public int ClientId { get; set; }
-    public Client? Client { get; set; }
     public int ItemId { get; set; }
-    public Item? Item { get; set; }
-    public int Units { get; set; }
-    public decimal UnitPrice { get; set; }
+    public decimal Weight { get; set; }
+    public decimal KiloPrice { get; set; }
     public DateTime Date { get; set; }
-    public decimal Total => Units * UnitPrice;
+    public decimal Total { get; set; }
     public decimal Collected { get; set; }
+
+    public virtual Client Client { get; set; } = null!;
+    public virtual Item Item { get; set; } = null!;
+    public virtual ICollection<CollectionDetail> CollectionDetails { get; set; } = new List<CollectionDetail>();
+    public virtual ICollection<OrderPurchase> OrderPurchases { get; set; } = new List<OrderPurchase>();
 }
+

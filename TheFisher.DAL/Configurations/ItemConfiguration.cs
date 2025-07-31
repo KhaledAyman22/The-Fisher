@@ -6,9 +6,34 @@ namespace TheFisher.DAL.Configurations;
 
 public class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
-    public void Configure(EntityTypeBuilder<Item> entity)
+    public void Configure(EntityTypeBuilder<Item> builder)
     {
-        entity.HasKey(e => e.Id);
-        entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+        builder.HasKey(i => i.Id);
+        
+        builder.Property(i => i.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+            
+        builder.Property(i => i.Stock)
+            .HasColumnType("decimal(18,3)")
+            .HasDefaultValue(0m);
+            
+        builder.Property(i => i.CommissionedStock)
+            .HasColumnType("decimal(18,3)")
+            .HasDefaultValue(0m);
+
+        builder.Property(i => i.AvgPricePerKg)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.HasMany(i => i.Orders)
+            .WithOne(o => o.Item)
+            .HasForeignKey(o => o.ItemId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasMany(i => i.Purchases)
+            .WithOne(p => p.Item)
+            .HasForeignKey(p => p.ItemId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 } 

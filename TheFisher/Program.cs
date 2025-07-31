@@ -1,16 +1,30 @@
+﻿using System.Net.Mime;
+using TheFisher.DAL;
+
 namespace TheFisher;
 
-static class Program
+public static class Program
 {
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
     [STAThread]
-    static void Main()
+    public static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+            
+        // Initialize database
+        try
+        {
+            using var context = new FisherDbContext();
+            context.Database.EnsureCreated();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Database initialization failed: {ex.Message}", "Database Error", 
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         ApplicationConfiguration.Initialize();
-        Application.Run(new Form1());
+        Application.Run(new MainForm());
     }
 }

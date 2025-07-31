@@ -6,13 +6,26 @@ namespace TheFisher.DAL.Configurations;
 
 public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
 {
-    public void Configure(EntityTypeBuilder<Collection> entity)
+    public void Configure(EntityTypeBuilder<Collection> builder)
     {
-        entity.HasKey(e => e.Id);
-        entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
-
-        entity.HasOne(d => d.Client)
-              .WithMany(p => p.Collections)
-              .HasForeignKey(d => d.ClientId);
+        builder.HasKey(c => c.Id);
+        
+        builder.Property(c => c.Id)
+            .HasColumnType("nvarchar(26)")
+            .HasConversion(new UlidToStringConverter());
+        
+        builder.Property(c => c.Amount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+            
+        builder.HasOne(c => c.Client)
+            .WithMany(cl => cl.Collections)
+            .HasForeignKey(c => c.ClientId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasMany(c => c.CollectionDetails)
+            .WithOne(cd => cd.Collection)
+            .HasForeignKey(cd => cd.CollectionId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 } 
