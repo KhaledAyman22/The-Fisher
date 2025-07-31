@@ -28,226 +28,207 @@ namespace TheFisher
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.clientComboBox = new System.Windows.Forms.ComboBox();
-            this.itemComboBox = new System.Windows.Forms.ComboBox();
-            this.weightNumeric = new System.Windows.Forms.NumericUpDown();
-            this.kiloPriceNumeric = new System.Windows.Forms.NumericUpDown();
-            this.datePicker = new System.Windows.Forms.DateTimePicker();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.totalLabel = new System.Windows.Forms.Label();
-            this.clientLabel = new System.Windows.Forms.Label();
-            this.itemLabel = new System.Windows.Forms.Label();
-            this.weightLabel = new System.Windows.Forms.Label();
-            this.priceLabel = new System.Windows.Forms.Label();
-            this.dateLabel = new System.Windows.Forms.Label();
-            this.totalNumeric = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.weightNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kiloPriceNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.totalNumeric)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // clientLabel
-            // 
-            this.clientLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clientLabel.AutoSize = true;
-            this.clientLabel.Location = new System.Drawing.Point(320, 18);
-            this.clientLabel.Name = "clientLabel";
-            this.clientLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.clientLabel.Size = new System.Drawing.Size(42, 15);
-            this.clientLabel.TabIndex = 0;
-            this.clientLabel.Text = "العميل:";
+            clientComboBox = new ComboBox();
+            itemComboBox = new ComboBox();
+            weightNumeric = new NumericUpDown();
+            kiloPriceNumeric = new NumericUpDown();
+            datePicker = new DateTimePicker();
+            saveButton = new Button();
+            cancelButton = new Button();
+            totalLabel = new Label();
+            clientLabel = new Label();
+            itemLabel = new Label();
+            weightLabel = new Label();
+            priceLabel = new Label();
+            dateLabel = new Label();
+            totalNumeric = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)weightNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)kiloPriceNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)totalNumeric).BeginInit();
+            SuspendLayout();
             // 
             // clientComboBox
             // 
-            this.clientComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.clientComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.clientComboBox.FormattingEnabled = true;
-            this.clientComboBox.Location = new System.Drawing.Point(120, 15);
-            this.clientComboBox.Name = "clientComboBox";
-            this.clientComboBox.Size = new System.Drawing.Size(190, 23);
-            this.clientComboBox.TabIndex = 1;
-            // 
-            // itemLabel
-            // 
-            this.itemLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.itemLabel.AutoSize = true;
-            this.itemLabel.Location = new System.Drawing.Point(320, 47);
-            this.itemLabel.Name = "itemLabel";
-            this.itemLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.itemLabel.Size = new System.Drawing.Size(42, 15);
-            this.itemLabel.TabIndex = 2;
-            this.itemLabel.Text = "المنتج:";
+            clientComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            clientComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            clientComboBox.FormattingEnabled = true;
+            clientComboBox.Location = new Point(105, 12);
+            clientComboBox.Name = "clientComboBox";
+            clientComboBox.Size = new Size(190, 23);
+            clientComboBox.TabIndex = 1;
             // 
             // itemComboBox
             // 
-            this.itemComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.itemComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.itemComboBox.FormattingEnabled = true;
-            this.itemComboBox.Location = new System.Drawing.Point(120, 44);
-            this.itemComboBox.Name = "itemComboBox";
-            this.itemComboBox.Size = new System.Drawing.Size(190, 23);
-            this.itemComboBox.TabIndex = 3;
-            // 
-            // weightLabel
-            // 
-            this.weightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.weightLabel.AutoSize = true;
-            this.weightLabel.Location = new System.Drawing.Point(320, 76);
-            this.weightLabel.Name = "weightLabel";
-            this.weightLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.weightLabel.Size = new System.Drawing.Size(42, 15);
-            this.weightLabel.TabIndex = 4;
-            this.weightLabel.Text = "الوزن:";
+            itemComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            itemComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            itemComboBox.FormattingEnabled = true;
+            itemComboBox.Location = new Point(105, 41);
+            itemComboBox.Name = "itemComboBox";
+            itemComboBox.Size = new Size(190, 23);
+            itemComboBox.TabIndex = 3;
             // 
             // weightNumeric
             // 
-            this.weightNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.weightNumeric.DecimalPlaces = 3;
-            this.weightNumeric.Location = new System.Drawing.Point(120, 73);
-            this.weightNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.weightNumeric.Name = "weightNumeric";
-            this.weightNumeric.Size = new System.Drawing.Size(190, 23);
-            this.weightNumeric.TabIndex = 5;
-            this.weightNumeric.ValueChanged += new System.EventHandler(this.WeightNumeric_ValueChanged);
-            // 
-            // priceLabel
-            // 
-            this.priceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.priceLabel.AutoSize = true;
-            this.priceLabel.Location = new System.Drawing.Point(320, 105);
-            this.priceLabel.Name = "priceLabel";
-            this.priceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.priceLabel.Size = new System.Drawing.Size(42, 15);
-            this.priceLabel.TabIndex = 6;
-            this.priceLabel.Text = "سعر الكيلو:";
+            weightNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            weightNumeric.DecimalPlaces = 3;
+            weightNumeric.Location = new Point(105, 70);
+            weightNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            weightNumeric.Name = "weightNumeric";
+            weightNumeric.Size = new Size(190, 23);
+            weightNumeric.TabIndex = 5;
+            weightNumeric.ValueChanged += WeightNumeric_ValueChanged;
             // 
             // kiloPriceNumeric
             // 
-            this.kiloPriceNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kiloPriceNumeric.DecimalPlaces = 2;
-            this.kiloPriceNumeric.Location = new System.Drawing.Point(120, 102);
-            this.kiloPriceNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.kiloPriceNumeric.Name = "kiloPriceNumeric";
-            this.kiloPriceNumeric.Size = new System.Drawing.Size(190, 23);
-            this.kiloPriceNumeric.TabIndex = 7;
-            this.kiloPriceNumeric.ValueChanged += new System.EventHandler(this.KiloPriceNumeric_ValueChanged);
-            // 
-            // totalLabel
-            // 
-            this.totalLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalLabel.AutoSize = true;
-            this.totalLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.totalLabel.Location = new System.Drawing.Point(320, 134);
-            this.totalLabel.Name = "totalLabel";
-            this.totalLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.totalLabel.Size = new System.Drawing.Size(42, 15);
-            this.totalLabel.TabIndex = 8;
-            this.totalLabel.Text = "المجموع:";
-            // 
-            // totalNumeric
-            // 
-            this.totalNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalNumeric.DecimalPlaces = 2;
-            this.totalNumeric.Enabled = false;
-            this.totalNumeric.Location = new System.Drawing.Point(120, 131);
-            this.totalNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.totalNumeric.Name = "totalNumeric";
-            this.totalNumeric.Size = new System.Drawing.Size(190, 23);
-            this.totalNumeric.TabIndex = 9;
-            // 
-            // dateLabel
-            // 
-            this.dateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateLabel.AutoSize = true;
-            this.dateLabel.Location = new System.Drawing.Point(320, 163);
-            this.dateLabel.Name = "dateLabel";
-            this.dateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.dateLabel.Size = new System.Drawing.Size(42, 15);
-            this.dateLabel.TabIndex = 10;
-            this.dateLabel.Text = "التاريخ:";
+            kiloPriceNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            kiloPriceNumeric.DecimalPlaces = 2;
+            kiloPriceNumeric.Location = new Point(105, 99);
+            kiloPriceNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            kiloPriceNumeric.Name = "kiloPriceNumeric";
+            kiloPriceNumeric.Size = new Size(190, 23);
+            kiloPriceNumeric.TabIndex = 7;
+            kiloPriceNumeric.ValueChanged += KiloPriceNumeric_ValueChanged;
             // 
             // datePicker
             // 
-            this.datePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.datePicker.Location = new System.Drawing.Point(120, 160);
-            this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(190, 23);
-            this.datePicker.TabIndex = 11;
+            datePicker.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            datePicker.Location = new Point(105, 157);
+            datePicker.Name = "datePicker";
+            datePicker.Size = new Size(190, 23);
+            datePicker.TabIndex = 11;
             // 
             // saveButton
             // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveButton.Location = new System.Drawing.Point(20, 200);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 25);
-            this.saveButton.TabIndex = 12;
-            this.saveButton.Text = "حفظ";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            saveButton.Location = new Point(20, 200);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(75, 25);
+            saveButton.TabIndex = 12;
+            saveButton.Text = "حفظ";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += SaveButton_Click;
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancelButton.Location = new System.Drawing.Point(105, 200);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 25);
-            this.cancelButton.TabIndex = 13;
-            this.cancelButton.Text = "إلغاء";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cancelButton.Location = new Point(105, 200);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(75, 25);
+            cancelButton.TabIndex = 13;
+            cancelButton.Text = "إلغاء";
+            cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += CancelButton_Click;
+            // 
+            // totalLabel
+            // 
+            totalLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            totalLabel.AutoSize = true;
+            totalLabel.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            totalLabel.Location = new Point(31, 134);
+            totalLabel.Name = "totalLabel";
+            totalLabel.RightToLeft = RightToLeft.Yes;
+            totalLabel.Size = new Size(61, 19);
+            totalLabel.TabIndex = 8;
+            totalLabel.Text = "المجموع:";
+            // 
+            // clientLabel
+            // 
+            clientLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            clientLabel.AutoSize = true;
+            clientLabel.Location = new Point(31, 18);
+            clientLabel.Name = "clientLabel";
+            clientLabel.RightToLeft = RightToLeft.Yes;
+            clientLabel.Size = new Size(43, 15);
+            clientLabel.TabIndex = 0;
+            clientLabel.Text = "العميل:";
+            // 
+            // itemLabel
+            // 
+            itemLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            itemLabel.AutoSize = true;
+            itemLabel.Location = new Point(31, 47);
+            itemLabel.Name = "itemLabel";
+            itemLabel.RightToLeft = RightToLeft.Yes;
+            itemLabel.Size = new Size(39, 15);
+            itemLabel.TabIndex = 2;
+            itemLabel.Text = "المنتج:";
+            // 
+            // weightLabel
+            // 
+            weightLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            weightLabel.AutoSize = true;
+            weightLabel.Location = new Point(31, 76);
+            weightLabel.Name = "weightLabel";
+            weightLabel.RightToLeft = RightToLeft.Yes;
+            weightLabel.Size = new Size(36, 15);
+            weightLabel.TabIndex = 4;
+            weightLabel.Text = "الوزن:";
+            // 
+            // priceLabel
+            // 
+            priceLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            priceLabel.AutoSize = true;
+            priceLabel.Location = new Point(31, 105);
+            priceLabel.Name = "priceLabel";
+            priceLabel.RightToLeft = RightToLeft.Yes;
+            priceLabel.Size = new Size(62, 15);
+            priceLabel.TabIndex = 6;
+            priceLabel.Text = "سعر الكيلو:";
+            // 
+            // dateLabel
+            // 
+            dateLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            dateLabel.AutoSize = true;
+            dateLabel.Location = new Point(31, 163);
+            dateLabel.Name = "dateLabel";
+            dateLabel.RightToLeft = RightToLeft.Yes;
+            dateLabel.Size = new Size(41, 15);
+            dateLabel.TabIndex = 10;
+            dateLabel.Text = "التاريخ:";
+            // 
+            // totalNumeric
+            // 
+            totalNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            totalNumeric.DecimalPlaces = 2;
+            totalNumeric.Enabled = false;
+            totalNumeric.Location = new Point(105, 128);
+            totalNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            totalNumeric.Name = "totalNumeric";
+            totalNumeric.Size = new Size(190, 23);
+            totalNumeric.TabIndex = 9;
             // 
             // OrderForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 250);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.dateLabel);
-            this.Controls.Add(this.totalLabel);
-            this.Controls.Add(this.priceLabel);
-            this.Controls.Add(this.weightLabel);
-            this.Controls.Add(this.itemLabel);
-            this.Controls.Add(this.clientLabel);
-            this.Controls.Add(this.datePicker);
-            this.Controls.Add(this.kiloPriceNumeric);
-            this.Controls.Add(this.weightNumeric);
-            this.Controls.Add(this.itemComboBox);
-            this.Controls.Add(this.clientComboBox);
-            this.Controls.Add(this.totalNumeric);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "OrderForm";
-            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.RightToLeftLayout = true;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "طلب جديد";
-            ((System.ComponentModel.ISupportInitialize)(this.weightNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.kiloPriceNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.totalNumeric)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(400, 250);
+            Controls.Add(cancelButton);
+            Controls.Add(saveButton);
+            Controls.Add(dateLabel);
+            Controls.Add(totalLabel);
+            Controls.Add(priceLabel);
+            Controls.Add(weightLabel);
+            Controls.Add(itemLabel);
+            Controls.Add(clientLabel);
+            Controls.Add(datePicker);
+            Controls.Add(kiloPriceNumeric);
+            Controls.Add(weightNumeric);
+            Controls.Add(itemComboBox);
+            Controls.Add(clientComboBox);
+            Controls.Add(totalNumeric);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "OrderForm";
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "طلب جديد";
+            ((System.ComponentModel.ISupportInitialize)weightNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)kiloPriceNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)totalNumeric).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
