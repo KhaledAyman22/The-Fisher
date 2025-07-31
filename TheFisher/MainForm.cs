@@ -30,6 +30,41 @@ public partial class MainForm : Form
         
         // Load initial statistics
         LoadStatistics();
+        
+        // Set minimum size to prevent controls from overlapping
+        this.MinimumSize = new Size(1000, 700);
+        
+        // Subscribe to Resize event
+        this.Resize += MainForm_Resize;
+        
+        // Initially arrange controls properly
+        ArrangeControls();
+    }
+    
+    private void MainForm_Resize(object sender, EventArgs e)
+    {
+        ArrangeControls();
+    }
+    
+    private void ArrangeControls()
+    {
+        // Adjust the layout of stats cards based on form size
+        int cardMargin = 20;
+        int cardWidth = (statsPanel.Width - (3 * cardMargin)) / 2;
+        int cardHeight = (statsPanel.Height - (3 * cardMargin)) / 2;
+        
+        // Position the cards in a responsive grid layout
+        revenueCard.Size = new Size(cardWidth, cardHeight);
+        revenueCard.Location = new Point(cardMargin, cardMargin);
+        
+        dealersCard.Size = new Size(cardWidth, cardHeight);
+        dealersCard.Location = new Point(cardWidth + (2 * cardMargin), cardMargin);
+        
+        clientsCard.Size = new Size(cardWidth, cardHeight);
+        clientsCard.Location = new Point(cardMargin, cardHeight + (2 * cardMargin));
+        
+        collectionsCard.Size = new Size(cardWidth, cardHeight);
+        collectionsCard.Location = new Point(cardWidth + (2 * cardMargin), cardHeight + (2 * cardMargin));
     }
 
     private void SetupRefreshTimer()

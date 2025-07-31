@@ -8,6 +8,8 @@ public static class Program
     [STAThread]
     public static void Main()
     {
+        // Enable better scaling for high DPI displays
+        Application.SetHighDpiMode(HighDpiMode.SystemAware);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
             

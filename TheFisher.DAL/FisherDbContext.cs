@@ -14,7 +14,7 @@ public class FisherDbContext : DbContext
     public DbSet<Purchase> Purchases { get; set; }
     public DbSet<CollectionDetail> CollectionDetails { get; set; }
     public DbSet<OrderPurchase> OrderPurchases { get; set; }
-
+    public DbSet<Expense> Expenses { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Remember to replace this with your actual connection string, 
@@ -32,5 +32,6 @@ public class FisherDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CollectionConfiguration());
         modelBuilder.ApplyConfiguration(new CollectionDetailConfiguration());
         modelBuilder.ApplyConfiguration(new OrderPurchaseConfiguration());
+        modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
     }
 }
