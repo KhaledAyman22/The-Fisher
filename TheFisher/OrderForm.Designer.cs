@@ -132,69 +132,79 @@ namespace TheFisher
             // clientLabel
             // 
             this.clientLabel.AutoSize = true;
-            this.clientLabel.Location = new System.Drawing.Point(20, 23);
+            this.clientLabel.Location = new System.Drawing.Point(12, 15);
             this.clientLabel.Name = "clientLabel";
-            this.clientLabel.Size = new System.Drawing.Size(41, 15);
-            this.clientLabel.TabIndex = 8;
-            this.clientLabel.Text = "Client:";
+            this.clientLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.clientLabel.Size = new System.Drawing.Size(42, 15);
+            this.clientLabel.TabIndex = 0;
+            this.clientLabel.Text = "العميل:";
             // 
             // itemLabel
             // 
             this.itemLabel.AutoSize = true;
-            this.itemLabel.Location = new System.Drawing.Point(20, 63);
+            this.itemLabel.Location = new System.Drawing.Point(12, 44);
             this.itemLabel.Name = "itemLabel";
-            this.itemLabel.Size = new System.Drawing.Size(35, 15);
-            this.itemLabel.TabIndex = 9;
-            this.itemLabel.Text = "Item:";
+            this.itemLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.itemLabel.Size = new System.Drawing.Size(42, 15);
+            this.itemLabel.TabIndex = 2;
+            this.itemLabel.Text = "المنتج:";
             // 
             // weightLabel
             // 
             this.weightLabel.AutoSize = true;
-            this.weightLabel.Location = new System.Drawing.Point(20, 103);
+            this.weightLabel.Location = new System.Drawing.Point(12, 73);
             this.weightLabel.Name = "weightLabel";
-            this.weightLabel.Size = new System.Drawing.Size(48, 15);
-            this.weightLabel.TabIndex = 10;
-            this.weightLabel.Text = "Weight:";
+            this.weightLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.weightLabel.Size = new System.Drawing.Size(42, 15);
+            this.weightLabel.TabIndex = 4;
+            this.weightLabel.Text = "الوزن:";
             // 
             // priceLabel
             // 
             this.priceLabel.AutoSize = true;
-            this.priceLabel.Location = new System.Drawing.Point(20, 143);
+            this.priceLabel.Location = new System.Drawing.Point(12, 102);
             this.priceLabel.Name = "priceLabel";
-            this.priceLabel.Size = new System.Drawing.Size(67, 15);
-            this.priceLabel.TabIndex = 11;
-            this.priceLabel.Text = "Price/KG:";
+            this.priceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.priceLabel.Size = new System.Drawing.Size(42, 15);
+            this.priceLabel.TabIndex = 6;
+            this.priceLabel.Text = "سعر الكيلو:";
             // 
             // dateLabel
             // 
             this.dateLabel.AutoSize = true;
-            this.dateLabel.Location = new System.Drawing.Point(20, 183);
+            this.dateLabel.Location = new System.Drawing.Point(12, 160);
             this.dateLabel.Name = "dateLabel";
-            this.dateLabel.Size = new System.Drawing.Size(34, 15);
-            this.dateLabel.TabIndex = 12;
-            this.dateLabel.Text = "Date:";
+            this.dateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dateLabel.Size = new System.Drawing.Size(42, 15);
+            this.dateLabel.TabIndex = 10;
+            this.dateLabel.Text = "التاريخ:";
             // 
             // OrderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 300);
+            this.ClientSize = new System.Drawing.Size(384, 230);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.dateLabel);
+            this.Controls.Add(this.totalLabel);
             this.Controls.Add(this.priceLabel);
             this.Controls.Add(this.weightLabel);
             this.Controls.Add(this.itemLabel);
             this.Controls.Add(this.clientLabel);
-            this.Controls.Add(this.totalLabel);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.datePicker);
             this.Controls.Add(this.kiloPriceNumeric);
             this.Controls.Add(this.weightNumeric);
             this.Controls.Add(this.itemComboBox);
             this.Controls.Add(this.clientComboBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "OrderForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New Order";
+            this.Text = "طلب جديد";
             ((System.ComponentModel.ISupportInitialize)(this.weightNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.kiloPriceNumeric)).EndInit();
             this.ResumeLayout(false);

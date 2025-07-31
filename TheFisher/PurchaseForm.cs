@@ -1,43 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.DTOs;
 using TheFisher.BLL.IServices;
-using TheFisher.DAL;
 using TheFisher.DAL.enums;
 
 namespace TheFisher;
 
 public partial class PurchaseForm : Form
 {
-    private readonly FisherDbContext _context;
     private readonly IPurchaseService _purchaseService;
-    private ComboBox _dealerComboBox, _itemComboBox, _typeComboBox;
-    private NumericUpDown _unitsNumeric, _unitPriceNumeric, _totalWeightNumeric;
-    private DateTimePicker _datePicker;
-    private Button _saveButton, _cancelButton;
+    private readonly IDealerService _dealerService;
+    private readonly IItemService _itemService;
 
-    public PurchaseForm(FisherDbContext context, IPurchaseService purchaseService)
+    public PurchaseForm(IPurchaseService purchaseService, IDealerService dealerService, IItemService itemService)
     {
-        _context = context;
         _purchaseService = purchaseService;
+        _dealerService = dealerService;
+        _itemService = itemService;
         InitializeComponent();
-        LoadComboBoxes();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadComboBoxes());
     }
-
-
 
     private async Task LoadComboBoxes()
     {
         try
         {
-            var dealers = await _context.Dealers.OrderBy(d => d.Name).ToListAsync();
-            _dealerComboBox.DataSource = dealers;
-            _dealerComboBox.DisplayMember = "Name";
-            _dealerComboBox.ValueMember = "Id";
+            var dealers = await _dealerService.GetDealersForDropDown();
+            dealerComboBox.DataSource = dealers;
+            dealerComboBox.DisplayMember = "Name";
+            dealerComboBox.ValueMember = "Id";
 
-            var items = await _context.Items.OrderBy(i => i.Name).ToListAsync();
-            _itemComboBox.DataSource = items;
-            _itemComboBox.DisplayMember = "Name";
-            _itemComboBox.ValueMember = "Id";
+            var items = await _itemService.GetItemsForDropDown();
+            itemComboBox.DataSource = items;
+            itemComboBox.DisplayMember = "Name";
+            itemComboBox.ValueMember = "Id";
         }
         catch (Exception ex)
         {
@@ -61,39 +56,38 @@ public partial class PurchaseForm : Form
 
     private async void SaveButton_Click(object sender, EventArgs e)
     {
-        if (_dealerComboBox.SelectedValue == null || _itemComboBox.SelectedValue == null)
+        if (dealerComboBox.SelectedValue == null || itemComboBox.SelectedValue == null)
         {
-            MessageBox.Show("Please select dealer and item.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار التاجر والمنتج.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        if (_totalWeightNumeric.Value <= 0)
+        if (totalWeightNumeric.Value <= 0)
         {
-            MessageBox.Show("Please enter a valid total weight.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال وزن إجمالي صحيح.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         try
         {
-            var purchaseDto = new PurchaseCreateDto
-            {
-                DealerId = (int)_dealerComboBox.SelectedValue,
-                ItemId = (int)_itemComboBox.SelectedValue,
-                TotalUnits = (int)_unitsNumeric.Value,
-                KiloPrice = _unitPriceNumeric.Enabled ? _unitPriceNumeric.Value : null,
-                TotalWeight = _totalWeightNumeric.Value,
-                Type = (PurchaseType)Enum.Parse(typeof(PurchaseType), _typeComboBox.SelectedItem.ToString()!),
-                Date = _datePicker.Value
-            };
+            var purchaseDto = new PurchaseCreateDto(
+                (int)dealerComboBox.SelectedValue,
+                (int)itemComboBox.SelectedValue,
+                (int)unitsNumeric.Value,
+                unitPriceNumeric.Enabled ? unitPriceNumeric.Value : null,
+                totalWeightNumeric.Value,
+                (PurchaseType)Enum.Parse(typeof(PurchaseType), typeComboBox.SelectedItem.ToString()!),
+                datePicker.Value
+            );
 
             await _purchaseService.CreatePurchaseAsync(purchaseDto);
-            MessageBox.Show("Purchase saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم حفظ الشراء بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error saving purchase: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في حفظ الشراء: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

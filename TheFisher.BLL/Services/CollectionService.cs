@@ -2,29 +2,15 @@
 using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.Entities;
-using TheFisher.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace TheFisher.BLL.Services;
 
-public class CollectionService : ICollectionService
+public class CollectionService(FisherDbContext context) : ICollectionService
 {
-    private readonly CollectionRepository _collectionRepository;
-    private readonly OrderRepository _orderRepository;
-    private readonly Repository<Client> _clientRepository;
-    private readonly FisherDbContext _context;
-
-    public CollectionService(FisherDbContext context)
-    {
-        _context = context;
-        _collectionRepository = new CollectionRepository(context);
-        _orderRepository = new OrderRepository(context);
-        _clientRepository = new Repository<Client>(context);
-    }
-
     public async Task<Collection> CreateCollectionAsync(CollectionCreateDto collectionDto)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
             var collection = new Collection
@@ -34,7 +20,7 @@ public class CollectionService : ICollectionService
                 Date = collectionDto.Date
             };
 
-            await _collectionRepository.AddAsync(collection);
+            await context.Collections.AddAsync(collection);
 
             // Create collection details and update orders
             foreach (var payment in collectionDto.OrderPayments)
@@ -46,23 +32,24 @@ public class CollectionService : ICollectionService
                     Amount = payment.Amount
                 };
                     
-                _context.CollectionDetails.Add(collectionDetail);
+                context.CollectionDetails.Add(collectionDetail);
 
                 // Update order collected amount
-                var order = await _orderRepository.GetByIdAsync(payment.OrderId);
+                var order = await context.Orders.FindAsync(payment.OrderId);
                 if (order == null) continue;
                 order.Collected += payment.Amount;
-                await _orderRepository.UpdateAsync(order);
+                context.Orders.Update(order);
             }
 
             // Update client balance
-            var client = await _clientRepository.GetByIdAsync(collectionDto.ClientId);
+            var client = await context.Clients.FindAsync(collectionDto.ClientId);
             if (client != null)
             {
                 client.OutstandingBalance -= collectionDto.Amount;
-                await _clientRepository.UpdateAsync(client);
+                context.Clients.Update(client);
             }
 
+            await context.SaveChangesAsync();
             await transaction.CommitAsync();
             return collection;
         }
@@ -75,17 +62,31 @@ public class CollectionService : ICollectionService
 
     public async Task<IEnumerable<Collection>> GetAllCollectionsAsync()
     {
-        return await _collectionRepository.GetCollectionsWithDetailsAsync();
+        return await context.Collections
+            .Include(c => c.Client)
+            .Include(c => c.CollectionDetails)
+            .ThenInclude(cd => cd.Order)
+            .OrderByDescending(c => c.Date)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Collection>> GetTodaysCollectionsAsync()
     {
-        return await _collectionRepository.GetTodaysCollectionsAsync();
+        var today = DateTime.Today;
+        return await context.Collections
+            .Include(c => c.Client)
+            .Where(c => c.Date.Date == today)
+            .OrderByDescending(c => c.Date)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Collection>> GetCollectionsByClientAsync(int clientId)
     {
-        return await _collectionRepository.GetCollectionsByClientAsync(clientId);
+        return await context.Collections
+            .Include(c => c.Client)
+            .Where(c => c.ClientId == clientId)
+            .OrderByDescending(c => c.Date)
+            .ToListAsync();
     }
 
     public async Task<decimal> GetCurrentMonthCollectionsAsync()
@@ -93,7 +94,7 @@ public class CollectionService : ICollectionService
         var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-        var collections = await _context.Collections
+        var collections = await context.Collections
             .Where(c => c.Date >= startOfMonth && c.Date <= endOfMonth)
             .ToListAsync();
 

@@ -1,21 +1,19 @@
-﻿using TheFisher.DAL;
-using TheFisher.DAL.Entities;
-using TheFisher.DAL.Repositories;
+﻿using TheFisher.BLL.IServices;
+using TheFisher.BLL.Services;
 
 namespace TheFisher;
 
 public partial class ClientsForm : Form
 {
-    private readonly FisherDbContext _context;
-    private readonly ClientRepository _clientRepository;
-
-    public ClientsForm(FisherDbContext context)
+    private readonly IClientService _clientService;
+    
+    public ClientsForm(IClientService clientService)
     {
-        _context = context;
-        _clientRepository = new ClientRepository(context);
+        _clientService = clientService;
         InitializeComponent();
         SetupDataGridView();
-        LoadClients();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadClients());
     }
 
     private void SetupDataGridView()
@@ -30,7 +28,7 @@ public partial class ClientsForm : Form
     {
         try
         {
-            var clients = await _clientRepository.GetAllAsync();
+            var clients = await _clientService.GetClientsForDropDown();
             dataGridView.DataSource = clients.ToList();
         }
         catch (Exception ex)
@@ -43,26 +41,20 @@ public partial class ClientsForm : Form
     {
         if (string.IsNullOrWhiteSpace(nameTextBox.Text))
         {
-            MessageBox.Show("Please enter a client name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال اسم العميل.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         try
         {
-            var client = new Client
-            {
-                Name = nameTextBox.Text.Trim(),
-                OutstandingBalance = balanceNumeric.Value
-            };
-
-            await _clientRepository.AddAsync(client);
+            await _clientService.AddClient(nameTextBox.Text.Trim(), balanceNumeric.Value);
             await LoadClients();
             ClearInputs();
-            MessageBox.Show("Client added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم إضافة العميل بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error adding client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في إضافة العميل: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -70,13 +62,13 @@ public partial class ClientsForm : Form
     {
         if (dataGridView.SelectedRows.Count == 0)
         {
-            MessageBox.Show("Please select a client to update.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار عميل للتحديث.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         if (string.IsNullOrWhiteSpace(nameTextBox.Text))
         {
-            MessageBox.Show("Please enter a client name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال اسم العميل.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -85,24 +77,18 @@ public partial class ClientsForm : Form
             var selectedRow = dataGridView.SelectedRows[0];
             var clientId = (int)selectedRow.Cells["Id"].Value;
 
-            var client = await _clientRepository.GetByIdAsync(clientId);
-            if (client == null)
-            {
-                MessageBox.Show("Client not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            var clientName = nameTextBox.Text.Trim();
+            var outstandingBalance = balanceNumeric.Value;
 
-            client.Name = nameTextBox.Text.Trim();
-            client.OutstandingBalance = balanceNumeric.Value;
-
-            await _clientRepository.UpdateAsync(client);
+            await _clientService.UpdateClient(clientId, clientName, outstandingBalance);
+            
             await LoadClients();
             ClearInputs();
-            MessageBox.Show("Client updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم تحديث العميل بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error updating client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في تحديث العميل: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -110,11 +96,11 @@ public partial class ClientsForm : Form
     {
         if (dataGridView.SelectedRows.Count == 0)
         {
-            MessageBox.Show("Please select a client to delete.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار عميل للحذف.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        var result = MessageBox.Show("Are you sure you want to delete this client?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        var result = MessageBox.Show("هل أنت متأكد من حذف هذا العميل؟", "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (result != DialogResult.Yes) return;
 
         try
@@ -122,14 +108,14 @@ public partial class ClientsForm : Form
             var selectedRow = dataGridView.SelectedRows[0];
             var clientId = (int)selectedRow.Cells["Id"].Value;
 
-            await _clientRepository.DeleteAsync(clientId);
+            await _clientService.DeleteClient(clientId);
             await LoadClients();
             ClearInputs();
-            MessageBox.Show("Client deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم حذف العميل بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error deleting client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في حذف العميل: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

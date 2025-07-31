@@ -72,27 +72,27 @@ namespace TheFisher
             masterDataMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dealersMenuItem, clientsMenuItem, itemsMenuItem });
             masterDataMenuItem.Name = "masterDataMenuItem";
             masterDataMenuItem.Size = new Size(104, 24);
-            masterDataMenuItem.Text = "Master Data";
+            masterDataMenuItem.Text = "البيانات الأساسية";
             // 
             // dealersMenuItem
             // 
             dealersMenuItem.Name = "dealersMenuItem";
             dealersMenuItem.Size = new Size(142, 26);
-            dealersMenuItem.Text = "Dealers";
+            dealersMenuItem.Text = "التجار";
             dealersMenuItem.Click += ShowDealersForm;
             // 
             // clientsMenuItem
             // 
             clientsMenuItem.Name = "clientsMenuItem";
             clientsMenuItem.Size = new Size(142, 26);
-            clientsMenuItem.Text = "Clients";
+            clientsMenuItem.Text = "العملاء";
             clientsMenuItem.Click += ShowClientsForm;
             // 
             // itemsMenuItem
             // 
             itemsMenuItem.Name = "itemsMenuItem";
             itemsMenuItem.Size = new Size(142, 26);
-            itemsMenuItem.Text = "Items";
+            itemsMenuItem.Text = "المنتجات";
             itemsMenuItem.Click += ShowItemsForm;
             // 
             // transactionsMenuItem
@@ -100,27 +100,27 @@ namespace TheFisher
             transactionsMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newPurchaseMenuItem, newOrderMenuItem, newCollectionMenuItem });
             transactionsMenuItem.Name = "transactionsMenuItem";
             transactionsMenuItem.Size = new Size(104, 24);
-            transactionsMenuItem.Text = "Transactions";
+            transactionsMenuItem.Text = "المعاملات";
             // 
             // newPurchaseMenuItem
             // 
             newPurchaseMenuItem.Name = "newPurchaseMenuItem";
             newPurchaseMenuItem.Size = new Size(193, 26);
-            newPurchaseMenuItem.Text = "New Purchase";
+            newPurchaseMenuItem.Text = "شراء جديد";
             newPurchaseMenuItem.Click += ShowPurchaseForm;
             // 
             // newOrderMenuItem
             // 
             newOrderMenuItem.Name = "newOrderMenuItem";
             newOrderMenuItem.Size = new Size(193, 26);
-            newOrderMenuItem.Text = "New Order";
+            newOrderMenuItem.Text = "طلب جديد";
             newOrderMenuItem.Click += ShowOrderForm;
             // 
             // newCollectionMenuItem
             // 
             newCollectionMenuItem.Name = "newCollectionMenuItem";
             newCollectionMenuItem.Size = new Size(193, 26);
-            newCollectionMenuItem.Text = "New Collection";
+            newCollectionMenuItem.Text = "تحصيل جديد";
             newCollectionMenuItem.Click += ShowCollectionForm;
             // 
             // reportsMenuItem
@@ -128,34 +128,34 @@ namespace TheFisher
             reportsMenuItem.DropDownItems.AddRange(new ToolStripItem[] { todaysPurchasesMenuItem, todaysCollectionsMenuItem, purchasesByDealerMenuItem, collectionsByClientMenuItem });
             reportsMenuItem.Name = "reportsMenuItem";
             reportsMenuItem.Size = new Size(74, 24);
-            reportsMenuItem.Text = "Reports";
+            reportsMenuItem.Text = "التقارير";
             // 
             // todaysPurchasesMenuItem
             // 
             todaysPurchasesMenuItem.Name = "todaysPurchasesMenuItem";
             todaysPurchasesMenuItem.Size = new Size(227, 26);
-            todaysPurchasesMenuItem.Text = "Today's Purchases";
+            todaysPurchasesMenuItem.Text = "مشتريات اليوم";
             todaysPurchasesMenuItem.Click += ShowTodaysPurchasesReport;
             // 
             // todaysCollectionsMenuItem
             // 
             todaysCollectionsMenuItem.Name = "todaysCollectionsMenuItem";
             todaysCollectionsMenuItem.Size = new Size(227, 26);
-            todaysCollectionsMenuItem.Text = "Today's Collections";
+            todaysCollectionsMenuItem.Text = "تحصيلات اليوم";
             todaysCollectionsMenuItem.Click += ShowTodaysCollectionsReport;
             // 
             // purchasesByDealerMenuItem
             // 
             purchasesByDealerMenuItem.Name = "purchasesByDealerMenuItem";
             purchasesByDealerMenuItem.Size = new Size(227, 26);
-            purchasesByDealerMenuItem.Text = "Purchases by Dealer";
+            purchasesByDealerMenuItem.Text = "المشتريات حسب التاجر";
             purchasesByDealerMenuItem.Click += ShowPurchasesByDealerReport;
             // 
             // collectionsByClientMenuItem
             // 
             collectionsByClientMenuItem.Name = "collectionsByClientMenuItem";
             collectionsByClientMenuItem.Size = new Size(227, 26);
-            collectionsByClientMenuItem.Text = "Collections by Client";
+            collectionsByClientMenuItem.Text = "التحصيلات حسب العميل";
             collectionsByClientMenuItem.Click += ShowCollectionsByClientReport;
             // 
             // dashboardPanel
@@ -207,9 +207,10 @@ namespace TheFisher
             collectionsTitleLabel.ForeColor = Color.FromArgb(50, 50, 50);
             collectionsTitleLabel.Location = new Point(17, 20);
             collectionsTitleLabel.Name = "collectionsTitleLabel";
+            collectionsTitleLabel.RightToLeft = RightToLeft.Yes;
             collectionsTitleLabel.Size = new Size(326, 24);
             collectionsTitleLabel.TabIndex = 0;
-            collectionsTitleLabel.Text = "Total Collections (Current Month)";
+            collectionsTitleLabel.Text = "إجمالي التحصيلات (الشهر الحالي)";
             // 
             // collectionsLabel
             // 
@@ -242,9 +243,10 @@ namespace TheFisher
             clientsTitleLabel.ForeColor = Color.FromArgb(50, 50, 50);
             clientsTitleLabel.Location = new Point(17, 20);
             clientsTitleLabel.Name = "clientsTitleLabel";
+            clientsTitleLabel.RightToLeft = RightToLeft.Yes;
             clientsTitleLabel.Size = new Size(192, 24);
             clientsTitleLabel.TabIndex = 0;
-            clientsTitleLabel.Text = "Money Clients Owe";
+            clientsTitleLabel.Text = "المدينين يدين للعملاء";
             // 
             // clientsOweLabel
             // 
@@ -277,9 +279,10 @@ namespace TheFisher
             dealersTitleLabel.ForeColor = Color.FromArgb(50, 50, 50);
             dealersTitleLabel.Location = new Point(17, 20);
             dealersTitleLabel.Name = "dealersTitleLabel";
+            dealersTitleLabel.RightToLeft = RightToLeft.Yes;
             dealersTitleLabel.Size = new Size(235, 24);
             dealersTitleLabel.TabIndex = 0;
-            dealersTitleLabel.Text = "Money Owed to Dealers";
+            dealersTitleLabel.Text = "المدينين يدين للتجار";
             // 
             // owedToDealersLabel
             // 
@@ -312,9 +315,10 @@ namespace TheFisher
             revenueTitleLabel.ForeColor = Color.FromArgb(50, 50, 50);
             revenueTitleLabel.Location = new Point(17, 20);
             revenueTitleLabel.Name = "revenueTitleLabel";
+            revenueTitleLabel.RightToLeft = RightToLeft.Yes;
             revenueTitleLabel.Size = new Size(303, 24);
             revenueTitleLabel.TabIndex = 0;
-            revenueTitleLabel.Text = "Total Revenue (Current Month)";
+            revenueTitleLabel.Text = "إجمالي الإيرادات (الشهر الحالي)";
             // 
             // revenueLabel
             // 
@@ -336,31 +340,33 @@ namespace TheFisher
             dateLabel.Name = "dateLabel";
             dateLabel.Size = new Size(298, 23);
             dateLabel.TabIndex = 1;
-            dateLabel.Text = "Today: Monday, January 1, 2024";
+            dateLabel.Text = "اليوم: الاثنين، 1 يناير، 2024";
             // 
             // titleLabel
             // 
-            titleLabel.AutoSize = true;
-            titleLabel.Font = new Font("Arial", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            titleLabel.ForeColor = Color.FromArgb(50, 50, 50);
-            titleLabel.Location = new Point(57, 40);
-            titleLabel.Name = "titleLabel";
-            titleLabel.Size = new Size(226, 46);
-            titleLabel.TabIndex = 0;
-            titleLabel.Text = "Dashboard";
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Arial", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.titleLabel.Location = new System.Drawing.Point(57, 40);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.titleLabel.Size = new System.Drawing.Size(226, 46);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "لوحة التحكم";
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1600, 745);
-            Controls.Add(dashboardPanel);
-            Controls.Add(menuStrip);
-            MainMenuStrip = menuStrip;
-            Margin = new Padding(3, 4, 3, 4);
-            Name = "MainForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Fish Market Management System";
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1600, 745);
+            this.Controls.Add(this.dashboardPanel);
+            this.Controls.Add(this.menuStrip);
+            this.MainMenuStrip = this.menuStrip;
+            this.Name = "MainForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "نظام إدارة الصيد";
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             dashboardPanel.ResumeLayout(false);

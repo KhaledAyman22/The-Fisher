@@ -1,21 +1,18 @@
-﻿using TheFisher.DAL;
-using TheFisher.DAL.Entities;
-using TheFisher.DAL.Repositories;
+﻿using TheFisher.BLL.IServices;
 
 namespace TheFisher;
 
 public partial class DealersForm : Form
 {
-    private readonly FisherDbContext _context;
-    private readonly DealerRepository _dealerRepository;
+    private readonly IDealerService _dealerService;
 
-    public DealersForm(FisherDbContext context)
+    public DealersForm(IDealerService dealerService)
     {
-        _context = context;
-        _dealerRepository = new DealerRepository(context);
+        _dealerService = dealerService;
         InitializeComponent();
         SetupDataGridView();
-        LoadDealers();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadDealers());
     }
 
     private void SetupDataGridView()
@@ -30,7 +27,7 @@ public partial class DealersForm : Form
     {
         try
         {
-            var dealers = await _dealerRepository.GetAllAsync();
+            var dealers = await _dealerService.GetAllDealersAsync();
             dataGridView.DataSource = dealers.ToList();
         }
         catch (Exception ex)
@@ -43,26 +40,20 @@ public partial class DealersForm : Form
     {
         if (string.IsNullOrWhiteSpace(nameTextBox.Text))
         {
-            MessageBox.Show("Please enter a dealer name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال اسم التاجر.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         try
         {
-            var dealer = new Dealer
-            {
-                Name = nameTextBox.Text.Trim(),
-                OutstandingBalance = balanceNumeric.Value
-            };
-
-            await _dealerRepository.AddAsync(dealer);
+            await _dealerService.AddDealer(nameTextBox.Text.Trim(), balanceNumeric.Value);
             await LoadDealers();
             ClearInputs();
-            MessageBox.Show("Dealer added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم إضافة التاجر بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error adding dealer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في إضافة التاجر: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -70,13 +61,13 @@ public partial class DealersForm : Form
     {
         if (dataGridView.SelectedRows.Count == 0)
         {
-            MessageBox.Show("Please select a dealer to update.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار تاجر للتحديث.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         if (string.IsNullOrWhiteSpace(nameTextBox.Text))
         {
-            MessageBox.Show("Please enter a dealer name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال اسم التاجر.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -85,24 +76,14 @@ public partial class DealersForm : Form
             var selectedRow = dataGridView.SelectedRows[0];
             var dealerId = (int)selectedRow.Cells["Id"].Value;
 
-            var dealer = await _dealerRepository.GetByIdAsync(dealerId);
-            if (dealer == null)
-            {
-                MessageBox.Show("Dealer not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            dealer.Name = nameTextBox.Text.Trim();
-            dealer.OutstandingBalance = balanceNumeric.Value;
-
-            await _dealerRepository.UpdateAsync(dealer);
+            await _dealerService.UpdateDealer(dealerId, nameTextBox.Text.Trim(), balanceNumeric.Value);
             await LoadDealers();
             ClearInputs();
-            MessageBox.Show("Dealer updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم تحديث التاجر بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error updating dealer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في تحديث التاجر: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -110,11 +91,11 @@ public partial class DealersForm : Form
     {
         if (dataGridView.SelectedRows.Count == 0)
         {
-            MessageBox.Show("Please select a dealer to delete.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار تاجر للحذف.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        var result = MessageBox.Show("Are you sure you want to delete this dealer?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        var result = MessageBox.Show("هل أنت متأكد من حذف هذا التاجر؟", "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (result != DialogResult.Yes) return;
 
         try
@@ -122,14 +103,14 @@ public partial class DealersForm : Form
             var selectedRow = dataGridView.SelectedRows[0];
             var dealerId = (int)selectedRow.Cells["Id"].Value;
 
-            await _dealerRepository.DeleteAsync(dealerId);
+            await _dealerService.DeleteDealer(dealerId);
             await LoadDealers();
             ClearInputs();
-            MessageBox.Show("Dealer deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم حذف التاجر بنجاح.", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error deleting dealer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في حذف التاجر: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

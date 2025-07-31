@@ -125,92 +125,101 @@ namespace TheFisher
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(120, 300);
+            this.saveButton.Location = new System.Drawing.Point(12, 220);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 25);
-            this.saveButton.TabIndex = 7;
-            this.saveButton.Text = "Save";
+            this.saveButton.TabIndex = 14;
+            this.saveButton.Text = "حفظ";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(210, 300);
+            this.cancelButton.Location = new System.Drawing.Point(93, 220);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 25);
-            this.cancelButton.TabIndex = 8;
-            this.cancelButton.Text = "Cancel";
+            this.cancelButton.TabIndex = 15;
+            this.cancelButton.Text = "إلغاء";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // dealerLabel
             // 
             this.dealerLabel.AutoSize = true;
-            this.dealerLabel.Location = new System.Drawing.Point(20, 23);
+            this.dealerLabel.Location = new System.Drawing.Point(12, 15);
             this.dealerLabel.Name = "dealerLabel";
-            this.dealerLabel.Size = new System.Drawing.Size(44, 15);
-            this.dealerLabel.TabIndex = 9;
-            this.dealerLabel.Text = "Dealer:";
+            this.dealerLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dealerLabel.Size = new System.Drawing.Size(42, 15);
+            this.dealerLabel.TabIndex = 0;
+            this.dealerLabel.Text = "التاجر:";
             // 
             // itemLabel
             // 
             this.itemLabel.AutoSize = true;
-            this.itemLabel.Location = new System.Drawing.Point(20, 63);
+            this.itemLabel.Location = new System.Drawing.Point(12, 44);
             this.itemLabel.Name = "itemLabel";
-            this.itemLabel.Size = new System.Drawing.Size(35, 15);
-            this.itemLabel.TabIndex = 10;
-            this.itemLabel.Text = "Item:";
+            this.itemLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.itemLabel.Size = new System.Drawing.Size(42, 15);
+            this.itemLabel.TabIndex = 2;
+            this.itemLabel.Text = "المنتج:";
             // 
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(20, 103);
+            this.typeLabel.Location = new System.Drawing.Point(12, 73);
             this.typeLabel.Name = "typeLabel";
-            this.typeLabel.Size = new System.Drawing.Size(34, 15);
-            this.typeLabel.TabIndex = 11;
-            this.typeLabel.Text = "Type:";
+            this.typeLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.typeLabel.Size = new System.Drawing.Size(42, 15);
+            this.typeLabel.TabIndex = 4;
+            this.typeLabel.Text = "النوع:";
             // 
             // unitsLabel
             // 
             this.unitsLabel.AutoSize = true;
-            this.unitsLabel.Location = new System.Drawing.Point(20, 143);
+            this.unitsLabel.Location = new System.Drawing.Point(12, 102);
             this.unitsLabel.Name = "unitsLabel";
-            this.unitsLabel.Size = new System.Drawing.Size(38, 15);
-            this.unitsLabel.TabIndex = 12;
-            this.unitsLabel.Text = "Units:";
+            this.unitsLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.unitsLabel.Size = new System.Drawing.Size(42, 15);
+            this.unitsLabel.TabIndex = 6;
+            this.unitsLabel.Text = "الوحدات:";
             // 
             // unitPriceLabel
             // 
             this.unitPriceLabel.AutoSize = true;
-            this.unitPriceLabel.Location = new System.Drawing.Point(20, 183);
+            this.unitPriceLabel.Location = new System.Drawing.Point(12, 131);
             this.unitPriceLabel.Name = "unitPriceLabel";
-            this.unitPriceLabel.Size = new System.Drawing.Size(67, 15);
-            this.unitPriceLabel.TabIndex = 13;
-            this.unitPriceLabel.Text = "Unit Price:";
+            this.unitPriceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.unitPriceLabel.Size = new System.Drawing.Size(42, 15);
+            this.unitPriceLabel.TabIndex = 8;
+            this.unitPriceLabel.Text = "سعر الوحدة:";
             // 
             // totalWeightLabel
             // 
             this.totalWeightLabel.AutoSize = true;
-            this.totalWeightLabel.Location = new System.Drawing.Point(20, 223);
+            this.totalWeightLabel.Location = new System.Drawing.Point(12, 160);
             this.totalWeightLabel.Name = "totalWeightLabel";
-            this.totalWeightLabel.Size = new System.Drawing.Size(82, 15);
-            this.totalWeightLabel.TabIndex = 14;
-            this.totalWeightLabel.Text = "Total Weight:";
+            this.totalWeightLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.totalWeightLabel.Size = new System.Drawing.Size(42, 15);
+            this.totalWeightLabel.TabIndex = 10;
+            this.totalWeightLabel.Text = "الوزن الإجمالي:";
             // 
             // dateLabel
             // 
             this.dateLabel.AutoSize = true;
-            this.dateLabel.Location = new System.Drawing.Point(20, 263);
+            this.dateLabel.Location = new System.Drawing.Point(12, 189);
             this.dateLabel.Name = "dateLabel";
-            this.dateLabel.Size = new System.Drawing.Size(34, 15);
-            this.dateLabel.TabIndex = 15;
-            this.dateLabel.Text = "Date:";
+            this.dateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dateLabel.Size = new System.Drawing.Size(42, 15);
+            this.dateLabel.TabIndex = 12;
+            this.dateLabel.Text = "التاريخ:";
             // 
             // PurchaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 350);
+            this.ClientSize = new System.Drawing.Size(384, 261);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.dateLabel);
             this.Controls.Add(this.totalWeightLabel);
             this.Controls.Add(this.unitPriceLabel);
@@ -218,8 +227,6 @@ namespace TheFisher
             this.Controls.Add(this.typeLabel);
             this.Controls.Add(this.itemLabel);
             this.Controls.Add(this.dealerLabel);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.datePicker);
             this.Controls.Add(this.totalWeightNumeric);
             this.Controls.Add(this.unitPriceNumeric);
@@ -227,9 +234,14 @@ namespace TheFisher
             this.Controls.Add(this.typeComboBox);
             this.Controls.Add(this.itemComboBox);
             this.Controls.Add(this.dealerComboBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "PurchaseForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New Purchase";
+            this.Text = "شراء جديد";
             ((System.ComponentModel.ISupportInitialize)(this.unitsNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unitPriceNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.totalWeightNumeric)).EndInit();

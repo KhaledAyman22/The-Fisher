@@ -1,35 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.DTOs;
 using TheFisher.BLL.IServices;
-using TheFisher.DAL;
 
 namespace TheFisher;
 
 public partial class OrderForm : Form
 {
-    private readonly FisherDbContext _context;
     private readonly IOrderService _orderService;
+    private readonly IClientService _clientService;
+    private readonly IItemService _itemService;
 
-    public OrderForm(FisherDbContext context, IOrderService orderService)
+    public OrderForm(IOrderService orderService, IClientService clientService, IItemService itemService)
     {
-        _context = context;
         _orderService = orderService;
+        _clientService = clientService;
+        _itemService = itemService;
         InitializeComponent();
-        LoadComboBoxes();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadComboBoxes());
     }
-
 
 
     private async Task LoadComboBoxes()
     {
         try
         {
-            var clients = await _context.Clients.OrderBy(c => c.Name).ToListAsync();
+            var clients = await _clientService.GetClientsForDropDown();
             clientComboBox.DataSource = clients;
             clientComboBox.DisplayMember = "Name";
             clientComboBox.ValueMember = "Id";
 
-            var items = await _context.Items.OrderBy(i => i.Name).ToListAsync();
+            var items = await _itemService.GetItemsForDropDown();
             itemComboBox.DataSource = items;
             itemComboBox.DisplayMember = "Name";
             itemComboBox.ValueMember = "Id";
@@ -66,35 +66,34 @@ public partial class OrderForm : Form
     {
         if (clientComboBox.SelectedValue == null || itemComboBox.SelectedValue == null)
         {
-            MessageBox.Show("Please select client and item.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار العميل والمنتج.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         if (weightNumeric.Value <= 0 || kiloPriceNumeric.Value <= 0)
         {
-            MessageBox.Show("Please enter valid weight and price.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال وزن وسعر صحيحين.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         try
         {
-            var orderDto = new OrderCreateDto
-            {
-                ClientId = (int)clientComboBox.SelectedValue,
-                ItemId = (int)itemComboBox.SelectedValue,
-                Weight = weightNumeric.Value,
-                KiloPrice = kiloPriceNumeric.Value,
-                Date = datePicker.Value
-            };
+            var orderDto = new OrderCreateDto(
+                (int)clientComboBox.SelectedValue,
+                (int)itemComboBox.SelectedValue,
+                weightNumeric.Value,
+                kiloPriceNumeric.Value,
+                datePicker.Value
+            );
 
             await _orderService.CreateOrderAsync(orderDto);
-            MessageBox.Show("Order saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم حفظ الطلب بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error saving order: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في حفظ الطلب: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

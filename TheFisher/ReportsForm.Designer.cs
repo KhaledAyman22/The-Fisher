@@ -61,35 +61,38 @@ namespace TheFisher
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(340, 19);
+            this.refreshButton.Location = new System.Drawing.Point(200, 12);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 25);
             this.refreshButton.TabIndex = 2;
-            this.refreshButton.Text = "Refresh";
+            this.refreshButton.Text = "تحديث";
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // filterLabel
             // 
             this.filterLabel.AutoSize = true;
-            this.filterLabel.Location = new System.Drawing.Point(20, 23);
+            this.filterLabel.Location = new System.Drawing.Point(12, 15);
             this.filterLabel.Name = "filterLabel";
-            this.filterLabel.Size = new System.Drawing.Size(36, 15);
-            this.filterLabel.TabIndex = 3;
-            this.filterLabel.Text = "Filter:";
+            this.filterLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.filterLabel.Size = new System.Drawing.Size(42, 15);
+            this.filterLabel.TabIndex = 0;
+            this.filterLabel.Text = "الفلتر:";
             // 
             // ReportsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 600);
-            this.Controls.Add(this.filterLabel);
             this.Controls.Add(this.refreshButton);
+            this.Controls.Add(this.filterLabel);
             this.Controls.Add(this.filterComboBox);
             this.Controls.Add(this.dataGridView);
             this.Name = "ReportsForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Reports";
+            this.Text = "التقارير";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

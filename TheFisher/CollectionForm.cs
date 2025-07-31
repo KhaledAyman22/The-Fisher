@@ -1,38 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.DTOs;
 using TheFisher.BLL.IServices;
-using TheFisher.DAL;
 
 namespace TheFisher;
 
 public partial class CollectionForm : Form
 {
-    private readonly FisherDbContext _context;
     private readonly ICollectionService _collectionService;
-    private ComboBox _clientComboBox;
-    private NumericUpDown _amountNumeric;
-    private DateTimePicker _datePicker;
-    private DataGridView _ordersGridView;
-    private Button _saveButton, _cancelButton;
+    private readonly IClientService _clientService;
+    private readonly IOrderService _orderService;
 
-    public CollectionForm(FisherDbContext context, ICollectionService collectionService)
+    public CollectionForm(ICollectionService collectionService, IClientService clientService, IOrderService orderService)
     {
-        _context = context;
         _collectionService = collectionService;
+        _clientService = clientService;
+        _orderService = orderService;
         InitializeComponent();
-        LoadComboBoxes();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadComboBoxes());
     }
-
-
 
     private async Task LoadComboBoxes()
     {
         try
         {
-            var clients = await _context.Clients.OrderBy(c => c.Name).ToListAsync();
-            _clientComboBox.DataSource = clients;
-            _clientComboBox.DisplayMember = "Name";
-            _clientComboBox.ValueMember = "Id";
+            var clients = await _clientService.GetClientsForDropDown();
+            clientComboBox.DataSource = clients;
+            clientComboBox.DisplayMember = "Name";
+            clientComboBox.ValueMember = "Id";
         }
         catch (Exception ex)
         {
@@ -58,24 +52,11 @@ public partial class CollectionForm : Form
     {
         try
         {
-            var orders = await _context.Orders
-                .Include(o => o.Item)
-                .Where(o => o.ClientId == clientId && o.Total > o.Collected)
-                .Select(o => new
-                {
-                    o.Id,
-                    o.Item.Name,
-                    o.Weight,
-                    o.Total,
-                    o.Collected,
-                    Balance = o.Total - o.Collected
-                })
-                .ToListAsync();
-
-            _ordersGridView.DataSource = orders;
+            var orders = await _orderService.GetClientUnpaidOrdersAsync(clientId);
+            ordersGridView.DataSource = orders;
 
             // Add editable payment amount column
-            foreach (DataGridViewRow row in _ordersGridView.Rows)
+            foreach (DataGridViewRow row in ordersGridView.Rows)
             {
                 if (row.Cells["PaymentAmount"] != null)
                 {
@@ -91,15 +72,15 @@ public partial class CollectionForm : Form
 
     private async void SaveButton_Click(object sender, EventArgs e)
     {
-        if (_clientComboBox.SelectedValue == null)
+        if (clientComboBox.SelectedValue == null)
         {
-            MessageBox.Show("Please select a client.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى اختيار العميل.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        if (_amountNumeric.Value <= 0)
+        if (amountNumeric.Value <= 0)
         {
-            MessageBox.Show("Please enter a valid collection amount.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("يرجى إدخال مبلغ تحصيل صحيح.", "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -108,44 +89,44 @@ public partial class CollectionForm : Form
             var orderPayments = new List<OrderPaymentDto>();
             decimal totalPayments = 0;
 
-            foreach (DataGridViewRow row in _ordersGridView.Rows)
+            foreach (DataGridViewRow row in ordersGridView.Rows)
             {
                 if (row.Cells["Select"].Value is true && 
                     decimal.TryParse(row.Cells["PaymentAmount"].Value?.ToString(), out decimal paymentAmount) && 
                     paymentAmount > 0)
                 {
-                    orderPayments.Add(new OrderPaymentDto
+                    var idValue = row.Cells["Id"].Value?.ToString();
+                    if (idValue != null)
                     {
-                        OrderId = Ulid.NewUlid(),
-                        Amount = paymentAmount
-                    });
-                    totalPayments += paymentAmount;
+                        var orderId = Ulid.Parse(idValue);
+                        orderPayments.Add(new OrderPaymentDto(orderId, paymentAmount));
+                        totalPayments += paymentAmount;
+                    }
                 }
             }
 
-            if (totalPayments != _amountNumeric.Value)
+            if (totalPayments != amountNumeric.Value)
             {
-                MessageBox.Show($"Total payment amounts ({totalPayments:C2}) must equal collection amount ({_amountNumeric.Value:C2}).", 
-                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"يجب أن يساوي إجمالي مبالغ الدفع ({totalPayments:C2}) مبلغ التحصيل ({amountNumeric.Value:C2}).", 
+                    "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var collectionDto = new CollectionCreateDto
-            {
-                ClientId = (int)_clientComboBox.SelectedValue,
-                Amount = _amountNumeric.Value,
-                Date = _datePicker.Value,
-                OrderPayments = orderPayments
-            };
+            var collectionDto = new CollectionCreateDto(
+                (int)clientComboBox.SelectedValue,
+                amountNumeric.Value,
+                datePicker.Value,
+                orderPayments
+            );
 
             await _collectionService.CreateCollectionAsync(collectionDto);
-            MessageBox.Show("Collection saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("تم حفظ التحصيل بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error saving collection: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في حفظ التحصيل: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

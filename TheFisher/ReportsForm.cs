@@ -1,19 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TheFisher.DAL;
+﻿using TheFisher.BLL.IServices;
 
 namespace TheFisher;
 
 public partial class ReportsForm : Form
 {
-    private readonly FisherDbContext _context;
     private readonly string _reportType;
+    private readonly IReportsService _reportsService;
 
-    public ReportsForm(FisherDbContext context, string reportType)
+    public ReportsForm(string reportType, IReportsService reportsService)
     {
-        _context = context;
         _reportType = reportType;
+        _reportsService = reportsService;
         InitializeComponent();
-        LoadReport();
+        // Use Task.Run to avoid CS4014 warning
+        _ = Task.Run(async () => await LoadReport());
     }
 
     private async Task LoadFilterComboBox()
@@ -22,14 +22,14 @@ public partial class ReportsForm : Form
         {
             if (_reportType.Contains("by Dealer"))
             {
-                var dealers = await _context.Dealers.OrderBy(d => d.Name).ToListAsync();
+                var dealers = await _reportsService.GetDealersForFilterAsync();
                 filterComboBox.DataSource = dealers;
                 filterComboBox.DisplayMember = "Name";
                 filterComboBox.ValueMember = "Id";
             }
             else if (_reportType.Contains("by Client"))
             {
-                var clients = await _context.Clients.OrderBy(c => c.Name).ToListAsync();
+                var clients = await _reportsService.GetClientsForFilterAsync();
                 filterComboBox.DataSource = clients;
                 filterComboBox.DisplayMember = "Name";
                 filterComboBox.ValueMember = "Id";
@@ -37,7 +37,7 @@ public partial class ReportsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error loading filter data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في تحميل بيانات الفلتر: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -50,82 +50,24 @@ public partial class ReportsForm : Form
             switch (_reportType)
             {
                 case "Today's Purchases":
-                    var todayPurchases = await _context.Purchases
-                        .Include(p => p.Dealer)
-                        .Include(p => p.Item)
-                        .Where(p => p.Date.Date == DateTime.Today)
-                        .Select(p => new
-                        {
-                            p.Id,
-                            Dealer = p.Dealer.Name,
-                            Item = p.Item.Name,
-                            p.TotalUnits,
-                            p.UnitPrice,
-                            p.TotalWeight,
-                            p.WeightAvailable,
-                            p.Type,
-                            p.Date
-                        })
-                        .OrderByDescending(p => p.Date)
-                        .ToListAsync();
-                    dataSource = todayPurchases;
+                    dataSource = await _reportsService.GetTodaysPurchasesAsync();
                     break;
 
                 case "Today's Collections":
-                    var todayCollections = await _context.Collections
-                        .Include(c => c.Client)
-                        .Where(c => c.Date.Date == DateTime.Today)
-                        .Select(c => new
-                        {
-                            c.Id,
-                            Client = c.Client.Name,
-                            c.Amount,
-                            c.Date
-                        })
-                        .OrderByDescending(c => c.Date)
-                        .ToListAsync();
-                    dataSource = todayCollections;
+                    dataSource = await _reportsService.GetTodaysCollectionsAsync();
                     break;
 
                 case "Purchases by Dealer":
                     if (filterComboBox?.SelectedValue != null)
                     {
-                        var dealerPurchases = await _context.Purchases
-                            .Include(p => p.Dealer)
-                            .Include(p => p.Item)
-                            .Where(p => p.DealerId == (int)filterComboBox.SelectedValue)
-                            .Select(p => new
-                            {
-                                p.Id,
-                                Item = p.Item.Name,
-                                p.TotalUnits,
-                                p.UnitPrice,
-                                p.TotalWeight,
-                                p.WeightAvailable,
-                                p.Type,
-                                p.Date
-                            })
-                            .OrderByDescending(p => p.Date)
-                            .ToListAsync();
-                        dataSource = dealerPurchases;
+                        dataSource = await _reportsService.GetPurchasesByDealerAsync((int)filterComboBox.SelectedValue);
                     }
                     break;
 
                 case "Collections by Client":
                     if (filterComboBox?.SelectedValue != null)
                     {
-                        var clientCollections = await _context.Collections
-                            .Include(c => c.Client)
-                            .Where(c => c.ClientId == (int)filterComboBox.SelectedValue)
-                            .Select(c => new
-                            {
-                                c.Id,
-                                c.Amount,
-                                c.Date
-                            })
-                            .OrderByDescending(c => c.Date)
-                            .ToListAsync();
-                        dataSource = clientCollections;
+                        dataSource = await _reportsService.GetCollectionsByClientAsync((int)filterComboBox.SelectedValue);
                     }
                     break;
             }
@@ -147,7 +89,7 @@ public partial class ReportsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error loading report: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"خطأ في تحميل التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

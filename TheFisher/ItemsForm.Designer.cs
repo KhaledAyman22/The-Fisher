@@ -63,6 +63,7 @@ namespace TheFisher
             // 
             this.nameTextBox.Location = new System.Drawing.Point(80, 12);
             this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.nameTextBox.Size = new System.Drawing.Size(150, 23);
             this.nameTextBox.TabIndex = 1;
             // 
@@ -98,7 +99,7 @@ namespace TheFisher
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 25);
             this.addButton.TabIndex = 4;
-            this.addButton.Text = "Add";
+            this.addButton.Text = "إضافة";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
@@ -108,7 +109,7 @@ namespace TheFisher
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(75, 25);
             this.updateButton.TabIndex = 5;
-            this.updateButton.Text = "Update";
+            this.updateButton.Text = "تحديث";
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
             // 
@@ -118,7 +119,7 @@ namespace TheFisher
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 25);
             this.deleteButton.TabIndex = 6;
-            this.deleteButton.Text = "Delete";
+            this.deleteButton.Text = "حذف";
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
@@ -145,27 +146,30 @@ namespace TheFisher
             this.nameLabel.AutoSize = true;
             this.nameLabel.Location = new System.Drawing.Point(10, 15);
             this.nameLabel.Name = "nameLabel";
+            this.nameLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.nameLabel.Size = new System.Drawing.Size(42, 15);
             this.nameLabel.TabIndex = 8;
-            this.nameLabel.Text = "Name:";
+            this.nameLabel.Text = "الاسم:";
             // 
             // stockLabel
             // 
             this.stockLabel.AutoSize = true;
             this.stockLabel.Location = new System.Drawing.Point(250, 15);
             this.stockLabel.Name = "stockLabel";
+            this.stockLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.stockLabel.Size = new System.Drawing.Size(64, 15);
             this.stockLabel.TabIndex = 9;
-            this.stockLabel.Text = "Stock (KG):";
+            this.stockLabel.Text = "المخزون (كجم):";
             // 
             // priceLabel
             // 
             this.priceLabel.AutoSize = true;
             this.priceLabel.Location = new System.Drawing.Point(440, 15);
             this.priceLabel.Name = "priceLabel";
+            this.priceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.priceLabel.Size = new System.Drawing.Size(84, 15);
             this.priceLabel.TabIndex = 10;
-            this.priceLabel.Text = "Avg Price/KG:";
+            this.priceLabel.Text = "متوسط السعر/كجم:";
             // 
             // ItemsForm
             // 
@@ -175,8 +179,10 @@ namespace TheFisher
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.inputPanel);
             this.Name = "ItemsForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Items Management";
+            this.Text = "إدارة المنتجات";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stockNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.priceNumeric)).EndInit();

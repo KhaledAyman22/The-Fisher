@@ -75,21 +75,21 @@ namespace TheFisher
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(120, 140);
+            this.saveButton.Location = new System.Drawing.Point(12, 131);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 25);
-            this.saveButton.TabIndex = 3;
-            this.saveButton.Text = "Save";
+            this.saveButton.TabIndex = 8;
+            this.saveButton.Text = "حفظ";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(210, 140);
+            this.cancelButton.Location = new System.Drawing.Point(93, 131);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 25);
-            this.cancelButton.TabIndex = 4;
-            this.cancelButton.Text = "Cancel";
+            this.cancelButton.TabIndex = 9;
+            this.cancelButton.Text = "إلغاء";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
@@ -109,57 +109,67 @@ namespace TheFisher
             // clientLabel
             // 
             this.clientLabel.AutoSize = true;
-            this.clientLabel.Location = new System.Drawing.Point(20, 23);
+            this.clientLabel.Location = new System.Drawing.Point(12, 15);
             this.clientLabel.Name = "clientLabel";
-            this.clientLabel.Size = new System.Drawing.Size(41, 15);
-            this.clientLabel.TabIndex = 6;
-            this.clientLabel.Text = "Client:";
+            this.clientLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.clientLabel.Size = new System.Drawing.Size(42, 15);
+            this.clientLabel.TabIndex = 0;
+            this.clientLabel.Text = "العميل:";
             // 
             // amountLabel
             // 
             this.amountLabel.AutoSize = true;
-            this.amountLabel.Location = new System.Drawing.Point(20, 63);
+            this.amountLabel.Location = new System.Drawing.Point(12, 44);
             this.amountLabel.Name = "amountLabel";
-            this.amountLabel.Size = new System.Drawing.Size(54, 15);
-            this.amountLabel.TabIndex = 7;
-            this.amountLabel.Text = "Amount:";
+            this.amountLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.amountLabel.Size = new System.Drawing.Size(42, 15);
+            this.amountLabel.TabIndex = 2;
+            this.amountLabel.Text = "المبلغ:";
             // 
             // dateLabel
             // 
             this.dateLabel.AutoSize = true;
-            this.dateLabel.Location = new System.Drawing.Point(20, 103);
+            this.dateLabel.Location = new System.Drawing.Point(12, 73);
             this.dateLabel.Name = "dateLabel";
-            this.dateLabel.Size = new System.Drawing.Size(34, 15);
-            this.dateLabel.TabIndex = 8;
-            this.dateLabel.Text = "Date:";
+            this.dateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dateLabel.Size = new System.Drawing.Size(42, 15);
+            this.dateLabel.TabIndex = 4;
+            this.dateLabel.Text = "التاريخ:";
             // 
             // ordersLabel
             // 
             this.ordersLabel.AutoSize = true;
-            this.ordersLabel.Location = new System.Drawing.Point(20, 180);
+            this.ordersLabel.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ordersLabel.Location = new System.Drawing.Point(12, 102);
             this.ordersLabel.Name = "ordersLabel";
-            this.ordersLabel.Size = new System.Drawing.Size(48, 15);
-            this.ordersLabel.TabIndex = 9;
-            this.ordersLabel.Text = "Orders:";
+            this.ordersLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ordersLabel.Size = new System.Drawing.Size(42, 15);
+            this.ordersLabel.TabIndex = 6;
+            this.ordersLabel.Text = "الطلبات:";
             // 
             // CollectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 420);
+            this.ClientSize = new System.Drawing.Size(800, 600);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.ordersLabel);
             this.Controls.Add(this.dateLabel);
             this.Controls.Add(this.amountLabel);
             this.Controls.Add(this.clientLabel);
             this.Controls.Add(this.ordersGridView);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.datePicker);
             this.Controls.Add(this.amountNumeric);
             this.Controls.Add(this.clientComboBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CollectionForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New Collection";
+            this.Text = "تحصيل جديد";
             ((System.ComponentModel.ISupportInitialize)(this.amountNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ordersGridView)).EndInit();
             this.ResumeLayout(false);

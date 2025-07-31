@@ -20,7 +20,7 @@ namespace TheFisher
             this.Load += BaseForm_Load;
         }
         
-        private void BaseForm_Load(object sender, EventArgs e)
+        private void BaseForm_Load(object? sender, EventArgs e)
         {
             // Apply responsive behavior to this form
             FormResponsiveHelper.SetupResponsiveForm(this);

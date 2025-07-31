@@ -5,7 +5,7 @@ namespace TheFisher.BLL.IServices;
 
 public interface IPurchaseService
 {
-    Task<Purchase> CreatePurchaseAsync(PurchaseCreateDto purchaseDto);
+    Task<Purchase> CreatePurchaseAsync(PurchaseCreateDto purchaseCreateDto);
     Task<IEnumerable<Purchase>> GetAllPurchasesAsync();
     Task<IEnumerable<Purchase>> GetTodaysPurchasesAsync();
     Task<IEnumerable<Purchase>> GetPurchasesByDealerAsync(int dealerId);

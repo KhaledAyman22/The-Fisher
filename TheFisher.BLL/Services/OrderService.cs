@@ -3,35 +3,26 @@ using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.Entities;
 using TheFisher.DAL.enums;
-using TheFisher.DAL.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace TheFisher.BLL.Services;
 
-public class OrderService : IOrderService
+public class OrderService(FisherDbContext context) : IOrderService
 {
-    private readonly OrderRepository _orderRepository;
-    private readonly PurchaseRepository _purchaseRepository;
-    private readonly Repository<Item> _itemRepository;
-    private readonly Repository<Client> _clientRepository;
-    private readonly FisherDbContext _context;
-
-    public OrderService(FisherDbContext context)
-    {
-        _context = context;
-        _orderRepository = new OrderRepository(context);
-        _purchaseRepository = new PurchaseRepository(context);
-        _itemRepository = new Repository<Item>(context);
-        _clientRepository = new Repository<Client>(context);
-    }
-
     public async Task<Order> CreateOrderAsync(OrderCreateDto orderDto)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
             // Validate item availability
-            var availablePurchases = await _purchaseRepository.GetAvailablePurchasesForItemAsync(orderDto.ItemId);
+            var availablePurchases =  await context.Purchases
+                .Include(p => p.Dealer)
+                .Include(p => p.Item)
+                .Where(p => p.ItemId == orderDto.ItemId && p.WeightAvailable > 0)
+                .OrderBy(p => p.Date) // FIFO
+                .ToListAsync();
+          
             var totalAvailable = availablePurchases.Sum(p => p.WeightAvailable);
 
             if (totalAvailable < orderDto.Weight)
@@ -51,7 +42,7 @@ public class OrderService : IOrderService
                 Collected = 0
             };
 
-            await _orderRepository.AddAsync(order);
+            await context.Orders.AddAsync(order);
 
             // Link order to purchases (FIFO)
             decimal remainingWeight = orderDto.Weight;
@@ -71,7 +62,7 @@ public class OrderService : IOrderService
                     WeightUsed = weightToUse
                 };
                     
-                _context.OrderPurchases.Add(orderPurchase);
+                context.OrderPurchases.Add(orderPurchase);
 
                 // Update purchase available weight
                 purchase.WeightAvailable -= weightToUse;
@@ -85,27 +76,28 @@ public class OrderService : IOrderService
                     commissionedStock += weightToUse;
                 }
                
-                await _purchaseRepository.UpdateAsync(purchase);
+                context.Purchases.Update(purchase);
 
                 remainingWeight -= weightToUse;
                 
                 // Update client balance
-                var client = await _clientRepository.GetByIdAsync(orderDto.ClientId);
+                var client = await context.Clients.FindAsync(orderDto.ClientId);
                 if (client == null) throw new Exception("Client not found");
                 
                 client.OutstandingBalance += order.Total * (100 - purchase.CommissionPercent) / 100;
-                await _clientRepository.UpdateAsync(client);
+                context.Clients.Update(client);
             }
 
             // Update item stock
-            var item = await _itemRepository.GetByIdAsync(orderDto.ItemId);
+            var item = await context.Items.FindAsync(orderDto.ItemId);
             if (item != null)
             {
                 item.Stock -= normalStock;
                 item.CommissionedStock -= commissionedStock;
-                await _itemRepository.UpdateAsync(item);
+                context.Items.Update(item);
             }
 
+            await context.SaveChangesAsync();
             await transaction.CommitAsync();
             return order;
         }
@@ -118,17 +110,32 @@ public class OrderService : IOrderService
 
     public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
-        return await _orderRepository.GetOrdersWithDetailsAsync();
+        return await context.Orders
+            .Include(o => o.Client)
+            .Include(o => o.Item)
+            .Include(o => o.CollectionDetails)
+            .OrderByDescending(o => o.Date)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Order>> GetTodaysOrdersAsync()
     {
-        return await _orderRepository.GetTodaysOrdersAsync();
-    }
+        var today = DateTime.Today;
+        return await context.Orders
+            .Include(o => o.Client)
+            .Include(o => o.Item)
+            .Where(o => o.Date.Date == today)
+            .OrderByDescending(o => o.Date)
+            .ToListAsync();    }
 
     public async Task<IEnumerable<Order>> GetOrdersByClientAsync(int clientId)
     {
-        return await _orderRepository.GetOrdersByClientAsync(clientId);
+        return await context.Orders
+            .Include(o => o.Client)
+            .Include(o => o.Item)
+            .Where(o => o.ClientId == clientId)
+            .OrderByDescending(o => o.Date)
+            .ToListAsync();
     }
 
     public async Task<decimal> GetCurrentMonthRevenueAsync()
@@ -136,7 +143,7 @@ public class OrderService : IOrderService
         var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-        var orders = await _context.Orders
+        var orders = await context.Orders
             .Where(o => o.Date >= startOfMonth && o.Date <= endOfMonth)
             .ToListAsync();
 
@@ -145,7 +152,24 @@ public class OrderService : IOrderService
 
     public async Task<decimal> GetMoneyClientsOweAsync()
     {
-        var clients = await _context.Clients.ToListAsync();
+        var clients = await context.Clients.ToListAsync();
         return clients.Sum(c => c.OutstandingBalance);
+    }
+
+    public async Task<IEnumerable<object>> GetClientUnpaidOrdersAsync(int clientId)
+    {
+        return await context.Orders
+            .Include(o => o.Item)
+            .Where(o => o.ClientId == clientId && o.Total > o.Collected)
+            .Select(o => new
+            {
+                o.Id,
+                ItemName = o.Item.Name,
+                o.Weight,
+                o.Total,
+                o.Collected,
+                Balance = o.Total - o.Collected
+            })
+            .ToListAsync();
     }
 }

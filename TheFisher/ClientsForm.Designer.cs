@@ -60,6 +60,7 @@ namespace TheFisher
             // 
             this.nameTextBox.Location = new System.Drawing.Point(80, 12);
             this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.nameTextBox.Size = new System.Drawing.Size(200, 23);
             this.nameTextBox.TabIndex = 1;
             // 
@@ -82,7 +83,7 @@ namespace TheFisher
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 25);
             this.addButton.TabIndex = 3;
-            this.addButton.Text = "Add";
+            this.addButton.Text = "إضافة";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
@@ -92,7 +93,7 @@ namespace TheFisher
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(75, 25);
             this.updateButton.TabIndex = 4;
-            this.updateButton.Text = "Update";
+            this.updateButton.Text = "تحديث";
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
             // 
@@ -102,7 +103,7 @@ namespace TheFisher
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 25);
             this.deleteButton.TabIndex = 5;
-            this.deleteButton.Text = "Delete";
+            this.deleteButton.Text = "حذف";
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
@@ -127,18 +128,20 @@ namespace TheFisher
             this.nameLabel.AutoSize = true;
             this.nameLabel.Location = new System.Drawing.Point(10, 15);
             this.nameLabel.Name = "nameLabel";
+            this.nameLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.nameLabel.Size = new System.Drawing.Size(42, 15);
             this.nameLabel.TabIndex = 7;
-            this.nameLabel.Text = "Name:";
+            this.nameLabel.Text = "الاسم:";
             // 
             // balanceLabel
             // 
             this.balanceLabel.AutoSize = true;
             this.balanceLabel.Location = new System.Drawing.Point(300, 15);
             this.balanceLabel.Name = "balanceLabel";
+            this.balanceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.balanceLabel.Size = new System.Drawing.Size(54, 15);
             this.balanceLabel.TabIndex = 8;
-            this.balanceLabel.Text = "Balance:";
+            this.balanceLabel.Text = "الرصيد:";
             // 
             // ClientsForm
             // 
@@ -148,8 +151,10 @@ namespace TheFisher
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.inputPanel);
             this.Name = "ClientsForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Clients Management";
+            this.Text = "إدارة العملاء";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.balanceNumeric)).EndInit();
             this.inputPanel.ResumeLayout(false);
