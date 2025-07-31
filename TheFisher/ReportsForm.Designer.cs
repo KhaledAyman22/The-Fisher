@@ -36,32 +36,33 @@ namespace TheFisher
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView
+            // filterLabel
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AutoGenerateColumns = false;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView.Location = new System.Drawing.Point(0, 80);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.ReadOnly = true;
-            this.dataGridView.Size = new System.Drawing.Size(800, 520);
-            this.dataGridView.TabIndex = 0;
+            this.filterLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.filterLabel.AutoSize = true;
+            this.filterLabel.Location = new System.Drawing.Point(320, 18);
+            this.filterLabel.Name = "filterLabel";
+            this.filterLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.filterLabel.Size = new System.Drawing.Size(42, 15);
+            this.filterLabel.TabIndex = 0;
+            this.filterLabel.Text = "الفلتر:";
             // 
             // filterComboBox
             // 
+            this.filterComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.filterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterComboBox.FormattingEnabled = true;
-            this.filterComboBox.Location = new System.Drawing.Point(120, 20);
+            this.filterComboBox.Location = new System.Drawing.Point(120, 15);
             this.filterComboBox.Name = "filterComboBox";
-            this.filterComboBox.Size = new System.Drawing.Size(200, 23);
+            this.filterComboBox.Size = new System.Drawing.Size(190, 23);
             this.filterComboBox.TabIndex = 1;
             this.filterComboBox.SelectedIndexChanged += new System.EventHandler(this.FilterComboBox_SelectedIndexChanged);
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(200, 12);
+            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            this.refreshButton.Location = new System.Drawing.Point(20, 15);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 25);
             this.refreshButton.TabIndex = 2;
@@ -69,15 +70,20 @@ namespace TheFisher
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
-            // filterLabel
+            // dataGridView
             // 
-            this.filterLabel.AutoSize = true;
-            this.filterLabel.Location = new System.Drawing.Point(12, 15);
-            this.filterLabel.Name = "filterLabel";
-            this.filterLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.filterLabel.Size = new System.Drawing.Size(42, 15);
-            this.filterLabel.TabIndex = 0;
-            this.filterLabel.Text = "الفلتر:";
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Location = new System.Drawing.Point(0, 60);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.Size = new System.Drawing.Size(800, 540);
+            this.dataGridView.TabIndex = 3;
             // 
             // ReportsForm
             // 

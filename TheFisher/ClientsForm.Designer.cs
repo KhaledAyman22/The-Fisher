@@ -28,138 +28,142 @@ namespace TheFisher
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.nameTextBox = new System.Windows.Forms.TextBox();
-            this.balanceNumeric = new System.Windows.Forms.NumericUpDown();
-            this.addButton = new System.Windows.Forms.Button();
-            this.updateButton = new System.Windows.Forms.Button();
-            this.deleteButton = new System.Windows.Forms.Button();
-            this.inputPanel = new System.Windows.Forms.Panel();
-            this.nameLabel = new System.Windows.Forms.Label();
-            this.balanceLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.balanceNumeric)).BeginInit();
-            this.inputPanel.SuspendLayout();
-            this.SuspendLayout();
+            dataGridView = new DataGridView();
+            nameTextBox = new TextBox();
+            balanceNumeric = new NumericUpDown();
+            addButton = new Button();
+            updateButton = new Button();
+            deleteButton = new Button();
+            inputPanel = new Panel();
+            balanceLabel = new Label();
+            nameLabel = new Label();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)balanceNumeric).BeginInit();
+            inputPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AutoGenerateColumns = false;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 80);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(800, 520);
-            this.dataGridView.TabIndex = 0;
-            this.dataGridView.SelectionChanged += new System.EventHandler(this.DataGridView_SelectionChanged);
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Location = new Point(0, 80);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new Size(784, 520);
+            dataGridView.TabIndex = 0;
+            dataGridView.SelectionChanged += DataGridView_SelectionChanged;
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(80, 12);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.nameTextBox.Size = new System.Drawing.Size(200, 23);
-            this.nameTextBox.TabIndex = 1;
+            nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            nameTextBox.Location = new Point(553, 13);
+            nameTextBox.Name = "nameTextBox";
+            nameTextBox.RightToLeft = RightToLeft.Yes;
+            nameTextBox.Size = new Size(165, 23);
+            nameTextBox.TabIndex = 1;
             // 
             // balanceNumeric
             // 
-            this.balanceNumeric.DecimalPlaces = 2;
-            this.balanceNumeric.Location = new System.Drawing.Point(360, 12);
-            this.balanceNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.balanceNumeric.Name = "balanceNumeric";
-            this.balanceNumeric.Size = new System.Drawing.Size(100, 23);
-            this.balanceNumeric.TabIndex = 2;
+            balanceNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            balanceNumeric.DecimalPlaces = 2;
+            balanceNumeric.Location = new Point(306, 13);
+            balanceNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            balanceNumeric.Name = "balanceNumeric";
+            balanceNumeric.Size = new Size(164, 23);
+            balanceNumeric.TabIndex = 2;
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(480, 11);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 25);
-            this.addButton.TabIndex = 3;
-            this.addButton.Text = "إضافة";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            addButton.Location = new Point(20, 11);
+            addButton.Name = "addButton";
+            addButton.Size = new Size(75, 25);
+            addButton.TabIndex = 3;
+            addButton.Text = "إضافة";
+            addButton.UseVisualStyleBackColor = true;
+            addButton.Click += AddButton_Click;
             // 
             // updateButton
             // 
-            this.updateButton.Location = new System.Drawing.Point(560, 11);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(75, 25);
-            this.updateButton.TabIndex = 4;
-            this.updateButton.Text = "تحديث";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
+            updateButton.Location = new Point(105, 11);
+            updateButton.Name = "updateButton";
+            updateButton.Size = new Size(75, 25);
+            updateButton.TabIndex = 4;
+            updateButton.Text = "تحديث";
+            updateButton.UseVisualStyleBackColor = true;
+            updateButton.Click += UpdateButton_Click;
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(640, 11);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(75, 25);
-            this.deleteButton.TabIndex = 5;
-            this.deleteButton.Text = "حذف";
-            this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            deleteButton.Location = new Point(190, 11);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new Size(75, 25);
+            deleteButton.TabIndex = 5;
+            deleteButton.Text = "حذف";
+            deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Click += DeleteButton_Click;
             // 
             // inputPanel
             // 
-            this.inputPanel.Controls.Add(this.balanceLabel);
-            this.inputPanel.Controls.Add(this.nameLabel);
-            this.inputPanel.Controls.Add(this.deleteButton);
-            this.inputPanel.Controls.Add(this.updateButton);
-            this.inputPanel.Controls.Add(this.addButton);
-            this.inputPanel.Controls.Add(this.balanceNumeric);
-            this.inputPanel.Controls.Add(this.nameTextBox);
-            this.inputPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputPanel.Location = new System.Drawing.Point(0, 0);
-            this.inputPanel.Name = "inputPanel";
-            this.inputPanel.Padding = new System.Windows.Forms.Padding(10);
-            this.inputPanel.Size = new System.Drawing.Size(800, 80);
-            this.inputPanel.TabIndex = 6;
-            // 
-            // nameLabel
-            // 
-            this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(10, 15);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.nameLabel.Size = new System.Drawing.Size(42, 15);
-            this.nameLabel.TabIndex = 7;
-            this.nameLabel.Text = "الاسم:";
+            inputPanel.BackColor = Color.FromArgb(240, 240, 240);
+            inputPanel.Controls.Add(deleteButton);
+            inputPanel.Controls.Add(updateButton);
+            inputPanel.Controls.Add(addButton);
+            inputPanel.Controls.Add(balanceNumeric);
+            inputPanel.Controls.Add(nameTextBox);
+            inputPanel.Controls.Add(balanceLabel);
+            inputPanel.Controls.Add(nameLabel);
+            inputPanel.Dock = DockStyle.Top;
+            inputPanel.Location = new Point(0, 0);
+            inputPanel.Name = "inputPanel";
+            inputPanel.Padding = new Padding(10);
+            inputPanel.Size = new Size(784, 80);
+            inputPanel.TabIndex = 6;
             // 
             // balanceLabel
             // 
-            this.balanceLabel.AutoSize = true;
-            this.balanceLabel.Location = new System.Drawing.Point(300, 15);
-            this.balanceLabel.Name = "balanceLabel";
-            this.balanceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.balanceLabel.Size = new System.Drawing.Size(54, 15);
-            this.balanceLabel.TabIndex = 8;
-            this.balanceLabel.Text = "الرصيد:";
+            balanceLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            balanceLabel.AutoSize = true;
+            balanceLabel.Location = new Point(480, 16);
+            balanceLabel.Name = "balanceLabel";
+            balanceLabel.RightToLeft = RightToLeft.Yes;
+            balanceLabel.Size = new Size(43, 15);
+            balanceLabel.TabIndex = 8;
+            balanceLabel.Text = "الرصيد:";
+            // 
+            // nameLabel
+            // 
+            nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            nameLabel.AutoSize = true;
+            nameLabel.Location = new Point(728, 16);
+            nameLabel.Name = "nameLabel";
+            nameLabel.RightToLeft = RightToLeft.Yes;
+            nameLabel.Size = new Size(37, 15);
+            nameLabel.TabIndex = 7;
+            nameLabel.Text = "الاسم:";
             // 
             // ClientsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 600);
-            this.Controls.Add(this.dataGridView);
-            this.Controls.Add(this.inputPanel);
-            this.Name = "ClientsForm";
-            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.RightToLeftLayout = true;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "إدارة العملاء";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.balanceNumeric)).EndInit();
-            this.inputPanel.ResumeLayout(false);
-            this.inputPanel.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(784, 600);
+            Controls.Add(dataGridView);
+            Controls.Add(inputPanel);
+            MinimumSize = new Size(800, 500);
+            Name = "ClientsForm";
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "إدارة العملاء";
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)balanceNumeric).EndInit();
+            inputPanel.ResumeLayout(false);
+            inputPanel.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

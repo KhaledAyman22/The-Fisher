@@ -130,4 +130,9 @@ public partial class DealersForm : Form
         balanceNumeric.Value = 0;
         dataGridView.ClearSelection();
     }
+
+    private void DealersForm_Load(object sender, EventArgs e)
+    {
+
+    }
 }

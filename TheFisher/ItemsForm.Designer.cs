@@ -28,167 +28,177 @@ namespace TheFisher
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.nameTextBox = new System.Windows.Forms.TextBox();
-            this.stockNumeric = new System.Windows.Forms.NumericUpDown();
-            this.priceNumeric = new System.Windows.Forms.NumericUpDown();
-            this.addButton = new System.Windows.Forms.Button();
-            this.updateButton = new System.Windows.Forms.Button();
-            this.deleteButton = new System.Windows.Forms.Button();
-            this.inputPanel = new System.Windows.Forms.Panel();
-            this.nameLabel = new System.Windows.Forms.Label();
-            this.stockLabel = new System.Windows.Forms.Label();
-            this.priceLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stockNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.priceNumeric)).BeginInit();
-            this.inputPanel.SuspendLayout();
-            this.SuspendLayout();
+            dataGridView = new DataGridView();
+            nameTextBox = new TextBox();
+            stockNumeric = new NumericUpDown();
+            priceNumeric = new NumericUpDown();
+            addButton = new Button();
+            updateButton = new Button();
+            deleteButton = new Button();
+            inputPanel = new Panel();
+            priceLabel = new Label();
+            stockLabel = new Label();
+            nameLabel = new Label();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)stockNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)priceNumeric).BeginInit();
+            inputPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AutoGenerateColumns = false;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 80);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(900, 520);
-            this.dataGridView.TabIndex = 0;
-            this.dataGridView.SelectionChanged += new System.EventHandler(this.DataGridView_SelectionChanged);
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Location = new Point(0, 80);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new Size(1034, 521);
+            dataGridView.TabIndex = 0;
+            dataGridView.SelectionChanged += DataGridView_SelectionChanged;
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(80, 12);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.nameTextBox.Size = new System.Drawing.Size(150, 23);
-            this.nameTextBox.TabIndex = 1;
+            nameTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            nameTextBox.Location = new Point(802, 18);
+            nameTextBox.Name = "nameTextBox";
+            nameTextBox.RightToLeft = RightToLeft.Yes;
+            nameTextBox.Size = new Size(160, 23);
+            nameTextBox.TabIndex = 1;
             // 
             // stockNumeric
             // 
-            this.stockNumeric.DecimalPlaces = 3;
-            this.stockNumeric.Location = new System.Drawing.Point(320, 12);
-            this.stockNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.stockNumeric.Name = "stockNumeric";
-            this.stockNumeric.Size = new System.Drawing.Size(100, 23);
-            this.stockNumeric.TabIndex = 2;
+            stockNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            stockNumeric.BackColor = Color.FromArgb(245, 245, 245);
+            stockNumeric.DecimalPlaces = 3;
+            stockNumeric.Enabled = false;
+            stockNumeric.Location = new Point(391, 18);
+            stockNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            stockNumeric.Name = "stockNumeric";
+            stockNumeric.ReadOnly = true;
+            stockNumeric.Size = new Size(93, 23);
+            stockNumeric.TabIndex = 2;
             // 
             // priceNumeric
             // 
-            this.priceNumeric.DecimalPlaces = 2;
-            this.priceNumeric.Location = new System.Drawing.Point(530, 12);
-            this.priceNumeric.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.priceNumeric.Name = "priceNumeric";
-            this.priceNumeric.Size = new System.Drawing.Size(100, 23);
-            this.priceNumeric.TabIndex = 3;
+            priceNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            priceNumeric.BackColor = Color.FromArgb(245, 245, 245);
+            priceNumeric.DecimalPlaces = 2;
+            priceNumeric.Enabled = false;
+            priceNumeric.Location = new Point(593, 18);
+            priceNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            priceNumeric.Name = "priceNumeric";
+            priceNumeric.ReadOnly = true;
+            priceNumeric.Size = new Size(85, 23);
+            priceNumeric.TabIndex = 3;
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(650, 11);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 25);
-            this.addButton.TabIndex = 4;
-            this.addButton.Text = "إضافة";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            addButton.Location = new Point(20, 11);
+            addButton.Name = "addButton";
+            addButton.Size = new Size(75, 25);
+            addButton.TabIndex = 4;
+            addButton.Text = "إضافة";
+            addButton.UseVisualStyleBackColor = true;
+            addButton.Click += AddButton_Click;
             // 
             // updateButton
             // 
-            this.updateButton.Location = new System.Drawing.Point(730, 11);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(75, 25);
-            this.updateButton.TabIndex = 5;
-            this.updateButton.Text = "تحديث";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.UpdateButton_Click);
+            updateButton.Location = new Point(105, 11);
+            updateButton.Name = "updateButton";
+            updateButton.Size = new Size(75, 25);
+            updateButton.TabIndex = 5;
+            updateButton.Text = "تحديث";
+            updateButton.UseVisualStyleBackColor = true;
+            updateButton.Click += UpdateButton_Click;
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(810, 11);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(75, 25);
-            this.deleteButton.TabIndex = 6;
-            this.deleteButton.Text = "حذف";
-            this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            deleteButton.Location = new Point(190, 11);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new Size(75, 25);
+            deleteButton.TabIndex = 6;
+            deleteButton.Text = "حذف";
+            deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Click += DeleteButton_Click;
             // 
             // inputPanel
             // 
-            this.inputPanel.Controls.Add(this.priceLabel);
-            this.inputPanel.Controls.Add(this.stockLabel);
-            this.inputPanel.Controls.Add(this.nameLabel);
-            this.inputPanel.Controls.Add(this.deleteButton);
-            this.inputPanel.Controls.Add(this.updateButton);
-            this.inputPanel.Controls.Add(this.addButton);
-            this.inputPanel.Controls.Add(this.priceNumeric);
-            this.inputPanel.Controls.Add(this.stockNumeric);
-            this.inputPanel.Controls.Add(this.nameTextBox);
-            this.inputPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputPanel.Location = new System.Drawing.Point(0, 0);
-            this.inputPanel.Name = "inputPanel";
-            this.inputPanel.Padding = new System.Windows.Forms.Padding(10);
-            this.inputPanel.Size = new System.Drawing.Size(900, 80);
-            this.inputPanel.TabIndex = 7;
-            // 
-            // nameLabel
-            // 
-            this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(10, 15);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.nameLabel.Size = new System.Drawing.Size(42, 15);
-            this.nameLabel.TabIndex = 8;
-            this.nameLabel.Text = "الاسم:";
-            // 
-            // stockLabel
-            // 
-            this.stockLabel.AutoSize = true;
-            this.stockLabel.Location = new System.Drawing.Point(250, 15);
-            this.stockLabel.Name = "stockLabel";
-            this.stockLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.stockLabel.Size = new System.Drawing.Size(64, 15);
-            this.stockLabel.TabIndex = 9;
-            this.stockLabel.Text = "المخزون (كجم):";
+            inputPanel.BackColor = Color.FromArgb(240, 240, 240);
+            inputPanel.Controls.Add(deleteButton);
+            inputPanel.Controls.Add(updateButton);
+            inputPanel.Controls.Add(addButton);
+            inputPanel.Controls.Add(priceNumeric);
+            inputPanel.Controls.Add(stockNumeric);
+            inputPanel.Controls.Add(nameTextBox);
+            inputPanel.Controls.Add(priceLabel);
+            inputPanel.Controls.Add(stockLabel);
+            inputPanel.Controls.Add(nameLabel);
+            inputPanel.Dock = DockStyle.Top;
+            inputPanel.Location = new Point(0, 0);
+            inputPanel.Name = "inputPanel";
+            inputPanel.Padding = new Padding(10);
+            inputPanel.Size = new Size(1034, 80);
+            inputPanel.TabIndex = 7;
             // 
             // priceLabel
             // 
-            this.priceLabel.AutoSize = true;
-            this.priceLabel.Location = new System.Drawing.Point(440, 15);
-            this.priceLabel.Name = "priceLabel";
-            this.priceLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.priceLabel.Size = new System.Drawing.Size(84, 15);
-            this.priceLabel.TabIndex = 10;
-            this.priceLabel.Text = "متوسط السعر/كجم:";
+            priceLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            priceLabel.AutoSize = true;
+            priceLabel.ForeColor = Color.Gray;
+            priceLabel.Location = new Point(688, 21);
+            priceLabel.Name = "priceLabel";
+            priceLabel.RightToLeft = RightToLeft.Yes;
+            priceLabel.Size = new Size(104, 15);
+            priceLabel.TabIndex = 10;
+            priceLabel.Text = "متوسط السعر/كجم:";
+            // 
+            // stockLabel
+            // 
+            stockLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            stockLabel.AutoSize = true;
+            stockLabel.ForeColor = Color.Gray;
+            stockLabel.Location = new Point(494, 21);
+            stockLabel.Name = "stockLabel";
+            stockLabel.RightToLeft = RightToLeft.Yes;
+            stockLabel.Size = new Size(80, 15);
+            stockLabel.TabIndex = 9;
+            stockLabel.Text = "المخزون (كجم):";
+            // 
+            // nameLabel
+            // 
+            nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            nameLabel.AutoSize = true;
+            nameLabel.Location = new Point(968, 21);
+            nameLabel.Name = "nameLabel";
+            nameLabel.RightToLeft = RightToLeft.Yes;
+            nameLabel.Size = new Size(37, 15);
+            nameLabel.TabIndex = 8;
+            nameLabel.Text = "الاسم:";
             // 
             // ItemsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 600);
-            this.Controls.Add(this.dataGridView);
-            this.Controls.Add(this.inputPanel);
-            this.Name = "ItemsForm";
-            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.RightToLeftLayout = true;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "إدارة المنتجات";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.stockNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.priceNumeric)).EndInit();
-            this.inputPanel.ResumeLayout(false);
-            this.inputPanel.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1034, 601);
+            Controls.Add(dataGridView);
+            Controls.Add(inputPanel);
+            MinimumSize = new Size(1050, 500);
+            Name = "ItemsForm";
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "إدارة المنتجات";
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)stockNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)priceNumeric).EndInit();
+            inputPanel.ResumeLayout(false);
+            inputPanel.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
