@@ -1,16 +1,16 @@
-﻿using TheFisher.BLL.DTOs;
-using TheFisher.BLL.IServices;
+﻿using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.Entities;
 using TheFisher.DAL.enums;
 
 using Microsoft.EntityFrameworkCore;
+using TheFisher.BLL.Dtos;
 
 namespace TheFisher.BLL.Services;
 
 public class OrderService(FisherDbContext context) : IOrderService
 {
-    public async Task<Order> CreateOrderAsync(OrderCreateDto orderDto)
+    public async Task CreateOrderAsync(OrderCreateDto orderDto)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
         try
@@ -85,7 +85,8 @@ public class OrderService(FisherDbContext context) : IOrderService
                 var client = await context.Clients.FindAsync(orderDto.ClientId);
                 if (client == null) throw new Exception("Client not found");
                 
-                client.OutstandingBalance += order.Total * (100 - purchase.CommissionPercent) / 100;
+                client.OutstandingBalance += order.Total;
+                purchase.Dealer.OutstandingBalance += order.Total * (100 - purchase.CommissionPercent) / 100;
                 context.Clients.Update(client);
             }
 
@@ -100,7 +101,6 @@ public class OrderService(FisherDbContext context) : IOrderService
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
-            return order;
         }
         catch
         {
@@ -108,33 +108,24 @@ public class OrderService(FisherDbContext context) : IOrderService
             throw;
         }
     }
+    
 
-    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
-    {
-        return await context.Orders
-            .Include(o => o.Client)
-            .Include(o => o.Item)
-            .Include(o => o.CollectionDetails)
-            .OrderByDescending(o => o.Date)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Order>> GetTodaysOrdersAsync()
+    public async Task<IEnumerable<GetOrderDto>> GetTodaysOrdersAsync()
     {
         var today = DateTime.Today;
         return await context.Orders
-            .Include(o => o.Client)
-            .Include(o => o.Item)
             .Where(o => o.Date.Date == today)
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .OrderByDescending(o => o.Date)
             .ToListAsync();    }
 
-    public async Task<IEnumerable<Order>> GetOrdersByClientAsync(int clientId)
+    public async Task<IEnumerable<GetOrderDto>> GetOrdersByClientAsync(int clientId)
     {
         return await context.Orders
             .Include(o => o.Client)
             .Include(o => o.Item)
             .Where(o => o.ClientId == clientId)
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .OrderByDescending(o => o.Date)
             .ToListAsync();
     }
@@ -157,20 +148,12 @@ public class OrderService(FisherDbContext context) : IOrderService
         return clients.Sum(c => c.OutstandingBalance);
     }
 
-    public async Task<IEnumerable<object>> GetClientUnpaidOrdersAsync(int clientId)
+    public async Task<IEnumerable<GetOrderDto>> GetClientUnpaidOrdersAsync(int clientId)
     {
         return await context.Orders
             .Include(o => o.Item)
             .Where(o => o.ClientId == clientId && o.Total > o.Collected)
-            .Select(o => new
-            {
-                o.Id,
-                ItemName = o.Item.Name,
-                o.Weight,
-                o.Total,
-                o.Collected,
-                Balance = o.Total - o.Collected
-            })
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .ToListAsync();
     }
 }

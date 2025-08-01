@@ -1,4 +1,4 @@
-﻿using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.Dtos;
 using TheFisher.BLL.IServices;
 using TheFisher.DAL.enums;
 

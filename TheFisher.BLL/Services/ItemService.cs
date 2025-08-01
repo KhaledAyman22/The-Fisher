@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TheFisher.BLL.DTOs;
+using TheFisher.BLL.Dtos;
 using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.Entities;

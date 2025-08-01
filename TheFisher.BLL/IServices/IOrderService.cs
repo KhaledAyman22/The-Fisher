@@ -1,17 +1,16 @@
-﻿using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.Dtos;
 using TheFisher.DAL.Entities;
 
 namespace TheFisher.BLL.IServices;
 
 public interface IOrderService
 {
-    Task<Order> CreateOrderAsync(OrderCreateDto orderDto);
-    Task<IEnumerable<Order>> GetAllOrdersAsync();
-    Task<IEnumerable<Order>> GetTodaysOrdersAsync();
-    Task<IEnumerable<Order>> GetOrdersByClientAsync(int clientId);
+    Task CreateOrderAsync(OrderCreateDto orderDto);
+    Task<IEnumerable<GetOrderDto>> GetTodaysOrdersAsync();
+    Task<IEnumerable<GetOrderDto>> GetOrdersByClientAsync(int clientId);
     
     // Statistics methods for dashboard
     Task<decimal> GetCurrentMonthRevenueAsync();
     Task<decimal> GetMoneyClientsOweAsync();
-    Task<IEnumerable<object>> GetClientUnpaidOrdersAsync(int clientId);
+    Task<IEnumerable<GetOrderDto>> GetClientUnpaidOrdersAsync(int clientId);
 }

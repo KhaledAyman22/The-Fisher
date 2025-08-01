@@ -1,29 +1,29 @@
-﻿using TheFisher.BLL.DTOs;
-using TheFisher.BLL.IServices;
+﻿using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using TheFisher.BLL.Dtos;
 
 namespace TheFisher.BLL.Services;
 
 public class CollectionService(FisherDbContext context) : ICollectionService
 {
-    public async Task<Collection> CreateCollectionAsync(CollectionCreateDto collectionDto)
+    public async Task CreateCollectionAsync(CreateCollectionDto createCollectionDto)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
             var collection = new Collection
             {
-                ClientId = collectionDto.ClientId,
-                Amount = collectionDto.Amount,
-                Date = collectionDto.Date
+                ClientId = createCollectionDto.ClientId,
+                Amount = createCollectionDto.Amount,
+                Date = createCollectionDto.Date
             };
 
             await context.Collections.AddAsync(collection);
 
             // Create collection details and update orders
-            foreach (var payment in collectionDto.OrderPayments)
+            foreach (var payment in createCollectionDto.OrderPayments)
             {
                 var collectionDetail = new CollectionDetail
                 {
@@ -42,16 +42,15 @@ public class CollectionService(FisherDbContext context) : ICollectionService
             }
 
             // Update client balance
-            var client = await context.Clients.FindAsync(collectionDto.ClientId);
+            var client = await context.Clients.FindAsync(createCollectionDto.ClientId);
             if (client != null)
             {
-                client.OutstandingBalance -= collectionDto.Amount;
+                client.OutstandingBalance -= createCollectionDto.Amount;
                 context.Clients.Update(client);
             }
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
-            return collection;
         }
         catch
         {
@@ -60,31 +59,23 @@ public class CollectionService(FisherDbContext context) : ICollectionService
         }
     }
 
-    public async Task<IEnumerable<Collection>> GetAllCollectionsAsync()
-    {
-        return await context.Collections
-            .Include(c => c.Client)
-            .Include(c => c.CollectionDetails)
-            .ThenInclude(cd => cd.Order)
-            .OrderByDescending(c => c.Date)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Collection>> GetTodaysCollectionsAsync()
+    public async Task<IEnumerable<GetCollectionDto>> GetTodaysCollectionsAsync()
     {
         var today = DateTime.Today;
         return await context.Collections
             .Include(c => c.Client)
             .Where(c => c.Date.Date == today)
+            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Collection>> GetCollectionsByClientAsync(int clientId)
+    public async Task<IEnumerable<GetCollectionDto>> GetCollectionsByClientAsync(int clientId)
     {
         return await context.Collections
             .Include(c => c.Client)
             .Where(c => c.ClientId == clientId)
+            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .OrderByDescending(c => c.Date)
             .ToListAsync();
     }

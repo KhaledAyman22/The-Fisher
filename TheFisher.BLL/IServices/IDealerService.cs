@@ -1,4 +1,4 @@
-using TheFisher.BLL.DTOs;
+using TheFisher.BLL.Dtos;
 
 namespace TheFisher.BLL.IServices;
 

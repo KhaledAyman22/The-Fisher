@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TheFisher.BLL.Dtos;
 using TheFisher.BLL.IServices;
 using TheFisher.DAL;
 using TheFisher.DAL.enums;
@@ -14,118 +15,111 @@ public class ReportsService : IReportsService
         _context = context;
     }
 
-    public async Task<IEnumerable<object>> GetTodaysPurchasesAsync()
+    public async Task<IEnumerable<GetPurchaseDto>> GetTodaysPurchasesAsync()
     {
         return await _context.Purchases
-            
-            
             .Where(p => p.Date.Date == DateTime.Today)
-            .Select(p => new
-            {
+            .Select(p => new GetPurchaseDto(
                 p.Id,
-                Dealer = p.Dealer.Name,
-                Item = p.Item.Name,
+                p.Dealer.Name,
+                p.Item.Name,
                 p.TotalUnits,
-                UnitPrice = p.UnitPrice ?? 0,
+                p.UnitPrice ?? 0,
                 p.TotalWeight,
-                p.WeightAvailable,
                 p.Type,
-                p.Date,
-                Cost = p.Type == PurchaseType.Direct? (p.TotalWeight * p.UnitPrice) : 0
-            })
+                DateTime.Today,
+                p.TransportationFees,
+                p.Tax
+            ))
             .OrderByDescending(p => p.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<object>> GetTodaysCollectionsAsync()
+    public async Task<IEnumerable<GetCollectionDto>> GetTodaysCollectionsAsync()
     {
         return await _context.Collections
-            
             .Where(c => c.Date.Date == DateTime.Today)
-            .Select(c => new
-            {
+            .Select(c => new GetCollectionDto(
                 c.Id,
-                Client = c.Client.Name,
+                c.Client.Name,
                 c.Amount,
                 c.Date
-            })
+            ))
             .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<object>> GetPurchasesByDealerAsync(int dealerId)
+    public async Task<IEnumerable<GetPurchaseDto>> GetPurchasesByDealerAsync(int dealerId)
     {
         return await _context.Purchases
-            
-            
             .Where(p => p.DealerId == dealerId)
-            .Select(p => new
-            {
+            .Select(p => new GetPurchaseDto(
                 p.Id,
-                Item = p.Item.Name,
+                p.Dealer.Name,
+                p.Item.Name,
                 p.TotalUnits,
-                UnitPrice = p.UnitPrice ?? 0,
+                p.UnitPrice ?? 0,
                 p.TotalWeight,
-                p.WeightAvailable,
                 p.Type,
-                p.Date,
-                Cost = p.Type == PurchaseType.Direct? (p.TotalWeight * p.UnitPrice) : 0
-            })
+                DateTime.Today,
+                p.TransportationFees,
+                p.Tax
+            ))
             .OrderByDescending(p => p.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<object>> GetCollectionsByClientAsync(int clientId)
+    public async Task<IEnumerable<GetCollectionDto>> GetCollectionsByClientAsync(int clientId)
     {
         return await _context.Collections
-            
             .Where(c => c.ClientId == clientId)
-            .Select(c => new
-            {
+            .Select(c => new GetCollectionDto(
                 c.Id,
+                c.Client.Name,
                 c.Amount,
                 c.Date
-            })
+            ))
             .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<object>> GetBalanceStatementCombined()
+    public async Task<IEnumerable<ClientBalanceDto>> GetBalanceStatementCombined()
     {
         return await _context.Clients
-            .Select(c => new
-            {
-                Client = c.Name,
-                Outstanding = c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
-                New = c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
-            }).ToListAsync();
+            .Select(c => new ClientBalanceDto(
+                c.Name,
+                c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
+                c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
+            )).ToListAsync();
     }
-    
-    public async Task<IEnumerable<object>> GetClientBalanceStatement(int clientId, DateTime startDate, DateTime endDate)
+
+    public async Task<IEnumerable<ClientBalanceDto>> GetClientBalanceStatement(int clientId, DateTime startDate,
+        DateTime endDate)
     {
-        return _context.Clients
-            .Where(c => c.Orders.Any(o => o.Date >= startDate && o.Date <= endDate))
-            .Select(c => new
-            {
-                Client = c.Name,
-                Outstanding = c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
-                New = c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
-            });
+        return await _context.Clients
+            .Where(c => c.Id == clientId && c.Orders.Any(o => o.Date >= startDate && o.Date <= endDate))
+            .Select(c => new ClientBalanceDto(
+                c.Name,
+                c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
+                c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
+            ))
+            .ToListAsync();
     }
-    
-    public async Task<IEnumerable<object>> GetDealersForFilterAsync()
+
+
+    public async Task<IEnumerable<DealerDropDownDto>> GetDealersForFilterAsync()
     {
         return await _context.Dealers
             .OrderBy(d => d.Name)
-            .Select(d => new { d.Id, d.Name })
+            .Select(d => new DealerDropDownDto(d.Id, d.Name))
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<object>> GetClientsForFilterAsync()
+    public async Task<IEnumerable<ClientDropDownDto>> GetClientsForFilterAsync()
     {
         return await _context.Clients
             .OrderBy(c => c.Name)
-            .Select(c => new { c.Id, c.Name })
+            .Select(c => new ClientDropDownDto(c.Id, c.Name))
             .ToListAsync();
     }
-} 
+}

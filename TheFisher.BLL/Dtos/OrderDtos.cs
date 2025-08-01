@@ -1,4 +1,4 @@
-﻿namespace TheFisher.BLL.DTOs;
+﻿namespace TheFisher.BLL.Dtos;
 
 public record OrderCreateDto(
     int ClientId,
@@ -9,3 +9,12 @@ public record OrderCreateDto(
     decimal Tax);
 
 public record OrderPaymentDto(Ulid OrderId, decimal Amount);
+
+public record GetOrderDto(
+    Ulid Id,
+    string ClientName,
+    string ItemName,
+    decimal Weight,
+    decimal KiloPrice,
+    DateTime Date,
+    decimal Tax);

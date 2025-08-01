@@ -1,4 +1,4 @@
-﻿using TheFisher.BLL.DTOs;
+﻿using TheFisher.BLL.Dtos;
 using TheFisher.BLL.IServices;
 
 namespace TheFisher;
@@ -61,8 +61,11 @@ public partial class CollectionForm : Form
                 if (row.Cells["PaymentAmount"] != null)
                 {
                     row.Cells["PaymentAmount"].Value = 0;
+                    row.Cells["PaymentAmount"].Value = 0;
                 }
             }
+
+            amountNumeric.Maximum = orders.Sum(o => o.Weight * o.KiloPrice);
         }
         catch (Exception ex)
         {
@@ -112,7 +115,7 @@ public partial class CollectionForm : Form
                 return;
             }
 
-            var collectionDto = new CollectionCreateDto(
+            var collectionDto = new CreateCollectionDto(
                 (int)clientComboBox.SelectedValue,
                 amountNumeric.Value,
                 datePicker.Value,

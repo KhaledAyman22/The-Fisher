@@ -1,11 +1,13 @@
+using TheFisher.BLL.Dtos;
+
 namespace TheFisher.BLL.IServices;
 
 public interface IReportsService
 {
-    Task<IEnumerable<object>> GetTodaysPurchasesAsync();
-    Task<IEnumerable<object>> GetTodaysCollectionsAsync();
-    Task<IEnumerable<object>> GetPurchasesByDealerAsync(int dealerId);
-    Task<IEnumerable<object>> GetCollectionsByClientAsync(int clientId);
-    Task<IEnumerable<object>> GetDealersForFilterAsync();
-    Task<IEnumerable<object>> GetClientsForFilterAsync();
+    Task<IEnumerable<GetPurchaseDto>> GetTodaysPurchasesAsync();
+    Task<IEnumerable<GetCollectionDto>> GetTodaysCollectionsAsync();
+    Task<IEnumerable<GetPurchaseDto>> GetPurchasesByDealerAsync(int dealerId);
+    Task<IEnumerable<GetCollectionDto>> GetCollectionsByClientAsync(int clientId);
+    Task<IEnumerable<DealerDropDownDto>> GetDealersForFilterAsync();
+    Task<IEnumerable<ClientDropDownDto>> GetClientsForFilterAsync();
 } 

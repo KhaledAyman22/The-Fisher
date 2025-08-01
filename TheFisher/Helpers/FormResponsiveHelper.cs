@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-namespace TheFisher
+﻿namespace TheFisher.Helpers
 {
     /// <summary>
     /// Helper class to make forms responsive to window resizing

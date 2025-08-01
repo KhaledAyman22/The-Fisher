@@ -1,4 +1,5 @@
-﻿using TheFisher.BLL.IServices;
+﻿using TheFisher.BLL.Dtos;
+using TheFisher.BLL.IServices;
 using TheFisher.DAL.Entities;
 
 namespace TheFisher;
