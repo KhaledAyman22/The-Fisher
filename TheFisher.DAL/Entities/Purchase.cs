@@ -14,6 +14,8 @@ public class Purchase
     public PurchaseType Type { get; set; } = PurchaseType.Direct; // Direct or Commission
     public DateTime Date { get; set; }
     public decimal CommissionPercent { get; set; }
+    public decimal TransportationFees { get; set; }
+    public decimal? Tax { get; set; }
 
     public virtual Dealer Dealer { get; set; } = null!;
     public virtual Item Item { get; set; } = null!;

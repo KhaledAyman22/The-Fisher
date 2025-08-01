@@ -83,7 +83,8 @@ public partial class OrderForm : Form
                 (int)itemComboBox.SelectedValue,
                 weightNumeric.Value,
                 kiloPriceNumeric.Value,
-                datePicker.Value
+                datePicker.Value,
+                taxNumeric.Value
             );
 
             await _orderService.CreateOrderAsync(orderDto);

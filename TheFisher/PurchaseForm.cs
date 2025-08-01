@@ -42,10 +42,20 @@ public partial class PurchaseForm : Form
 
     private void TypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
+        var selectedType = (PurchaseType)typeComboBox.SelectedIndex;
         // Disable unit price for commissioned purchases
-        unitPriceNumeric.Enabled = typeComboBox.SelectedItem?.ToString() == "direct";
-        if (!unitPriceNumeric.Enabled)
+        
+        if(selectedType == PurchaseType.Direct)
+        {
+            taxNumeric.Enabled = true;
+            unitPriceNumeric.Enabled = true;
+        }
+        else
+        {
+            taxNumeric.Enabled = false;
+            unitPriceNumeric.Enabled = false;
             unitPriceNumeric.Value = 0;
+        }
     }
 
     private void CancelButton_Click(object sender, EventArgs e)
@@ -77,7 +87,9 @@ public partial class PurchaseForm : Form
                 unitPriceNumeric.Enabled ? unitPriceNumeric.Value : null,
                 totalWeightNumeric.Value,
                 (PurchaseType)Enum.Parse(typeof(PurchaseType), typeComboBox.SelectedItem.ToString()!),
-                datePicker.Value
+                datePicker.Value,
+                transportaionNumeric.Value,
+                taxNumeric.Value
             );
 
             await _purchaseService.CreatePurchaseAsync(purchaseDto);

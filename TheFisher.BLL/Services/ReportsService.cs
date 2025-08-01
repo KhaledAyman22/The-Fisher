@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TheFisher.BLL.IServices;
 using TheFisher.DAL;
+using TheFisher.DAL.enums;
 
 namespace TheFisher.BLL.Services;
 
@@ -16,8 +17,8 @@ public class ReportsService : IReportsService
     public async Task<IEnumerable<object>> GetTodaysPurchasesAsync()
     {
         return await _context.Purchases
-            .Include(p => p.Dealer)
-            .Include(p => p.Item)
+            
+            
             .Where(p => p.Date.Date == DateTime.Today)
             .Select(p => new
             {
@@ -25,11 +26,12 @@ public class ReportsService : IReportsService
                 Dealer = p.Dealer.Name,
                 Item = p.Item.Name,
                 p.TotalUnits,
-                p.UnitPrice,
+                UnitPrice = p.UnitPrice ?? 0,
                 p.TotalWeight,
                 p.WeightAvailable,
                 p.Type,
-                p.Date
+                p.Date,
+                Cost = p.Type == PurchaseType.Direct? (p.TotalWeight * p.UnitPrice) : 0
             })
             .OrderByDescending(p => p.Date)
             .ToListAsync();
@@ -38,7 +40,7 @@ public class ReportsService : IReportsService
     public async Task<IEnumerable<object>> GetTodaysCollectionsAsync()
     {
         return await _context.Collections
-            .Include(c => c.Client)
+            
             .Where(c => c.Date.Date == DateTime.Today)
             .Select(c => new
             {
@@ -54,19 +56,20 @@ public class ReportsService : IReportsService
     public async Task<IEnumerable<object>> GetPurchasesByDealerAsync(int dealerId)
     {
         return await _context.Purchases
-            .Include(p => p.Dealer)
-            .Include(p => p.Item)
+            
+            
             .Where(p => p.DealerId == dealerId)
             .Select(p => new
             {
                 p.Id,
                 Item = p.Item.Name,
                 p.TotalUnits,
-                p.UnitPrice,
+                UnitPrice = p.UnitPrice ?? 0,
                 p.TotalWeight,
                 p.WeightAvailable,
                 p.Type,
-                p.Date
+                p.Date,
+                Cost = p.Type == PurchaseType.Direct? (p.TotalWeight * p.UnitPrice) : 0
             })
             .OrderByDescending(p => p.Date)
             .ToListAsync();
@@ -75,7 +78,7 @@ public class ReportsService : IReportsService
     public async Task<IEnumerable<object>> GetCollectionsByClientAsync(int clientId)
     {
         return await _context.Collections
-            .Include(c => c.Client)
+            
             .Where(c => c.ClientId == clientId)
             .Select(c => new
             {
@@ -87,6 +90,29 @@ public class ReportsService : IReportsService
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<object>> GetBalanceStatementCombined()
+    {
+        return await _context.Clients
+            .Select(c => new
+            {
+                Client = c.Name,
+                Outstanding = c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
+                New = c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
+            }).ToListAsync();
+    }
+    
+    public async Task<IEnumerable<object>> GetClientBalanceStatement(int clientId, DateTime startDate, DateTime endDate)
+    {
+        return _context.Clients
+            .Where(c => c.Orders.Any(o => o.Date >= startDate && o.Date <= endDate))
+            .Select(c => new
+            {
+                Client = c.Name,
+                Outstanding = c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
+                New = c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
+            });
+    }
+    
     public async Task<IEnumerable<object>> GetDealersForFilterAsync()
     {
         return await _context.Dealers

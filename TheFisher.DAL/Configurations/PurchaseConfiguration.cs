@@ -20,10 +20,19 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         
         builder.Property(p => p.CommissionPercent)
             .HasColumnType("decimal(18,2)");
+        
+        builder.Property(p => p.TransportationFees)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+            
+        
+        builder.Property(p => p.Tax)
+            .HasColumnType("decimal(18,2)");
             
         builder.Property(p => p.TotalWeight)
             .HasColumnType("decimal(18,3)")
-            .HasDefaultValue(0m);
+            .HasDefaultValue(0m)
+            .IsRequired();
             
         builder.Property(p => p.WeightAvailable)
             .HasColumnType("decimal(18,3)")
@@ -32,7 +41,7 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.Property(p => p.Type)
             .HasConversion<string>()
             .HasMaxLength(20)
-            .HasDefaultValue(PurchaseType.Direct);
+            .HasDefaultValue(PurchaseType.Commission);
             
         builder.HasOne(p => p.Dealer)
             .WithMany(d => d.Purchases)

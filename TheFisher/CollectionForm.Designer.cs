@@ -68,6 +68,10 @@ namespace TheFisher
             datePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             datePicker.Location = new Point(78, 73);
             datePicker.Name = "datePicker";
+            datePicker.Format = DateTimePickerFormat.Custom;
+            datePicker.CustomFormat = "dd/MM/yyyy";
+            datePicker.RightToLeft = RightToLeft.Yes;
+            datePicker.RightToLeftLayout = true;
             datePicker.Size = new Size(190, 23);
             datePicker.TabIndex = 5;
             // 

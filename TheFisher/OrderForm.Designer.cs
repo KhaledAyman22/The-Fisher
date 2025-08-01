@@ -42,9 +42,12 @@ namespace TheFisher
             priceLabel = new Label();
             dateLabel = new Label();
             totalNumeric = new NumericUpDown();
+            taxLabel = new Label();
+            taxNumeric = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)weightNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kiloPriceNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)totalNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)taxNumeric).BeginInit();
             SuspendLayout();
             // 
             // clientComboBox
@@ -92,15 +95,19 @@ namespace TheFisher
             // datePicker
             // 
             datePicker.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            datePicker.Location = new Point(105, 157);
+            datePicker.Location = new Point(105, 187);
             datePicker.Name = "datePicker";
+            datePicker.Format = DateTimePickerFormat.Custom;
+            datePicker.CustomFormat = "dd/MM/yyyy";
+            datePicker.RightToLeft = RightToLeft.Yes;
+            datePicker.RightToLeftLayout = true;
             datePicker.Size = new Size(190, 23);
             datePicker.TabIndex = 11;
             // 
             // saveButton
             // 
             saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            saveButton.Location = new Point(20, 200);
+            saveButton.Location = new Point(20, 233);
             saveButton.Name = "saveButton";
             saveButton.Size = new Size(75, 25);
             saveButton.TabIndex = 12;
@@ -111,7 +118,7 @@ namespace TheFisher
             // cancelButton
             // 
             cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            cancelButton.Location = new Point(105, 200);
+            cancelButton.Location = new Point(105, 233);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(75, 25);
             cancelButton.TabIndex = 13;
@@ -124,7 +131,7 @@ namespace TheFisher
             totalLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             totalLabel.AutoSize = true;
             totalLabel.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            totalLabel.Location = new Point(31, 134);
+            totalLabel.Location = new Point(31, 164);
             totalLabel.Name = "totalLabel";
             totalLabel.RightToLeft = RightToLeft.Yes;
             totalLabel.Size = new Size(61, 19);
@@ -179,7 +186,7 @@ namespace TheFisher
             // 
             dateLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dateLabel.AutoSize = true;
-            dateLabel.Location = new Point(31, 163);
+            dateLabel.Location = new Point(31, 193);
             dateLabel.Name = "dateLabel";
             dateLabel.RightToLeft = RightToLeft.Yes;
             dateLabel.Size = new Size(41, 15);
@@ -191,17 +198,40 @@ namespace TheFisher
             totalNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             totalNumeric.DecimalPlaces = 2;
             totalNumeric.Enabled = false;
-            totalNumeric.Location = new Point(105, 128);
+            totalNumeric.Location = new Point(105, 158);
             totalNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             totalNumeric.Name = "totalNumeric";
             totalNumeric.Size = new Size(190, 23);
             totalNumeric.TabIndex = 9;
             // 
+            // taxLabel
+            // 
+            taxLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            taxLabel.AutoSize = true;
+            taxLabel.Location = new Point(31, 135);
+            taxLabel.Name = "taxLabel";
+            taxLabel.RightToLeft = RightToLeft.Yes;
+            taxLabel.Size = new Size(22, 15);
+            taxLabel.TabIndex = 14;
+            taxLabel.Text = "جر:";
+            // 
+            // taxNumeric
+            // 
+            taxNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            taxNumeric.DecimalPlaces = 2;
+            taxNumeric.Location = new Point(105, 129);
+            taxNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            taxNumeric.Name = "taxNumeric";
+            taxNumeric.Size = new Size(190, 23);
+            taxNumeric.TabIndex = 15;
+            // 
             // OrderForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 250);
+            ClientSize = new Size(400, 283);
+            Controls.Add(taxLabel);
+            Controls.Add(taxNumeric);
             Controls.Add(cancelButton);
             Controls.Add(saveButton);
             Controls.Add(dateLabel);
@@ -227,6 +257,7 @@ namespace TheFisher
             ((System.ComponentModel.ISupportInitialize)weightNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)kiloPriceNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)totalNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)taxNumeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -247,5 +278,7 @@ namespace TheFisher
         private System.Windows.Forms.Label priceLabel;
         private System.Windows.Forms.Label dateLabel;
         private System.Windows.Forms.NumericUpDown totalNumeric;
+        private Label taxLabel;
+        private NumericUpDown taxNumeric;
     }
 } 

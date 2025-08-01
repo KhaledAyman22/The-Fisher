@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using TheFisher.BLL.IServices;
 using TheFisher.BLL.Services;
 using TheFisher.DAL;
@@ -14,6 +15,9 @@ public static class Program
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
 
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("ar-EG");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("ar-EG");
+        
         var services = new ServiceCollection();
         ConfigureServices(services);
         var serviceProvider = services.BuildServiceProvider();

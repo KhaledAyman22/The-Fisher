@@ -31,7 +31,9 @@ public class PurchaseService : IPurchaseService
                 TotalWeight = purchaseCreateDto.TotalWeight,
                 WeightAvailable = purchaseCreateDto.TotalWeight,
                 Type = purchaseCreateDto.Type,
-                Date = purchaseCreateDto.Date
+                Date = purchaseCreateDto.Date,
+                Tax = purchaseCreateDto.Tax,
+                TransportationFees = purchaseCreateDto.TransportationFees
             };
 
             await _context.Purchases.AddAsync(purchase);

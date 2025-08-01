@@ -38,8 +38,9 @@ public class OrderService(FisherDbContext context) : IOrderService
                 Weight = orderDto.Weight,
                 KiloPrice = orderDto.KiloPrice,
                 Date = orderDto.Date,
-                Total = orderDto.Weight * orderDto.KiloPrice,
-                Collected = 0
+                Total = orderDto.Weight * orderDto.KiloPrice + orderDto.Tax,
+                Collected = 0,
+                Tax = orderDto.Tax,
             };
 
             await context.Orders.AddAsync(order);

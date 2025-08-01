@@ -9,5 +9,7 @@ public record PurchaseCreateDto(
     decimal? KiloPrice,
     decimal TotalWeight,
     PurchaseType Type,
-    DateTime Date
+    DateTime Date,
+    decimal TransportationFees,
+    decimal? Tax
 );

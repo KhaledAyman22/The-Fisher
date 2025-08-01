@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace TheFisher
 {
     partial class PurchaseForm
@@ -44,9 +46,15 @@ namespace TheFisher
             unitPriceLabel = new Label();
             totalWeightLabel = new Label();
             dateLabel = new Label();
+            taxLabel = new Label();
+            taxNumeric = new NumericUpDown();
+            transportaionNumeric = new NumericUpDown();
+            transportaionLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)unitsNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)unitPriceNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)totalWeightNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)taxNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)transportaionNumeric).BeginInit();
             SuspendLayout();
             // 
             // dealerComboBox
@@ -75,10 +83,12 @@ namespace TheFisher
             typeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             typeComboBox.FormattingEnabled = true;
             typeComboBox.Items.AddRange(new object[] { "كاش", "آجل" });
+            typeComboBox.SelectedIndex = 1;
             typeComboBox.Location = new Point(120, 73);
             typeComboBox.Name = "typeComboBox";
             typeComboBox.Size = new Size(190, 23);
             typeComboBox.TabIndex = 5;
+            typeComboBox.SelectedIndexChanged += TypeComboBox_SelectedIndexChanged;
             // 
             // unitsNumeric
             // 
@@ -113,15 +123,19 @@ namespace TheFisher
             // datePicker
             // 
             datePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            datePicker.Location = new Point(120, 189);
+            datePicker.Location = new Point(120, 245);
             datePicker.Name = "datePicker";
             datePicker.Size = new Size(190, 23);
+            datePicker.Format = DateTimePickerFormat.Custom;
+            datePicker.CustomFormat = "dd/MM/yyyy";
+            datePicker.RightToLeft = RightToLeft.Yes;
+            datePicker.RightToLeftLayout = true;
             datePicker.TabIndex = 13;
             // 
             // saveButton
             // 
             saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            saveButton.Location = new Point(20, 230);
+            saveButton.Location = new Point(20, 292);
             saveButton.Name = "saveButton";
             saveButton.Size = new Size(75, 25);
             saveButton.TabIndex = 14;
@@ -132,7 +146,7 @@ namespace TheFisher
             // cancelButton
             // 
             cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            cancelButton.Location = new Point(105, 230);
+            cancelButton.Location = new Point(105, 292);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(75, 25);
             cancelButton.TabIndex = 15;
@@ -210,18 +224,66 @@ namespace TheFisher
             // 
             dateLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dateLabel.AutoSize = true;
-            dateLabel.Location = new Point(30, 192);
+            dateLabel.Location = new Point(30, 245);
             dateLabel.Name = "dateLabel";
             dateLabel.RightToLeft = RightToLeft.Yes;
             dateLabel.Size = new Size(41, 15);
             dateLabel.TabIndex = 12;
             dateLabel.Text = "التاريخ:";
             // 
+            // taxLabel
+            // 
+            taxLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            taxLabel.AutoSize = true;
+            taxLabel.Location = new Point(30, 219);
+            taxLabel.Name = "taxLabel";
+            taxLabel.RightToLeft = RightToLeft.Yes;
+            taxLabel.Size = new Size(22, 15);
+            taxLabel.TabIndex = 16;
+            taxLabel.Text = "جر:";
+            // 
+            // taxNumeric
+            // 
+            taxNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            taxNumeric.DecimalPlaces = 3;
+            taxNumeric.Enabled = false;
+            taxNumeric.Location = new Point(120, 217);
+            taxNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            taxNumeric.Name = "taxNumeric";
+            taxNumeric.Size = new Size(190, 23);
+            taxNumeric.TabIndex = 17;
+            // 
+            // transportaionNumeric
+            // 
+            transportaionNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            transportaionNumeric.DecimalPlaces = 3;
+            transportaionNumeric.Enabled = true;
+            transportaionNumeric.Location = new Point(120, 189);
+            transportaionNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
+            transportaionNumeric.Name = "transportaionNumeric";
+            transportaionNumeric.Size = new Size(190, 23);
+            transportaionNumeric.TabIndex = 19;
+            // 
+            // transportaionLabel
+            // 
+            transportaionLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            transportaionLabel.AutoSize = true;
+            transportaionLabel.Location = new Point(30, 191);
+            transportaionLabel.Name = "transportaionLabel";
+            transportaionLabel.RightToLeft = RightToLeft.Yes;
+            transportaionLabel.Size = new Size(38, 15);
+            transportaionLabel.TabIndex = 18;
+            transportaionLabel.Text = "نولون:";
+            // 
             // PurchaseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 280);
+            ClientSize = new Size(400, 342);
+            Controls.Add(transportaionNumeric);
+            Controls.Add(transportaionLabel);
+            Controls.Add(taxNumeric);
+            Controls.Add(taxLabel);
             Controls.Add(cancelButton);
             Controls.Add(saveButton);
             Controls.Add(dateLabel);
@@ -249,6 +311,8 @@ namespace TheFisher
             ((System.ComponentModel.ISupportInitialize)unitsNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)unitPriceNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)totalWeightNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)taxNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)transportaionNumeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -271,5 +335,9 @@ namespace TheFisher
         private System.Windows.Forms.Label unitPriceLabel;
         private System.Windows.Forms.Label totalWeightLabel;
         private System.Windows.Forms.Label dateLabel;
+        private Label taxLabel;
+        private NumericUpDown taxNumeric;
+        private NumericUpDown transportaionNumeric;
+        private Label transportaionLabel;
     }
 } 
