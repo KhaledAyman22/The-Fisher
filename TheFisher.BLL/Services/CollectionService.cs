@@ -65,8 +65,8 @@ public class CollectionService(FisherDbContext context) : ICollectionService
         return await context.Collections
             .Include(c => c.Client)
             .Where(c => c.Date.Date == today)
-            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .OrderByDescending(c => c.Date)
+            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .ToListAsync();
     }
 
@@ -75,8 +75,8 @@ public class CollectionService(FisherDbContext context) : ICollectionService
         return await context.Collections
             .Include(c => c.Client)
             .Where(c => c.ClientId == clientId)
-            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .OrderByDescending(c => c.Date)
+            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
             .ToListAsync();
     }
 

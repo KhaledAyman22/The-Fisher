@@ -224,6 +224,7 @@ namespace TheFisher
             taxNumeric.Name = "taxNumeric";
             taxNumeric.Size = new Size(190, 23);
             taxNumeric.TabIndex = 15;
+            taxNumeric.ValueChanged += TaxNumeric_ValueChanged;
             // 
             // OrderForm
             // 

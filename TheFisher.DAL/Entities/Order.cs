@@ -1,6 +1,8 @@
-﻿namespace TheFisher.DAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Order
+namespace TheFisher.DAL.Entities;
+
+public class    Order
 {
     public Ulid Id { get; set; }
     public int ClientId { get; set; }
@@ -8,10 +10,10 @@ public class Order
     public decimal Weight { get; set; }
     public decimal KiloPrice { get; set; }
     public DateTime Date { get; set; }
-    public decimal Total { get; set; }
-    public decimal Collected { get; set; }
-
     public decimal Tax { get; set; }
+    public decimal Collected { get; set; }
+    [NotMapped]
+    public decimal Total => Weight * KiloPrice + Tax;
     public virtual Client Client { get; set; } = null!;
     public virtual Item Item { get; set; } = null!;
     public virtual ICollection<CollectionDetail> CollectionDetails { get; set; } = new List<CollectionDetail>();

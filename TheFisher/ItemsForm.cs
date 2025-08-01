@@ -12,8 +12,8 @@ public partial class ItemsForm : Form
     {
         _itemService = itemService;
         InitializeComponent();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadItems());
+        
+        LoadItems();
     }
 
 

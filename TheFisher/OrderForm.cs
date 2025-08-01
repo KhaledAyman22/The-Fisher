@@ -15,8 +15,8 @@ public partial class OrderForm : Form
         _clientService = clientService;
         _itemService = itemService;
         InitializeComponent();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadComboBoxes());
+        
+        LoadComboBoxes();
     }
 
 
@@ -49,11 +49,15 @@ public partial class OrderForm : Form
     {
         CalculateTotal();
     }
+    
+    private void TaxNumeric_ValueChanged(object sender, EventArgs e)
+    {
+        CalculateTotal();
+    }
 
     private void CalculateTotal()
     {
-        var total = weightNumeric.Value * kiloPriceNumeric.Value;
-        totalLabel.Text = total.ToString("C2");
+        totalNumeric.Value = weightNumeric.Value * kiloPriceNumeric.Value + taxNumeric.Value;
     }
 
     private void CancelButton_Click(object sender, EventArgs e)

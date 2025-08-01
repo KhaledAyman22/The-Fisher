@@ -16,7 +16,7 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    OutstandingBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    OutstandingBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
@@ -30,11 +30,25 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    OutstandingBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    OutstandingBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dealers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expenses",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(26)", nullable: false),
+                    ExpenseType = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expenses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,8 +58,9 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Stock = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    AvgPricePerKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Stock = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    CommissionedStock = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    AvgPricePerKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
@@ -58,7 +73,7 @@ namespace TheFisher.DAL.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -79,11 +94,11 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    KiloPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    KiloPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Collected = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Tax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Collected = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
@@ -111,10 +126,13 @@ namespace TheFisher.DAL.Migrations
                     ItemId = table.Column<int>(type: "int", nullable: false),
                     TotalUnits = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    TotalWeight = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    WeightAvailable = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TotalWeight = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    WeightAvailable = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, defaultValue: "Commission"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommissionPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransportationFees = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Tax = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,14 +155,14 @@ namespace TheFisher.DAL.Migrations
                 name: "CollectionDetails",
                 columns: table => new
                 {
-                    CollectionDetailId = table.Column<string>(type: "nvarchar(26)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     CollectionId = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     OrderId = table.Column<string>(type: "nvarchar(26)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollectionDetails", x => x.CollectionDetailId);
+                    table.PrimaryKey("PK_CollectionDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CollectionDetails_Collections_CollectionId",
                         column: x => x.CollectionId,
@@ -165,7 +183,7 @@ namespace TheFisher.DAL.Migrations
                 {
                     OrderId = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     PurchaseId = table.Column<string>(type: "nvarchar(26)", nullable: false),
-                    WeightUsed = table.Column<decimal>(type: "decimal(18,3)", nullable: false)
+                    WeightUsed = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
@@ -229,6 +247,9 @@ namespace TheFisher.DAL.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CollectionDetails");
+
+            migrationBuilder.DropTable(
+                name: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "OrderPurchases");

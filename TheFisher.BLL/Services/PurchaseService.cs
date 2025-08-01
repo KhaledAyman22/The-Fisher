@@ -36,6 +36,7 @@ public class PurchaseService(FisherDbContext context) : IPurchaseService
 
             var purchase = new Purchase
             {
+                Id = Ulid.NewUlid(),
                 DealerId = purchaseCreateDto.DealerId,
                 ItemId = purchaseCreateDto.ItemId,
                 TotalUnits = purchaseCreateDto.TotalUnits,
@@ -45,18 +46,19 @@ public class PurchaseService(FisherDbContext context) : IPurchaseService
                 Type = purchaseCreateDto.Type,
                 Date = purchaseCreateDto.Date,
                 Tax = purchaseCreateDto.Tax,
-                TransportationFees = purchaseCreateDto.TransportationFees
+                TransportationFees = purchaseCreateDto.TransportationFees,
+                CommissionPercent = purchaseCreateDto.CommissionPercent
             };
 
             await context.Purchases.AddAsync(purchase);
             
-            dealer.OutstandingBalance -= purchaseCreateDto.TransportationFees;
+            dealer.OutstandingBalance -= purchaseCreateDto.TransportationFees?? 0;
 
             if (purchaseCreateDto.Type == PurchaseType.Direct)
             {
                 // Update average price (weighted average)
                 var totalValue = (item.Stock * item.AvgPricePerKg) +
-                                 (purchaseCreateDto.TotalWeight * purchaseCreateDto.KiloPrice!.Value);
+                                 (purchaseCreateDto.TotalWeight * actualKiloPrice!.Value);
                 var totalWeight = item.Stock + purchaseCreateDto.TotalWeight;
 
                 if (totalWeight > 0)

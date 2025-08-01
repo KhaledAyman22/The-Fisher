@@ -16,8 +16,8 @@ public partial class PurchaseForm : Form
         _dealerService = dealerService;
         _itemService = itemService;
         InitializeComponent();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadComboBoxes());
+        
+        LoadComboBoxes();
     }
 
     private async Task LoadComboBoxes()
@@ -49,12 +49,21 @@ public partial class PurchaseForm : Form
         {
             taxNumeric.Enabled = true;
             unitPriceNumeric.Enabled = true;
+            
+            transportaionNumeric.Enabled = false;
+            commissionPercentNumeric.Enabled = false;
+            transportaionNumeric.Value = 0;
+            commissionPercentNumeric.Value = 0.1m;
         }
         else
         {
             taxNumeric.Enabled = false;
             unitPriceNumeric.Enabled = false;
             unitPriceNumeric.Value = 0;
+            taxNumeric.Value = 0.1m;
+            
+            transportaionNumeric.Enabled = true;
+            commissionPercentNumeric.Enabled = true;
         }
     }
 
@@ -86,10 +95,11 @@ public partial class PurchaseForm : Form
                 (int)unitsNumeric.Value,
                 unitPriceNumeric.Enabled ? unitPriceNumeric.Value : null,
                 totalWeightNumeric.Value,
-                (PurchaseType)Enum.Parse(typeof(PurchaseType), typeComboBox.SelectedItem.ToString()!),
+                (PurchaseType)typeComboBox.SelectedIndex,
                 datePicker.Value,
-                transportaionNumeric.Value,
-                taxNumeric.Value
+                transportaionNumeric.Enabled? transportaionNumeric.Value : null,
+                taxNumeric.Enabled ? taxNumeric.Value : null,
+                commissionPercentNumeric.Enabled? commissionPercentNumeric.Value:null
             );
 
             await _purchaseService.CreatePurchaseAsync(purchaseDto);

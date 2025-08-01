@@ -11,10 +11,10 @@ public class Purchase
     public decimal? UnitPrice { get; set; }
     public decimal TotalWeight { get; set; }
     public decimal WeightAvailable { get; set; }
-    public PurchaseType Type { get; set; } = PurchaseType.Direct; // Direct or Commission
+    public PurchaseType Type { get; set; }
     public DateTime Date { get; set; }
-    public decimal CommissionPercent { get; set; }
-    public decimal TransportationFees { get; set; }
+    public decimal? CommissionPercent { get; set; }
+    public decimal? TransportationFees { get; set; }
     public decimal? Tax { get; set; }
 
     public virtual Dealer Dealer { get; set; } = null!;

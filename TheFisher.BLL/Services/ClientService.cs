@@ -13,6 +13,11 @@ public class ClientService(FisherDbContext context) : IClientService
         return await context.Clients.Select(c => new ClientDropDownDto(c.Id, c.Name)).ToListAsync();
     }
 
+    public async Task<List<ClientDto>> GetClients()
+    {
+        return await context.Clients.Select(c => new ClientDto(c.Id, c.Name, c.OutstandingBalance)).ToListAsync();
+    }
+
     public async Task AddClient(string name, decimal outstandingBalance)
     {
         var client = new Client()

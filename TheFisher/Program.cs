@@ -42,7 +42,7 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<FisherDbContext>(ServiceLifetime.Scoped);
+        services.AddDbContext<FisherDbContext>(ServiceLifetime.Transient);
 
         // Services
         services.AddScoped<IOrderService, OrderService>();

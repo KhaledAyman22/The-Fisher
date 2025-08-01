@@ -15,8 +15,8 @@ public partial class CollectionForm : Form
         _clientService = clientService;
         _orderService = orderService;
         InitializeComponent();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadComboBoxes());
+        
+        LoadComboBoxes();
     }
 
     private async Task LoadComboBoxes()
@@ -38,7 +38,8 @@ public partial class CollectionForm : Form
     {
         if (clientComboBox.SelectedValue != null)
         {
-            await LoadClientOrders((int)clientComboBox.SelectedValue);
+            var selected = (ClientDropDownDto)clientComboBox.SelectedValue;
+            await LoadClientOrders(selected.Id);
         }
     }
 
@@ -60,7 +61,6 @@ public partial class CollectionForm : Form
             {
                 if (row.Cells["PaymentAmount"] != null)
                 {
-                    row.Cells["PaymentAmount"].Value = 0;
                     row.Cells["PaymentAmount"].Value = 0;
                 }
             }

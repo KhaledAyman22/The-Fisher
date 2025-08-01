@@ -6,6 +6,7 @@ public class Collection
     public int ClientId { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
+    public decimal Profit { get; set; }
 
     public virtual Client Client { get; set; } = null!;
     public virtual ICollection<CollectionDetail> CollectionDetails { get; set; } = new List<CollectionDetail>();

@@ -38,7 +38,6 @@ public class OrderService(FisherDbContext context) : IOrderService
                 Weight = orderDto.Weight,
                 KiloPrice = orderDto.KiloPrice,
                 Date = orderDto.Date,
-                Total = orderDto.Weight * orderDto.KiloPrice + orderDto.Tax,
                 Collected = 0,
                 Tax = orderDto.Tax,
             };
@@ -75,20 +74,20 @@ public class OrderService(FisherDbContext context) : IOrderService
                 else
                 {
                     commissionedStock += weightToUse;
+                    purchase.Dealer.OutstandingBalance += order.KiloPrice * weightToUse * (100 - purchase.CommissionPercent!.Value) / 100;
                 }
                
                 context.Purchases.Update(purchase);
 
                 remainingWeight -= weightToUse;
-                
-                // Update client balance
-                var client = await context.Clients.FindAsync(orderDto.ClientId);
-                if (client == null) throw new Exception("Client not found");
-                
-                client.OutstandingBalance += order.Total;
-                purchase.Dealer.OutstandingBalance += order.Total * (100 - purchase.CommissionPercent) / 100;
-                context.Clients.Update(client);
             }
+            
+            // Update client balance
+            var client = await context.Clients.FindAsync(orderDto.ClientId);
+            if (client == null) throw new Exception("Client not found");
+            
+            client.OutstandingBalance += order.Total;
+            context.Clients.Update(client);
 
             // Update item stock
             var item = await context.Items.FindAsync(orderDto.ItemId);
@@ -115,8 +114,8 @@ public class OrderService(FisherDbContext context) : IOrderService
         var today = DateTime.Today;
         return await context.Orders
             .Where(o => o.Date.Date == today)
-            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .OrderByDescending(o => o.Date)
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .ToListAsync();    }
 
     public async Task<IEnumerable<GetOrderDto>> GetOrdersByClientAsync(int clientId)
@@ -125,8 +124,8 @@ public class OrderService(FisherDbContext context) : IOrderService
             .Include(o => o.Client)
             .Include(o => o.Item)
             .Where(o => o.ClientId == clientId)
-            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .OrderByDescending(o => o.Date)
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .ToListAsync();
     }
 
@@ -151,8 +150,7 @@ public class OrderService(FisherDbContext context) : IOrderService
     public async Task<IEnumerable<GetOrderDto>> GetClientUnpaidOrdersAsync(int clientId)
     {
         return await context.Orders
-            .Include(o => o.Item)
-            .Where(o => o.ClientId == clientId && o.Total > o.Collected)
+            .Where(o => o.ClientId == clientId && (o.KiloPrice * o.Weight) > o.Collected)
             .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
             .ToListAsync();
     }

@@ -16,8 +16,12 @@ public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
         
         builder.Property(c => c.Amount)
             .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
+            .IsRequired();
             
+        builder.Property(c => c.Profit)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+        
         builder.HasOne(c => c.Client)
             .WithMany(cl => cl.Collections)
             .HasForeignKey(c => c.ClientId)

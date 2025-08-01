@@ -16,6 +16,7 @@ public class CollectionDetailConfiguration : IEntityTypeConfiguration<Collection
             
         builder.Property(cd => cd.CollectionId)
             .HasColumnType("nvarchar(26)")
+            .IsRequired()
             .HasConversion(new UlidToStringConverter());
             
         builder.Property(cd => cd.OrderId)
@@ -24,8 +25,12 @@ public class CollectionDetailConfiguration : IEntityTypeConfiguration<Collection
         
         builder.Property(cd => cd.Amount)
             .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
+            .IsRequired();
             
+        builder.Property(c => c.Profit)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+        
         builder.HasOne(cd => cd.Collection)
             .WithMany(c => c.CollectionDetails)
             .HasForeignKey(cd => cd.CollectionId)

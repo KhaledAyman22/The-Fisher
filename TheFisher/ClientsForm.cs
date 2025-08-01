@@ -12,23 +12,23 @@ public partial class ClientsForm : Form
         _clientService = clientService;
         InitializeComponent();
         SetupDataGridView();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadClients());
+        
+        LoadClients();
     }
 
     private void SetupDataGridView()
     {
         dataGridView.Columns.Clear();
-        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Id", HeaderText = "ID", Visible = false });
-        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", HeaderText = "Name", Width = 200 });
-        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "OutstandingBalance", HeaderText = "Outstanding Balance", Width = 150, DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" } });
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "Id", DataPropertyName = "Id", HeaderText = "ID", Visible = false });
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "Name", DataPropertyName = "Name", HeaderText = "Name", Width = 200 });
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "OutstandingBalance", DataPropertyName = "OutstandingBalance", HeaderText = "Outstanding Balance", Width = 150, DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" } });
     }
 
     private async Task LoadClients()
     {
         try
         {
-            var clients = await _clientService.GetClientsForDropDown();
+            var clients = await _clientService.GetClients();
             dataGridView.DataSource = clients.ToList();
         }
         catch (Exception ex)

@@ -12,8 +12,8 @@ public partial class ReportsForm : Form
         _reportType = reportType;
         _reportsService = reportsService;
         InitializeComponent();
-        // Use Task.Run to avoid CS4014 warning
-        _ = Task.Run(async () => await LoadReport());
+        
+        LoadReport();
     }
 
     private async Task LoadFilterComboBox()

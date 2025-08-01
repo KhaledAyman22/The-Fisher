@@ -12,8 +12,8 @@ using TheFisher.DAL;
 namespace TheFisher.DAL.Migrations
 {
     [DbContext(typeof(FisherDbContext))]
-    [Migration("20250730224519_Initial")]
-    partial class Initial
+    [Migration("20250801211142_SchemaUpdates")]
+    partial class SchemaUpdates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,7 +38,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("OutstandingBalance")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -59,6 +61,9 @@ namespace TheFisher.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("Profit")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
@@ -68,7 +73,7 @@ namespace TheFisher.DAL.Migrations
 
             modelBuilder.Entity("TheFisher.DAL.Entities.CollectionDetail", b =>
                 {
-                    b.Property<string>("CollectionDetailId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(26)");
 
                     b.Property<decimal>("Amount")
@@ -82,7 +87,10 @@ namespace TheFisher.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(26)");
 
-                    b.HasKey("CollectionDetailId");
+                    b.Property<decimal>("Profit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
 
@@ -105,11 +113,35 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("OutstandingBalance")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
                     b.ToTable("Dealers");
+                });
+
+            modelBuilder.Entity("TheFisher.DAL.Entities.Expense", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<decimal>("Amount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ExpenseType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Item", b =>
@@ -121,7 +153,14 @@ namespace TheFisher.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("AvgPricePerKg")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("CommissionedStock")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,7 +168,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Stock")
-                        .HasColumnType("decimal(18,3)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -145,7 +186,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Collected")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -156,7 +199,7 @@ namespace TheFisher.DAL.Migrations
                     b.Property<decimal>("KiloPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal>("Tax")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Weight")
@@ -180,7 +223,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(26)");
 
                     b.Property<decimal>("WeightUsed")
-                        .HasColumnType("decimal(18,3)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("OrderId", "PurchaseId");
 
@@ -194,6 +239,9 @@ namespace TheFisher.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(26)");
 
+                    b.Property<decimal?>("CommissionPercent")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -203,11 +251,19 @@ namespace TheFisher.DAL.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("Tax")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("TotalUnits")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalWeight")
-                        .HasColumnType("decimal(18,3)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal?>("TransportationFees")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -218,7 +274,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("WeightAvailable")
-                        .HasColumnType("decimal(18,3)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 

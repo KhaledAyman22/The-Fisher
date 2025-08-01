@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheFisher.DAL;
 
@@ -11,9 +12,10 @@ using TheFisher.DAL;
 namespace TheFisher.DAL.Migrations
 {
     [DbContext(typeof(FisherDbContext))]
-    partial class FisherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250801175045_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,16 +53,15 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(26)");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -75,7 +76,9 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("nvarchar(26)");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<string>("CollectionId")
                         .IsRequired()
@@ -84,9 +87,6 @@ namespace TheFisher.DAL.Migrations
                     b.Property<string>("OrderId")
                         .IsRequired()
                         .HasColumnType("nvarchar(26)");
-
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -195,13 +195,17 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("KiloPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,3)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,3)")
+                        .HasDefaultValue(0m);
 
                     b.HasKey("Id");
 
@@ -237,7 +241,7 @@ namespace TheFisher.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(26)");
 
-                    b.Property<decimal?>("CommissionPercent")
+                    b.Property<decimal>("CommissionPercent")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Date")
@@ -260,13 +264,15 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("decimal(18,3)")
                         .HasDefaultValue(0m);
 
-                    b.Property<decimal?>("TransportationFees")
+                    b.Property<decimal>("TransportationFees")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Commission");
 
                     b.Property<decimal?>("UnitPrice")
                         .HasColumnType("decimal(18,2)");

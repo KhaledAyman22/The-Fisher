@@ -16,19 +16,15 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         
         builder.Property(o => o.Weight)
             .HasColumnType("decimal(18,3)")
-            .HasDefaultValue(0m);
+            .IsRequired();
             
         builder.Property(o => o.KiloPrice)
             .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
+            .IsRequired();
         
         builder.Property(o => o.Tax)
             .HasColumnType("decimal(18,2)")
             .IsRequired();
-            
-        builder.Property(o => o.Total)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
             
         builder.Property(o => o.Collected)
             .HasColumnType("decimal(18,2)")

@@ -50,11 +50,14 @@ namespace TheFisher
             taxNumeric = new NumericUpDown();
             transportaionNumeric = new NumericUpDown();
             transportaionLabel = new Label();
+            commissionPercentNumeric = new NumericUpDown();
+            commissionPercentLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)unitsNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)unitPriceNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)totalWeightNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)taxNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)transportaionNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)commissionPercentNumeric).BeginInit();
             SuspendLayout();
             // 
             // dealerComboBox
@@ -93,52 +96,56 @@ namespace TheFisher
             // unitsNumeric
             // 
             unitsNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            unitsNumeric.DecimalPlaces = 3;
+            unitsNumeric.DecimalPlaces = 2;
             unitsNumeric.Location = new Point(120, 102);
             unitsNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             unitsNumeric.Name = "unitsNumeric";
             unitsNumeric.Size = new Size(190, 23);
             unitsNumeric.TabIndex = 7;
+            unitsNumeric.ThousandsSeparator = true;
             // 
             // unitPriceNumeric
             // 
             unitPriceNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             unitPriceNumeric.DecimalPlaces = 2;
+            unitPriceNumeric.Enabled = false;
             unitPriceNumeric.Location = new Point(120, 131);
             unitPriceNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             unitPriceNumeric.Name = "unitPriceNumeric";
             unitPriceNumeric.Size = new Size(190, 23);
             unitPriceNumeric.TabIndex = 9;
+            unitPriceNumeric.ThousandsSeparator = true;
             // 
             // totalWeightNumeric
             // 
             totalWeightNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            totalWeightNumeric.DecimalPlaces = 3;
+            totalWeightNumeric.DecimalPlaces = 2;
             totalWeightNumeric.Location = new Point(120, 160);
             totalWeightNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             totalWeightNumeric.Name = "totalWeightNumeric";
             totalWeightNumeric.Size = new Size(190, 23);
             totalWeightNumeric.TabIndex = 11;
+            totalWeightNumeric.ThousandsSeparator = true;
             // 
             // datePicker
             // 
             datePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            datePicker.Location = new Point(120, 245);
-            datePicker.Name = "datePicker";
-            datePicker.Size = new Size(190, 23);
-            datePicker.Format = DateTimePickerFormat.Custom;
             datePicker.CustomFormat = "dd/MM/yyyy";
+            datePicker.Format = DateTimePickerFormat.Custom;
+            datePicker.Location = new Point(120, 275);
+            datePicker.Name = "datePicker";
             datePicker.RightToLeft = RightToLeft.Yes;
             datePicker.RightToLeftLayout = true;
-            datePicker.TabIndex = 13;
+            datePicker.Size = new Size(190, 23);
+            datePicker.TabIndex = 19;
             // 
             // saveButton
             // 
             saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            saveButton.Location = new Point(20, 292);
+            saveButton.Location = new Point(20, 325);
             saveButton.Name = "saveButton";
             saveButton.Size = new Size(75, 25);
-            saveButton.TabIndex = 14;
+            saveButton.TabIndex = 20;
             saveButton.Text = "حفظ";
             saveButton.UseVisualStyleBackColor = true;
             saveButton.Click += SaveButton_Click;
@@ -146,10 +153,10 @@ namespace TheFisher
             // cancelButton
             // 
             cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            cancelButton.Location = new Point(105, 292);
+            cancelButton.Location = new Point(105, 325);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(75, 25);
-            cancelButton.TabIndex = 15;
+            cancelButton.TabIndex = 21;
             cancelButton.Text = "إلغاء";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += CancelButton_Click;
@@ -224,11 +231,11 @@ namespace TheFisher
             // 
             dateLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dateLabel.AutoSize = true;
-            dateLabel.Location = new Point(30, 245);
+            dateLabel.Location = new Point(30, 275);
             dateLabel.Name = "dateLabel";
             dateLabel.RightToLeft = RightToLeft.Yes;
             dateLabel.Size = new Size(41, 15);
-            dateLabel.TabIndex = 12;
+            dateLabel.TabIndex = 18;
             dateLabel.Text = "التاريخ:";
             // 
             // taxLabel
@@ -239,30 +246,31 @@ namespace TheFisher
             taxLabel.Name = "taxLabel";
             taxLabel.RightToLeft = RightToLeft.Yes;
             taxLabel.Size = new Size(22, 15);
-            taxLabel.TabIndex = 16;
+            taxLabel.TabIndex = 14;
             taxLabel.Text = "جر:";
             // 
             // taxNumeric
             // 
             taxNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            taxNumeric.DecimalPlaces = 3;
+            taxNumeric.DecimalPlaces = 2;
             taxNumeric.Enabled = false;
             taxNumeric.Location = new Point(120, 217);
             taxNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             taxNumeric.Name = "taxNumeric";
             taxNumeric.Size = new Size(190, 23);
-            taxNumeric.TabIndex = 17;
+            taxNumeric.TabIndex = 15;
+            taxNumeric.ThousandsSeparator = true;
             // 
             // transportaionNumeric
             // 
             transportaionNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            transportaionNumeric.DecimalPlaces = 3;
-            transportaionNumeric.Enabled = true;
+            transportaionNumeric.DecimalPlaces = 2;
             transportaionNumeric.Location = new Point(120, 189);
             transportaionNumeric.Maximum = new decimal(new int[] { 999999999, 0, 0, 0 });
             transportaionNumeric.Name = "transportaionNumeric";
             transportaionNumeric.Size = new Size(190, 23);
-            transportaionNumeric.TabIndex = 19;
+            transportaionNumeric.TabIndex = 13;
+            transportaionNumeric.ThousandsSeparator = true;
             // 
             // transportaionLabel
             // 
@@ -272,14 +280,40 @@ namespace TheFisher
             transportaionLabel.Name = "transportaionLabel";
             transportaionLabel.RightToLeft = RightToLeft.Yes;
             transportaionLabel.Size = new Size(38, 15);
-            transportaionLabel.TabIndex = 18;
+            transportaionLabel.TabIndex = 12;
             transportaionLabel.Text = "نولون:";
+            // 
+            // commissionPercentNumeric
+            // 
+            commissionPercentNumeric.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            commissionPercentNumeric.DecimalPlaces = 2;
+            commissionPercentNumeric.Enabled = true;
+            commissionPercentNumeric.Location = new Point(120, 246);
+            commissionPercentNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+            commissionPercentNumeric.Name = "commissionPercentNumeric";
+            commissionPercentNumeric.Size = new Size(190, 23);
+            commissionPercentNumeric.TabIndex = 17;
+            commissionPercentNumeric.ThousandsSeparator = true;
+            commissionPercentNumeric.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            // 
+            // commissionPercentLabel
+            // 
+            commissionPercentLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            commissionPercentLabel.AutoSize = true;
+            commissionPercentLabel.Location = new Point(30, 248);
+            commissionPercentLabel.Name = "commissionPercentLabel";
+            commissionPercentLabel.RightToLeft = RightToLeft.Yes;
+            commissionPercentLabel.Size = new Size(74, 15);
+            commissionPercentLabel.TabIndex = 16;
+            commissionPercentLabel.Text = "نسبة العمولة:";
             // 
             // PurchaseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 342);
+            ClientSize = new Size(400, 375);
+            Controls.Add(commissionPercentNumeric);
+            Controls.Add(commissionPercentLabel);
             Controls.Add(transportaionNumeric);
             Controls.Add(transportaionLabel);
             Controls.Add(taxNumeric);
@@ -313,6 +347,7 @@ namespace TheFisher
             ((System.ComponentModel.ISupportInitialize)totalWeightNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)taxNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)transportaionNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)commissionPercentNumeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -339,5 +374,7 @@ namespace TheFisher
         private NumericUpDown taxNumeric;
         private NumericUpDown transportaionNumeric;
         private Label transportaionLabel;
+        private NumericUpDown commissionPercentNumeric;
+        private Label commissionPercentLabel;
     }
 } 

@@ -10,8 +10,9 @@ public record PurchaseCreateDto(
     decimal TotalWeight,
     PurchaseType Type,
     DateTime Date,
-    decimal TransportationFees,
-    decimal? Tax
+    decimal? TransportationFees,
+    decimal? Tax,
+    decimal? CommissionPercent
 );
 
 public record GetPurchaseDto(
@@ -23,7 +24,7 @@ public record GetPurchaseDto(
     decimal TotalWeight,
     PurchaseType Type,
     DateTime Date,
-    decimal TransportationFees,
+    decimal? TransportationFees,
     decimal? Tax
 );
 

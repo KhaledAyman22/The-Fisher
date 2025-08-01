@@ -19,6 +19,7 @@ public class ReportsService : IReportsService
     {
         return await _context.Purchases
             .Where(p => p.Date.Date == DateTime.Today)
+            .OrderByDescending(p => p.Date)
             .Select(p => new GetPurchaseDto(
                 p.Id,
                 p.Dealer.Name,
@@ -31,7 +32,6 @@ public class ReportsService : IReportsService
                 p.TransportationFees,
                 p.Tax
             ))
-            .OrderByDescending(p => p.Date)
             .ToListAsync();
     }
 
@@ -39,13 +39,13 @@ public class ReportsService : IReportsService
     {
         return await _context.Collections
             .Where(c => c.Date.Date == DateTime.Today)
+            .OrderByDescending(c => c.Date)
             .Select(c => new GetCollectionDto(
                 c.Id,
                 c.Client.Name,
                 c.Amount,
                 c.Date
             ))
-            .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
 
@@ -53,6 +53,7 @@ public class ReportsService : IReportsService
     {
         return await _context.Purchases
             .Where(p => p.DealerId == dealerId)
+            .OrderByDescending(p => p.Date)
             .Select(p => new GetPurchaseDto(
                 p.Id,
                 p.Dealer.Name,
@@ -65,7 +66,6 @@ public class ReportsService : IReportsService
                 p.TransportationFees,
                 p.Tax
             ))
-            .OrderByDescending(p => p.Date)
             .ToListAsync();
     }
 
@@ -73,23 +73,23 @@ public class ReportsService : IReportsService
     {
         return await _context.Collections
             .Where(c => c.ClientId == clientId)
+            .OrderByDescending(c => c.Date)
             .Select(c => new GetCollectionDto(
                 c.Id,
                 c.Client.Name,
                 c.Amount,
                 c.Date
             ))
-            .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<ClientBalanceDto>> GetBalanceStatementCombined()
+    public async Task<IEnumerable<ClientBalanceDto>> GetBalanceStatementCombined(DateTime date)
     {
         return await _context.Clients
             .Select(c => new ClientBalanceDto(
                 c.Name,
-                c.OutstandingBalance - c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total),
-                c.Orders.Where(o => o.Date == DateTime.Now.AddDays(-1).Date).Sum(o => o.Total)
+                c.OutstandingBalance - c.Orders.Where(o => o.Date >= date).Sum(o => o.Total),
+                c.Orders.Where(o => o.Date == date).Sum(o => o.Total)
             )).ToListAsync();
     }
 
