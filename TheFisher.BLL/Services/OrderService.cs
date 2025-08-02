@@ -33,6 +33,7 @@ public class OrderService(FisherDbContext context) : IOrderService
             // Create order
             var order = new Order
             {
+                Id = Ulid.NewUlid(),
                 ClientId = orderDto.ClientId,
                 ItemId = orderDto.ItemId,
                 Weight = orderDto.Weight,
@@ -59,7 +60,9 @@ public class OrderService(FisherDbContext context) : IOrderService
                 {
                     OrderId = order.Id,
                     PurchaseId = purchase.Id,
-                    WeightUsed = weightToUse
+                    WeightUsed = weightToUse,
+                    OrderShare = weightToUse * order.KiloPrice + (purchase.Tax ?? 0 / purchase.TotalWeight * weightToUse),
+                    SettledAmount = 0
                 };
                     
                 context.OrderPurchases.Add(orderPurchase);
@@ -115,7 +118,7 @@ public class OrderService(FisherDbContext context) : IOrderService
         return await context.Orders
             .Where(o => o.Date.Date == today)
             .OrderByDescending(o => o.Date)
-            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax, o.Total))
             .ToListAsync();    }
 
     public async Task<IEnumerable<GetOrderDto>> GetOrdersByClientAsync(int clientId)
@@ -125,7 +128,7 @@ public class OrderService(FisherDbContext context) : IOrderService
             .Include(o => o.Item)
             .Where(o => o.ClientId == clientId)
             .OrderByDescending(o => o.Date)
-            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
+            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax, o.Total))
             .ToListAsync();
     }
 
@@ -145,13 +148,5 @@ public class OrderService(FisherDbContext context) : IOrderService
     {
         var clients = await context.Clients.ToListAsync();
         return clients.Sum(c => c.OutstandingBalance);
-    }
-
-    public async Task<IEnumerable<GetOrderDto>> GetClientUnpaidOrdersAsync(int clientId)
-    {
-        return await context.Orders
-            .Where(o => o.ClientId == clientId && (o.KiloPrice * o.Weight) > o.Collected)
-            .Select(o => new GetOrderDto(o.Id, o.Client.Name, o.Item.Name, o.Weight, o.KiloPrice, o.Date, o.Tax))
-            .ToListAsync();
     }
 }

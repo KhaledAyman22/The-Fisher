@@ -12,11 +12,12 @@ public class    Order
     public DateTime Date { get; set; }
     public decimal Tax { get; set; }
     public decimal Collected { get; set; }
-    [NotMapped]
-    public decimal Total => Weight * KiloPrice + Tax;
+    public decimal Total { get; set; }
     public virtual Client Client { get; set; } = null!;
     public virtual Item Item { get; set; } = null!;
     public virtual ICollection<CollectionDetail> CollectionDetails { get; set; } = new List<CollectionDetail>();
     public virtual ICollection<OrderPurchase> OrderPurchases { get; set; } = new List<OrderPurchase>();
+
+    [NotMapped] public decimal Remaining => Total - Collected;
 }
 

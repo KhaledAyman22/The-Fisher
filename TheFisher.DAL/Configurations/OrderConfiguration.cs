@@ -15,8 +15,11 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasConversion(new UlidToStringConverter());
         
         builder.Property(o => o.Weight)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .IsRequired();
+        
+        builder.Property(o => o.Total)
+            .HasComputedColumnSql($"[{nameof(Order.KiloPrice)}] * [{nameof(Order.Weight)} + [{nameof(Order.Tax)}]", stored: false);
             
         builder.Property(o => o.KiloPrice)
             .HasColumnType("decimal(18,2)")

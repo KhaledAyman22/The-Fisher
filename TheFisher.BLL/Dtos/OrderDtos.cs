@@ -17,4 +17,5 @@ public record GetOrderDto(
     decimal Weight,
     decimal KiloPrice,
     DateTime Date,
-    decimal Tax);
+    decimal Tax,
+    decimal Total);

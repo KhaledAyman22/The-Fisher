@@ -159,7 +159,7 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<decimal>("CommissionedStock")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,3)")
+                        .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
                     b.Property<string>("Name")
@@ -169,7 +169,7 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<decimal>("Stock")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,3)")
+                        .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
                     b.HasKey("Id");
@@ -203,7 +203,7 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,3)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -224,7 +224,7 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<decimal>("WeightUsed")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,3)")
+                        .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
                     b.HasKey("OrderId", "PurchaseId");
@@ -259,7 +259,7 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<decimal>("TotalWeight")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,3)")
+                        .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
                     b.Property<decimal>("TransportationFees")
@@ -275,7 +275,7 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<decimal>("WeightAvailable")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,3)")
+                        .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
                     b.HasKey("Id");

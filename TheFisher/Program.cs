@@ -45,13 +45,13 @@ public static class Program
         services.AddDbContext<FisherDbContext>(ServiceLifetime.Transient);
 
         // Services
-        services.AddScoped<IOrderService, OrderService>();
-        services.AddScoped<IPurchaseService, PurchaseService>();
-        services.AddScoped<ICollectionService, CollectionService>();
-        services.AddScoped<IClientService, ClientService>();
-        services.AddScoped<IDealerService, DealerService>();
-        services.AddScoped<IItemService, ItemService>();
-        services.AddScoped<IReportsService, ReportsService>();
+        services.AddTransient<IOrderService, OrderService>();
+        services.AddTransient<IPurchaseService, PurchaseService>();
+        services.AddTransient<ICollectionService, CollectionService>();
+        services.AddTransient<IClientService, ClientService>();
+        services.AddTransient<IDealerService, DealerService>();
+        services.AddTransient<IItemService, ItemService>();
+        services.AddTransient<IReportsService, ReportsService>();
 
         // Forms
         services.AddTransient<MainForm>();

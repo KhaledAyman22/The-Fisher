@@ -33,13 +33,10 @@ namespace TheFisher
             datePicker = new DateTimePicker();
             saveButton = new Button();
             cancelButton = new Button();
-            ordersGridView = new DataGridView();
             clientLabel = new Label();
             amountLabel = new Label();
             dateLabel = new Label();
-            ordersLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)amountNumeric).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ordersGridView).BeginInit();
             SuspendLayout();
             // 
             // clientComboBox
@@ -51,7 +48,6 @@ namespace TheFisher
             clientComboBox.Name = "clientComboBox";
             clientComboBox.Size = new Size(190, 23);
             clientComboBox.TabIndex = 1;
-            clientComboBox.SelectedIndexChanged += ClientComboBox_SelectedIndexChanged;
             // 
             // amountNumeric
             // 
@@ -97,21 +93,6 @@ namespace TheFisher
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += CancelButton_Click;
             // 
-            // ordersGridView
-            // 
-            ordersGridView.AllowUserToAddRows = false;
-            ordersGridView.AllowUserToDeleteRows = false;
-            ordersGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            ordersGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            ordersGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ordersGridView.Location = new Point(78, 102);
-            ordersGridView.MultiSelect = false;
-            ordersGridView.Name = "ordersGridView";
-            ordersGridView.ReadOnly = true;
-            ordersGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            ordersGridView.Size = new Size(190, 100);
-            ordersGridView.TabIndex = 7;
-            // 
             // clientLabel
             // 
             clientLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -145,18 +126,6 @@ namespace TheFisher
             dateLabel.TabIndex = 4;
             dateLabel.Text = "التاريخ:";
             // 
-            // ordersLabel
-            // 
-            ordersLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            ordersLabel.AutoSize = true;
-            ordersLabel.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            ordersLabel.Location = new Point(29, 105);
-            ordersLabel.Name = "ordersLabel";
-            ordersLabel.RightToLeft = RightToLeft.Yes;
-            ordersLabel.Size = new Size(43, 16);
-            ordersLabel.TabIndex = 6;
-            ordersLabel.Text = "الطلبات:";
-            // 
             // CollectionForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -164,11 +133,9 @@ namespace TheFisher
             ClientSize = new Size(400, 270);
             Controls.Add(cancelButton);
             Controls.Add(saveButton);
-            Controls.Add(ordersLabel);
             Controls.Add(dateLabel);
             Controls.Add(amountLabel);
             Controls.Add(clientLabel);
-            Controls.Add(ordersGridView);
             Controls.Add(datePicker);
             Controls.Add(amountNumeric);
             Controls.Add(clientComboBox);
@@ -181,7 +148,6 @@ namespace TheFisher
             StartPosition = FormStartPosition.CenterParent;
             Text = "تحصيل جديد";
             ((System.ComponentModel.ISupportInitialize)amountNumeric).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ordersGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -193,10 +159,8 @@ namespace TheFisher
         private System.Windows.Forms.DateTimePicker datePicker;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.DataGridView ordersGridView;
         private System.Windows.Forms.Label clientLabel;
         private System.Windows.Forms.Label amountLabel;
         private System.Windows.Forms.Label dateLabel;
-        private System.Windows.Forms.Label ordersLabel;
     }
 } 

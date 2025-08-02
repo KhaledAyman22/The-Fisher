@@ -34,43 +34,18 @@ public partial class CollectionForm : Form
         }
     }
 
-    private async void ClientComboBox_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (clientComboBox.SelectedValue != null)
-        {
-            var selected = (ClientDropDownDto)clientComboBox.SelectedValue;
-            await LoadClientOrders(selected.Id);
-        }
-    }
+    // private async void ClientComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    // {
+    //     if (clientComboBox.SelectedItem is ClientDropDownDto selectedClient)
+    //     {
+    //         await LoadClientOrders(selectedClient.Id);
+    //     }
+    // }
 
     private void CancelButton_Click(object sender, EventArgs e)
     {
         this.DialogResult = DialogResult.Cancel;
         this.Close();
-    }
-
-    private async Task LoadClientOrders(int clientId)
-    {
-        try
-        {
-            var orders = await _orderService.GetClientUnpaidOrdersAsync(clientId);
-            ordersGridView.DataSource = orders;
-
-            // Add editable payment amount column
-            foreach (DataGridViewRow row in ordersGridView.Rows)
-            {
-                if (row.Cells["PaymentAmount"] != null)
-                {
-                    row.Cells["PaymentAmount"].Value = 0;
-                }
-            }
-
-            amountNumeric.Maximum = orders.Sum(o => o.Weight * o.KiloPrice);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error loading orders: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
     }
 
     private async void SaveButton_Click(object sender, EventArgs e)
@@ -89,24 +64,7 @@ public partial class CollectionForm : Form
 
         try
         {
-            var orderPayments = new List<OrderPaymentDto>();
             decimal totalPayments = 0;
-
-            foreach (DataGridViewRow row in ordersGridView.Rows)
-            {
-                if (row.Cells["Select"].Value is true && 
-                    decimal.TryParse(row.Cells["PaymentAmount"].Value?.ToString(), out decimal paymentAmount) && 
-                    paymentAmount > 0)
-                {
-                    var idValue = row.Cells["Id"].Value?.ToString();
-                    if (idValue != null)
-                    {
-                        var orderId = Ulid.Parse(idValue);
-                        orderPayments.Add(new OrderPaymentDto(orderId, paymentAmount));
-                        totalPayments += paymentAmount;
-                    }
-                }
-            }
 
             if (totalPayments != amountNumeric.Value)
             {
@@ -118,8 +76,7 @@ public partial class CollectionForm : Form
             var collectionDto = new CreateCollectionDto(
                 (int)clientComboBox.SelectedValue,
                 amountNumeric.Value,
-                datePicker.Value,
-                orderPayments
+                datePicker.Value
             );
 
             await _collectionService.CreateCollectionAsync(collectionDto);

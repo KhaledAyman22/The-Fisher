@@ -12,5 +12,4 @@ public interface IOrderService
     // Statistics methods for dashboard
     Task<decimal> GetCurrentMonthRevenueAsync();
     Task<decimal> GetMoneyClientsOweAsync();
-    Task<IEnumerable<GetOrderDto>> GetClientUnpaidOrdersAsync(int clientId);
 }

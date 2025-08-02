@@ -15,11 +15,11 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
             .HasMaxLength(100);
             
         builder.Property(i => i.Stock)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);
             
         builder.Property(i => i.CommissionedStock)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);
 
         builder.Property(i => i.AvgPricePerKg)

@@ -12,8 +12,8 @@ using TheFisher.DAL;
 namespace TheFisher.DAL.Migrations
 {
     [DbContext(typeof(FisherDbContext))]
-    [Migration("20250801205952_AddProfit")]
-    partial class AddProfit
+    [Migration("20250802114708_AddingColumns")]
+    partial class AddingColumns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -197,17 +197,18 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("KiloPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Weight")
-                        .ValueGeneratedOnAdd()
+                    b.Property<decimal>("Total")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
+                        .HasComputedColumnSql("[KiloPrice] * [Weight] + [Tax]", false);
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -225,6 +226,14 @@ namespace TheFisher.DAL.Migrations
 
                     b.Property<string>("PurchaseId")
                         .HasColumnType("nvarchar(26)");
+
+                    b.Property<decimal>("OrderShare")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SettledAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<decimal>("WeightUsed")
                         .ValueGeneratedOnAdd()
@@ -266,7 +275,7 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
-                    b.Property<decimal>("TransportationFees")
+                    b.Property<decimal?>("TransportationFees")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")

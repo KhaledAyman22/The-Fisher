@@ -58,8 +58,8 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Stock = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
-                    CommissionedStock = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    Stock = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    CommissionedStock = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     AvgPricePerKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
@@ -94,7 +94,7 @@ namespace TheFisher.DAL.Migrations
                     Id = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     KiloPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Tax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -126,8 +126,8 @@ namespace TheFisher.DAL.Migrations
                     ItemId = table.Column<int>(type: "int", nullable: false),
                     TotalUnits = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    TotalWeight = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
-                    WeightAvailable = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m),
+                    TotalWeight = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    WeightAvailable = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, defaultValue: "Commission"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CommissionPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -183,7 +183,7 @@ namespace TheFisher.DAL.Migrations
                 {
                     OrderId = table.Column<string>(type: "nvarchar(26)", nullable: false),
                     PurchaseId = table.Column<string>(type: "nvarchar(26)", nullable: false),
-                    WeightUsed = table.Column<decimal>(type: "decimal(18,3)", nullable: false, defaultValue: 0m)
+                    WeightUsed = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {

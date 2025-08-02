@@ -19,7 +19,7 @@ public class FisherDbContext : DbContext
     {
         // Remember to replace this with your actual connection string, 
         // perhaps from a configuration file.
-        optionsBuilder.UseSqlServer("Server=.;Database=TheFisher;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseSqlServer("Server=.;Database=TheFisher;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

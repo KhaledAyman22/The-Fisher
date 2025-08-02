@@ -28,12 +28,12 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
             .HasColumnType("decimal(18,2)");
             
         builder.Property(p => p.TotalWeight)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m)
             .IsRequired();
             
         builder.Property(p => p.WeightAvailable)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);
             
         builder.Property(p => p.Type)

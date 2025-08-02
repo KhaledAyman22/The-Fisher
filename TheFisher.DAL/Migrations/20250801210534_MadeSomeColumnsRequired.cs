@@ -11,10 +11,10 @@ namespace TheFisher.DAL.Migrations
             migrationBuilder.AlterColumn<decimal>(
                 name: "Weight",
                 table: "Orders",
-                type: "decimal(18,3)",
+                type: "decimal(18,2)",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(18,3)",
+                oldType: "decimal(18,2)",
                 oldDefaultValue: 0m);
 
             migrationBuilder.AlterColumn<decimal>(
@@ -32,11 +32,11 @@ namespace TheFisher.DAL.Migrations
             migrationBuilder.AlterColumn<decimal>(
                 name: "Weight",
                 table: "Orders",
-                type: "decimal(18,3)",
+                type: "decimal(18,2)",
                 nullable: false,
                 defaultValue: 0m,
                 oldClrType: typeof(decimal),
-                oldType: "decimal(18,3)");
+                oldType: "decimal(18,2)");
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "KiloPrice",

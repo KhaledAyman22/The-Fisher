@@ -19,8 +19,15 @@ public class OrderPurchaseConfiguration : IEntityTypeConfiguration<OrderPurchase
             .HasConversion(new UlidToStringConverter());
         
         builder.Property(op => op.WeightUsed)
-            .HasColumnType("decimal(18,3)")
+            .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);
+        
+        builder.Property(op => op.SettledAmount)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m);
+        
+        builder.Property(op => op.OrderShare)
+            .HasColumnType("decimal(18,2)");
             
         builder.HasOne(op => op.Order)
             .WithMany(o => o.OrderPurchases)
