@@ -64,7 +64,7 @@ public class CollectionService(FisherDbContext context, IOrderService orderServi
                             var taxSharePerSoldUnit = unpaidOrder.Tax / unpaidOrder.Weight;
                             var sellingPrice = unpaidOrder.KiloPrice * orderPurchase.WeightUsed + taxSharePerSoldUnit * orderPurchase.WeightUsed;
 
-                            orderProfit += sellingPrice * (100 - purchase.CommissionPercent!.Value) / 100;
+                            orderProfit += sellingPrice * purchase.CommissionPercent!.Value / 100;
                         }
                     }
                 }

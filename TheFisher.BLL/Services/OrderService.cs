@@ -61,7 +61,7 @@ public class OrderService(FisherDbContext context) : IOrderService
                     OrderId = order.Id,
                     PurchaseId = purchase.Id,
                     WeightUsed = weightToUse,
-                    OrderShare = weightToUse * order.KiloPrice + (purchase.Tax ?? 0 / purchase.TotalWeight * weightToUse),
+                    OrderShare = weightToUse * order.KiloPrice + (purchase.Tax ?? 0) / purchase.TotalWeight * weightToUse,
                     SettledAmount = 0
                 };
                     

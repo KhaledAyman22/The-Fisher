@@ -64,14 +64,7 @@ public partial class CollectionForm : Form
 
         try
         {
-            decimal totalPayments = 0;
-
-            if (totalPayments != amountNumeric.Value)
-            {
-                MessageBox.Show($"يجب أن يساوي إجمالي مبالغ الدفع ({totalPayments:C2}) مبلغ التحصيل ({amountNumeric.Value:C2}).", 
-                    "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            
 
             var collectionDto = new CreateCollectionDto(
                 (int)clientComboBox.SelectedValue,
