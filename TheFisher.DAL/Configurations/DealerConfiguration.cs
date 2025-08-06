@@ -13,7 +13,12 @@ public class DealerConfiguration : IEntityTypeConfiguration<Dealer>
         builder.Property(d => d.Name)
             .IsRequired()
             .HasMaxLength(100);
-            
+        
+        builder.Property(d => d.Type)
+            .HasConversion<string>()
+            .HasMaxLength(20)
+            .IsRequired();
+        
         builder.Property(d => d.OutstandingBalance)
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);

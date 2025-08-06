@@ -17,19 +17,10 @@ public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
         builder.Property(c => c.Amount)
             .HasColumnType("decimal(18,2)")
             .IsRequired();
-            
-        builder.Property(c => c.Profit)
-            .HasColumnType("decimal(18,2)")
-            .IsRequired();
         
         builder.HasOne(c => c.Client)
             .WithMany(cl => cl.Collections)
             .HasForeignKey(c => c.ClientId)
-            .OnDelete(DeleteBehavior.Restrict);
-            
-        builder.HasMany(c => c.CollectionDetails)
-            .WithOne(cd => cd.Collection)
-            .HasForeignKey(cd => cd.CollectionId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 } 

@@ -3,9 +3,9 @@ using TheFisher.DAL.Entities;
 
 namespace TheFisher.BLL.IServices;
 
-public interface IOrderService
+public interface ISalesService
 {
-    Task CreateOrderAsync(OrderCreateDto orderDto);
+    Task CreateDailySalesAsync(int clientId, List<SalesDto> sales);
     Task<IEnumerable<GetOrderDto>> GetTodaysOrdersAsync();
     Task<IEnumerable<GetOrderDto>> GetOrdersByClientAsync(int clientId);
     

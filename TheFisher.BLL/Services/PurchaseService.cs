@@ -9,77 +9,25 @@ namespace TheFisher.BLL.Services;
 
 public class PurchaseService(FisherDbContext context) : IPurchaseService
 {
-    public async Task<Purchase> CreatePurchaseAsync(PurchaseCreateDto purchaseCreateDto)
+    public async Task CreateDailyPurchasesAsync(List<PurchaseDto> purchases)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            var item = await context.Items.FindAsync(purchaseCreateDto.ItemId);
-            if (item == null)
+            foreach (var purchase in purchases)
             {
-                throw new Exception("Item not found");
-            }
-
-            var dealer = await context.Dealers.FindAsync(purchaseCreateDto.DealerId);
-            if (dealer == null)
-            {
-                throw new Exception("Dealer not found");
-            }
-            
-            var actualKiloPrice = purchaseCreateDto.KiloPrice;
-
-            if (purchaseCreateDto.Tax.HasValue)
-            {
-                actualKiloPrice = purchaseCreateDto.KiloPrice!.Value +
-                                  (purchaseCreateDto.Tax!.Value / purchaseCreateDto.TotalWeight);
-            }
-
-            var purchase = new Purchase
-            {
-                Id = Ulid.NewUlid(),
-                DealerId = purchaseCreateDto.DealerId,
-                ItemId = purchaseCreateDto.ItemId,
-                TotalUnits = purchaseCreateDto.TotalUnits,
-                UnitPrice = actualKiloPrice,
-                TotalWeight = purchaseCreateDto.TotalWeight,
-                WeightAvailable = purchaseCreateDto.TotalWeight,
-                Type = purchaseCreateDto.Type,
-                Date = purchaseCreateDto.Date,
-                Tax = purchaseCreateDto.Tax,
-                TransportationFees = purchaseCreateDto.TransportationFees,
-                CommissionPercent = purchaseCreateDto.CommissionPercent
-            };
-
-            await context.Purchases.AddAsync(purchase);
-            
-            dealer.OutstandingBalance -= purchaseCreateDto.TransportationFees?? 0;
-
-            if (purchaseCreateDto.Type == PurchaseType.Direct)
-            {
-                // Update average price (weighted average)
-                var totalValue = (item.Stock * item.AvgPricePerKg) +
-                                 (purchaseCreateDto.TotalWeight * actualKiloPrice!.Value);
-                var totalWeight = item.Stock + purchaseCreateDto.TotalWeight;
-
-                if (totalWeight > 0)
+                if (purchase.Id == Ulid.Empty)
                 {
-                    item.AvgPricePerKg = totalValue / totalWeight;
+                    await AddPurchase(purchase);
                 }
-
-                item.Stock += purchaseCreateDto.TotalWeight;
+                else
+                {
+                    await UpdatePurchase(purchase);
+                }
             }
-            else
-            {
-                item.CommissionedStock += purchaseCreateDto.TotalWeight;
-            }
-
-
-            context.Items.Update(item);
-            context.Dealers.Update(dealer);
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
-            return purchase;
         }
         catch
         {
@@ -88,33 +36,182 @@ public class PurchaseService(FisherDbContext context) : IPurchaseService
         }
     }
 
-    public async Task<IEnumerable<Purchase>> GetTodaysPurchasesAsync()
+    public async Task<IEnumerable<PurchaseDto>> GetPurchasesAsync(DateTime date, int dealerId)
     {
         var today = DateTime.Today;
         return await context.Purchases
-            .Include(p => p.Dealer)
-            .Include(p => p.Item)
-            .Where(p => p.Date.Date == today)
-            .OrderByDescending(p => p.Date)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Purchase>> GetPurchasesByDealerAsync(int dealerId)
-    {
-        return await context.Purchases
-            .Include(p => p.Dealer)
-            .Include(p => p.Item)
             .Where(p => p.DealerId == dealerId)
-            .OrderByDescending(p => p.Date)
+            .Where(p => p.Date.Date == today)
+            .Select(p => new PurchaseDto
+            {
+                Id = p.Id, 
+                DealerId = p.DealerId, 
+                DealerName = p.Dealer.Name, 
+                ItemId = p.ItemId, 
+                ItemName = p.Item.Name,
+                Boxes = p.Boxes,
+                UnitPrice = p.UnitPrice,
+                Units = p.Units, 
+                Date = p.Date, 
+                Tax = p.Tax,
+                TransportationFees = p.TransportationFees
+            })
             .ToListAsync();
     }
 
-    public async Task<decimal> GetMoneyOwedToDealersAsync()
+    private async Task AddPurchase(PurchaseDto purchase)
     {
-        var purchases = await context.Purchases
-            .Where(p => p.Type == PurchaseType.Direct && p.UnitPrice.HasValue)
-            .ToListAsync();
+        var item = await context.Items.FindAsync(purchase.ItemId);
+        if (item == null)
+        {
+            throw new Exception("Item not found");
+        }
 
-        return purchases.Sum(p => p.TotalWeight * p.UnitPrice!.Value);
+        var dealer = await context.Dealers.FindAsync(purchase.DealerId);
+        if (dealer == null)
+        {
+            throw new Exception("Dealer not found");
+        }
+
+        var dealerItem = await context.DealerItems.Where(di => di.DealerId == dealer.Id && di.ItemId == item.Id)
+                             .FirstOrDefaultAsync() ??
+                         new DealerItem()
+                         {
+                             DealerId = purchase.DealerId,
+                             ItemId = purchase.ItemId
+                         };
+
+        //TODO Check if required
+        dealer.OutstandingBalance -= purchase.TransportationFees ?? 0;
+
+        decimal actualKiloPrice = 0m;
+        if (purchase.UnitPrice.HasValue)
+        {
+            actualKiloPrice = purchase.UnitPrice.Value +
+                              (purchase.Tax!.Value / purchase.Units);
+        }
+
+        if (dealer.Type == PurchaseType.Direct)
+        {
+            item.AveragePrice = (item.AveragePrice * item.InHouseStock + actualKiloPrice * purchase.Units) /
+                                (item.InHouseStock + purchase.Units);
+
+            item.InHouseStock += purchase.Units;
+        }
+        else
+        {
+            dealerItem.CommissionedStock += purchase.Units;
+        }
+
+        var purchaseEntity = new Purchase
+        {
+            Id = Ulid.NewUlid(),
+            DealerId = purchase.DealerId,
+            ItemId = purchase.ItemId,
+            Boxes = purchase.Boxes,
+            UnitPrice = purchase.UnitPrice == null ? null : actualKiloPrice,
+            Units = purchase.Units,
+            Date = purchase.Date,
+            Tax = purchase.Tax,
+            TransportationFees = purchase.TransportationFees
+        };
+
+        await context.Purchases.AddAsync(purchaseEntity);
+        context.Items.Update(item);
+        context.Dealers.Update(dealer);
+    }
+
+    private async Task UpdatePurchase(PurchaseDto purchase)
+    {
+        var purchaseEntity =
+            await context.Purchases.FindAsync(purchase.Id) ?? throw new Exception("Purchase not found");
+
+        var newItem = await context.Items.FindAsync(purchase.ItemId) ?? throw new Exception("Item not found");
+
+        var oldItem = await context.Items.FindAsync(purchaseEntity.ItemId) ?? throw new Exception("Item not found");
+
+        var newDealer = await context.Dealers.FindAsync(purchase.DealerId) ?? throw new Exception("Dealer not found");
+
+        var oldDealer = await context.Dealers.FindAsync(purchaseEntity.DealerId) ??
+                        throw new Exception("Dealer not found");
+
+
+        var newDealerItem = await context.DealerItems.FindAsync(new { DealerId = newDealer.Id, ItemId = newItem.Id }) ??
+                            new DealerItem()
+                            {
+                                DealerId = purchase.DealerId,
+                                ItemId = purchase.ItemId
+                            };
+
+        var oldDealerItem = await context.DealerItems.FindAsync(new
+                                { DealerId = purchaseEntity.DealerId, ItemId = purchaseEntity.ItemId }) ??
+                            throw new Exception("Old dealer item not found");
+
+        decimal newActualKiloPrice = 0m, oldActualKiloPrice = 0m;
+        if (purchase.UnitPrice.HasValue)
+        {
+            newActualKiloPrice = purchase.UnitPrice.Value +
+                                 (purchase.Tax!.Value / purchase.Units);
+        }
+
+        if (purchaseEntity.UnitPrice.HasValue)
+        {
+            oldActualKiloPrice = purchaseEntity.UnitPrice.Value +
+                                 (purchaseEntity.Tax!.Value / purchaseEntity.Units);
+        }
+
+        //TODO Check if required
+        oldDealer.OutstandingBalance += purchaseEntity.TransportationFees ?? 0;
+        newDealer.OutstandingBalance -= purchase.TransportationFees ?? 0;
+
+        if (oldDealer.Type == PurchaseType.Direct)
+        {
+            var originalStock = oldItem.InHouseStock;
+            oldItem.InHouseStock -= purchaseEntity.Units;
+
+            var totalCostBefore = oldItem.AveragePrice * originalStock;
+            var removedCost = oldActualKiloPrice * purchaseEntity.Units;
+
+            var remainingStock = originalStock - purchaseEntity.Units;
+            if (remainingStock > 0)
+            {
+                oldItem.AveragePrice = (totalCostBefore - removedCost) / remainingStock;
+            }
+            else
+            {
+                oldItem.AveragePrice = 0;
+            }
+        }
+        else
+        {
+            oldDealerItem.CommissionedStock -= purchaseEntity.Units;
+        }
+
+        if (newDealer.Type == PurchaseType.Direct)
+        {
+            newItem.AveragePrice = (newItem.AveragePrice * newItem.InHouseStock + newActualKiloPrice * purchase.Units) /
+                                   (newItem.InHouseStock + purchase.Units);
+
+            newItem.InHouseStock += purchase.Units;
+        }
+        else
+        {
+            newDealerItem.CommissionedStock += purchase.Units;
+        }
+
+        purchaseEntity.DealerId = purchase.DealerId;
+        purchaseEntity.ItemId = purchase.ItemId;
+        purchaseEntity.Boxes = purchase.Boxes;
+        purchaseEntity.UnitPrice = purchase.UnitPrice == null ? null : newActualKiloPrice;
+        purchaseEntity.Units = purchase.Units;
+        purchaseEntity.Date = purchase.Date;
+        purchaseEntity.Tax = purchase.Tax;
+        purchaseEntity.TransportationFees = purchase.TransportationFees;
+
+        context.Purchases.Update(purchaseEntity);
+
+        context.Items.Update(newItem);
+        context.Dealers.Update(oldDealer);
+        context.Dealers.Update(newDealer);
     }
 }

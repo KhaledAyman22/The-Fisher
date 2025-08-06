@@ -5,13 +5,13 @@ namespace TheFisher;
 
 public partial class OrderForm : Form
 {
-    private readonly IOrderService _orderService;
+    private readonly ISalesService _salesService;
     private readonly IClientService _clientService;
     private readonly IItemService _itemService;
 
-    public OrderForm(IOrderService orderService, IClientService clientService, IItemService itemService)
+    public OrderForm(ISalesService salesService, IClientService clientService, IItemService itemService)
     {
-        _orderService = orderService;
+        _salesService = salesService;
         _clientService = clientService;
         _itemService = itemService;
         InitializeComponent();
@@ -82,19 +82,19 @@ public partial class OrderForm : Form
 
         try
         {
-            var orderDto = new OrderCreateDto(
-                (int)clientComboBox.SelectedValue,
-                (int)itemComboBox.SelectedValue,
-                weightNumeric.Value,
-                kiloPriceNumeric.Value,
-                datePicker.Value,
-                taxNumeric.Value
-            );
-
-            await _orderService.CreateOrderAsync(orderDto);
-            MessageBox.Show("تم حفظ الطلب بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            // var orderDto = new SalesDto(
+            //     (int)clientComboBox.SelectedValue,
+            //     (int)itemComboBox.SelectedValue,
+            //     weightNumeric.Value,
+            //     kiloPriceNumeric.Value,
+            //     datePicker.Value,
+            //     taxNumeric.Value
+            // );
+            //
+            // await _salesService.CreateDailySalesAsync(orderDto);
+            // MessageBox.Show("تم حفظ الطلب بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // this.DialogResult = DialogResult.OK;
+            // this.Close();
         }
         catch (Exception ex)
         {

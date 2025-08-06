@@ -52,7 +52,12 @@ public class DealerService : IDealerService
         if (dealer is null)
             throw new Exception("Dealer not found");
 
-        return new DealerDto(dealer.Id, dealer.Name, dealer.OutstandingBalance);
+        return new DealerDto
+        {
+            Id = dealer.Id,
+            Name = dealer.Name,
+            OutstandingBalance = dealer.OutstandingBalance
+        };
     }
 
     public async Task DeleteDealer(int id)
@@ -68,6 +73,7 @@ public class DealerService : IDealerService
 
     public async Task<IEnumerable<DealerDto>> GetAllDealersAsync()
     {
-        return await _context.Dealers.Select(d => new DealerDto(d.Id, d.Name, d.OutstandingBalance)).ToListAsync();
+        return await _context.Dealers.Select(d => new DealerDto
+            { Id = d.Id, Name = d.Name, OutstandingBalance = d.OutstandingBalance }).ToListAsync();
     }
-} 
+}

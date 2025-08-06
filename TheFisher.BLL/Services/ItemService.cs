@@ -25,9 +25,6 @@ public class ItemService : IItemService
         var item = new Item()
         {
             Name = name,
-            Stock = 0,
-            CommissionedStock = 0,
-            AvgPricePerKg = 0
         };
 
         _context.Items.Add(item);
@@ -52,7 +49,11 @@ public class ItemService : IItemService
         if (item is null)
             throw new Exception("Item not found");
 
-        return new ItemDto(item.Id, item.Name, item.Stock, item.CommissionedStock, item.AvgPricePerKg);
+        return new ItemDto
+        {
+         Id   = item.Id, 
+         Name = item.Name
+        };
     }
 
     public async Task DeleteItem(int id)
@@ -68,6 +69,9 @@ public class ItemService : IItemService
 
     public async Task<IEnumerable<ItemDto>> GetAllItemsAsync()
     {
-        return await _context.Items.Select(i => new ItemDto(i.Id, i.Name, i.Stock, i.CommissionedStock, i.AvgPricePerKg)).ToListAsync();
+        return await _context.Items.Select(i => new ItemDto{
+            Id   = i.Id, 
+            Name = i.Name
+        }).ToListAsync();
     }
 } 

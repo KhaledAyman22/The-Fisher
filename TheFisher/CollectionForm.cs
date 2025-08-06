@@ -7,13 +7,14 @@ public partial class CollectionForm : Form
 {
     private readonly ICollectionService _collectionService;
     private readonly IClientService _clientService;
-    private readonly IOrderService _orderService;
-
-    public CollectionForm(ICollectionService collectionService, IClientService clientService, IOrderService orderService)
+    private readonly ISalesService _salesService;
+    private List<ClientDto> clients;
+    
+    public CollectionForm(ICollectionService collectionService, IClientService clientService, ISalesService salesService)
     {
         _collectionService = collectionService;
         _clientService = clientService;
-        _orderService = orderService;
+        _salesService = salesService;
         InitializeComponent();
         
         LoadComboBoxes();
@@ -23,7 +24,7 @@ public partial class CollectionForm : Form
     {
         try
         {
-            var clients = await _clientService.GetClientsForDropDown();
+            clients = await _clientService.GetClients();
             clientComboBox.DataSource = clients;
             clientComboBox.DisplayMember = "Name";
             clientComboBox.ValueMember = "Id";
@@ -64,15 +65,23 @@ public partial class CollectionForm : Form
 
         try
         {
+            var client = (ClientDto)clientComboBox.SelectedItem;
+            var outstanding = clients.First(c => c.Id == client.Id).OutstandingBalance;
             
+            if (outstanding < amountNumeric.Value)
+            {
+                MessageBox.Show($"يجب أن يساوي إجمالي مبالغ الدفع ({outstanding:C2}) مبلغ التحصيل ({amountNumeric.Value:C2}).", 
+                    "خطأ في التحقق", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            var collectionDto = new CreateCollectionDto(
-                (int)clientComboBox.SelectedValue,
-                amountNumeric.Value,
-                datePicker.Value
-            );
-
-            await _collectionService.CreateCollectionAsync(collectionDto);
+            // var collectionDto = new CollectionDto(
+            //     client.Id,
+            //     amountNumeric.Value,
+            //     datePicker.Value
+            // );
+            //
+            // await _collectionService.CreateDailyCollectionsAsync(collectionDto);
             MessageBox.Show("تم حفظ التحصيل بنجاح!", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.DialogResult = DialogResult.OK;
             this.Close();

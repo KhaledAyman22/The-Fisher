@@ -7,100 +7,23 @@ using TheFisher.DAL.enums;
 
 namespace TheFisher.BLL.Services;
 
-public class CollectionService(FisherDbContext context, IOrderService orderService) : ICollectionService
+public class CollectionService(FisherDbContext context, ISalesService salesService) : ICollectionService
 {
-    public async Task CreateCollectionAsync(CreateCollectionDto createCollectionDto)
+    public async Task CreateDailyCollectionsAsync(List<CollectionDto> collections)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            var unpaidOrders = await context.Orders
-                .Include(o => o.OrderPurchases)
-                .ThenInclude(op => op.Purchase)
-                .Where(o => o.ClientId == createCollectionDto.ClientId && o.Total > o.Collected)
-                .OrderBy(o => o.Date)
-                .ToListAsync();
-
-            var profit = 0m;
-            var collectedAmount = createCollectionDto.Amount;
-            var collectionDetails = new List<CollectionDetail>();
-            
-            foreach (var unpaidOrder in unpaidOrders)
+            foreach (var collection in collections)
             {
-                var toPay = Math.Min(unpaidOrder.Remaining, collectedAmount);
-                var orderProfit = 0m;
-                
-                if(toPay == 0)
-                    break;
-                
-                collectedAmount -= toPay;
-                
-                foreach (var orderPurchase in unpaidOrder.OrderPurchases.OrderBy(op => op.Purchase.Date))
+                if (collection.Id == Ulid.Empty)
                 {
-                    var remainingAmount = orderPurchase.OrderShare - orderPurchase.SettledAmount;
-
-                    if (remainingAmount > 0)
-                    {
-                        var payPerPurchase = Math.Min(toPay, remainingAmount);
-                        orderPurchase.SettledAmount += payPerPurchase;
-
-                        toPay -= payPerPurchase;
-                        
-                        // calculate profit
-                        var purchase = orderPurchase.Purchase;
-                        if (purchase.Type == PurchaseType.Direct)
-                        {
-                            var taxSharePerBoughtUnit = purchase.Tax!.Value / purchase.TotalWeight;
-                            var cost = purchase.UnitPrice!.Value * orderPurchase.WeightUsed +
-                                       orderPurchase.WeightUsed * taxSharePerBoughtUnit;
-
-                            var taxSharePerSoldUnit = unpaidOrder.Tax / unpaidOrder.Weight;
-                            var sellingPrice = unpaidOrder.KiloPrice * orderPurchase.WeightUsed + taxSharePerSoldUnit * orderPurchase.WeightUsed;
-
-                            profit += sellingPrice - cost;
-                        }
-                        else
-                        {
-                            var taxSharePerSoldUnit = unpaidOrder.Tax / unpaidOrder.Weight;
-                            var sellingPrice = unpaidOrder.KiloPrice * orderPurchase.WeightUsed + taxSharePerSoldUnit * orderPurchase.WeightUsed;
-
-                            orderProfit += sellingPrice * purchase.CommissionPercent!.Value / 100;
-                        }
-                    }
+                    await AddCollection(collection);
                 }
-
-                profit += orderProfit;
-
-                var collectionDetail = new CollectionDetail()
+                else
                 {
-                    Id = Ulid.NewUlid(),
-                    Amount = toPay,
-                    Profit = orderProfit,
-                    OrderId = unpaidOrder.Id
-                };
-                collectionDetails.Add(collectionDetail);
-
-                unpaidOrder.Collected += toPay;
-            }
-
-            var collection = new Collection
-            {
-                Id = Ulid.NewUlid(),
-                ClientId = createCollectionDto.ClientId,
-                Amount = createCollectionDto.Amount,
-                Date = createCollectionDto.Date,
-                Profit = profit,
-                CollectionDetails = collectionDetails
-            };
-
-            await context.Collections.AddAsync(collection);
-
-            // Update client balance
-            var client = await context.Clients.FindAsync(createCollectionDto.ClientId);
-            if (client != null)
-            {
-                client.OutstandingBalance -= createCollectionDto.Amount;
-                context.Clients.Update(client);
+                    await UpdateCollection(collection);
+                }
             }
 
             await context.SaveChangesAsync();
@@ -113,36 +36,72 @@ public class CollectionService(FisherDbContext context, IOrderService orderServi
         }
     }
 
-    public async Task<IEnumerable<GetCollectionDto>> GetTodaysCollectionsAsync()
+    private async Task UpdateCollection(CollectionDto collection)
     {
-        var today = DateTime.Today;
-        return await context.Collections
-            .Include(c => c.Client)
-            .Where(c => c.Date.Date == today)
-            .OrderByDescending(c => c.Date)
-            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
-            .ToListAsync();
+        var client = await context.Clients.FindAsync(collection.ClientId);
+        if (client == null) throw new Exception("Client not found");
+
+        var collectionEntity = await context.Collections.FindAsync(collection.Id);
+        if (collectionEntity == null) throw new Exception("Collection not found");
+        
+        client.OutstandingBalance += collectionEntity.Amount;
+        client.OutstandingBalance -= collection.Amount;
+
+        collectionEntity.Amount = collection.Amount;
+        
+        context.Clients.Update(client);
+        context.Collections.Update(collectionEntity);
     }
 
-    public async Task<IEnumerable<GetCollectionDto>> GetCollectionsByClientAsync(int clientId)
+    private async Task AddCollection(CollectionDto collection)
     {
-        return await context.Collections
-            .Include(c => c.Client)
-            .Where(c => c.ClientId == clientId)
-            .OrderByDescending(c => c.Date)
-            .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
-            .ToListAsync();
+        var client = await context.Clients.FindAsync(collection.ClientId);
+        if (client == null) throw new Exception("Client not found");
+
+        client.OutstandingBalance -= collection.Amount;
+
+        var collectionEntity = new Collection
+        {
+            Id = Ulid.NewUlid(),
+            ClientId = collection.ClientId,
+            Amount = collection.Amount,
+            Date = collection.Date
+        };
+
+        context.Clients.Update(client);
+        await context.Collections.AddAsync(collectionEntity);
     }
 
-    public async Task<decimal> GetCurrentMonthCollectionsAsync()
-    {
-        var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
-
-        var collections = await context.Collections
-            .Where(c => c.Date >= startOfMonth && c.Date <= endOfMonth)
-            .ToListAsync();
-
-        return collections.Sum(c => c.Amount);
-    }
+    // public async Task<IEnumerable<GetCollectionDto>> GetTodaysCollectionsAsync()
+    // {
+    //     var today = DateTime.Today;
+    //     return await context.Collections
+    //         .Include(c => c.Client)
+    //         .Where(c => c.Date.Date == today)
+    //         .OrderByDescending(c => c.Date)
+    //         .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
+    //         .ToListAsync();
+    // }
+    //
+    // public async Task<IEnumerable<GetCollectionDto>> GetCollectionsByClientAsync(int clientId)
+    // {
+    //     return await context.Collections
+    //         .Include(c => c.Client)
+    //         .Where(c => c.ClientId == clientId)
+    //         .OrderByDescending(c => c.Date)
+    //         .Select(c => new GetCollectionDto(c.Id, c.Client.Name, c.Amount, c.Date))
+    //         .ToListAsync();
+    // }
+    //
+    // public async Task<decimal> GetCurrentMonthCollectionsAsync()
+    // {
+    //     var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+    //     var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+    //
+    //     var collections = await context.Collections
+    //         .Where(c => c.Date >= startOfMonth && c.Date <= endOfMonth)
+    //         .ToListAsync();
+    //
+    //     return collections.Sum(c => c.Amount);
+    // }
 }

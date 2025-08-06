@@ -59,42 +59,11 @@ namespace TheFisher.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.ToTable("Collections");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.CollectionDetail", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CollectionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollectionId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("CollectionDetails");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Dealer", b =>
@@ -115,31 +84,39 @@ namespace TheFisher.DAL.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Dealers");
                 });
 
-            modelBuilder.Entity("TheFisher.DAL.Entities.Expense", b =>
+            modelBuilder.Entity("TheFisher.DAL.Entities.DealerItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(26)");
+                    b.Property<int>("DealerId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CommissionedStock")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<decimal>("Stock")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
 
-                    b.Property<int>("ExpenseType")
-                        .HasColumnType("int");
+                    b.HasKey("DealerId", "ItemId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ItemId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("DealerItems");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Item", b =>
@@ -150,12 +127,12 @@ namespace TheFisher.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal>("AvgPricePerKg")
+                    b.Property<decimal>("AveragePrice")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
-                    b.Property<decimal>("CommissionedStock")
+                    b.Property<decimal>("InHouseStock")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
@@ -165,84 +142,9 @@ namespace TheFisher.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Stock")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
                     b.HasKey("Id");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.Order", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Collected")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("KiloPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Tax")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("[KiloPrice] * [Weight] + [Tax]", false);
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.OrderPurchase", b =>
-                {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<string>("PurchaseId")
-                        .HasColumnType("nvarchar(26)");
-
-                    b.Property<decimal>("OrderShare")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("SettledAmount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<decimal>("WeightUsed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
-                    b.HasKey("OrderId", "PurchaseId");
-
-                    b.HasIndex("PurchaseId");
-
-                    b.ToTable("OrderPurchases");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Purchase", b =>
@@ -250,8 +152,8 @@ namespace TheFisher.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(26)");
 
-                    b.Property<decimal?>("CommissionPercent")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Boxes")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -265,26 +167,13 @@ namespace TheFisher.DAL.Migrations
                     b.Property<decimal?>("Tax")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("TotalUnits")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalWeight")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m);
-
                     b.Property<decimal?>("TransportationFees")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal?>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("WeightAvailable")
+                    b.Property<decimal>("Units")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
@@ -298,6 +187,59 @@ namespace TheFisher.DAL.Migrations
                     b.ToTable("Purchases");
                 });
 
+            modelBuilder.Entity("TheFisher.DAL.Entities.Sale", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Collected")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<decimal>("CommissionPercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DealerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Profit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("decimal(18,2)")
+                        .HasComputedColumnSql("[UnitPrice] * [Units] + [Tax]", false);
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Units")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("DealerId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Sales");
+                });
+
             modelBuilder.Entity("TheFisher.DAL.Entities.Collection", b =>
                 {
                     b.HasOne("TheFisher.DAL.Entities.Client", "Client")
@@ -309,61 +251,23 @@ namespace TheFisher.DAL.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("TheFisher.DAL.Entities.CollectionDetail", b =>
+            modelBuilder.Entity("TheFisher.DAL.Entities.DealerItem", b =>
                 {
-                    b.HasOne("TheFisher.DAL.Entities.Collection", "Collection")
-                        .WithMany("CollectionDetails")
-                        .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TheFisher.DAL.Entities.Order", "Order")
-                        .WithMany("CollectionDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Collection");
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.Order", b =>
-                {
-                    b.HasOne("TheFisher.DAL.Entities.Client", "Client")
-                        .WithMany("Orders")
-                        .HasForeignKey("ClientId")
+                    b.HasOne("TheFisher.DAL.Entities.Dealer", "Dealer")
+                        .WithMany("DealerItems")
+                        .HasForeignKey("DealerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TheFisher.DAL.Entities.Item", "Item")
-                        .WithMany("Orders")
+                        .WithMany("DealerItems")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Dealer");
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.OrderPurchase", b =>
-                {
-                    b.HasOne("TheFisher.DAL.Entities.Order", "Order")
-                        .WithMany("OrderPurchases")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TheFisher.DAL.Entities.Purchase", "Purchase")
-                        .WithMany("OrderPurchases")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Purchase");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Purchase", b =>
@@ -385,40 +289,56 @@ namespace TheFisher.DAL.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("TheFisher.DAL.Entities.Sale", b =>
+                {
+                    b.HasOne("TheFisher.DAL.Entities.Client", "Client")
+                        .WithMany("Sales")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TheFisher.DAL.Entities.Dealer", "Dealer")
+                        .WithMany("Sales")
+                        .HasForeignKey("DealerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TheFisher.DAL.Entities.Item", "Item")
+                        .WithMany("Orders")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Dealer");
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("TheFisher.DAL.Entities.Client", b =>
                 {
                     b.Navigation("Collections");
 
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.Collection", b =>
-                {
-                    b.Navigation("CollectionDetails");
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Dealer", b =>
                 {
+                    b.Navigation("DealerItems");
+
                     b.Navigation("Purchases");
+
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("TheFisher.DAL.Entities.Item", b =>
                 {
+                    b.Navigation("DealerItems");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Purchases");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.Order", b =>
-                {
-                    b.Navigation("CollectionDetails");
-
-                    b.Navigation("OrderPurchases");
-                });
-
-            modelBuilder.Entity("TheFisher.DAL.Entities.Purchase", b =>
-                {
-                    b.Navigation("OrderPurchases");
                 });
 #pragma warning restore 612, 618
         }

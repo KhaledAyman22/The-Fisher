@@ -108,12 +108,12 @@ public partial class ItemsForm : Form
 
     private void DataGridView_SelectionChanged(object sender, EventArgs e)
     {
-        if (dataGridView.CurrentRow?.DataBoundItem is ItemDto selectedItem)
-        {
-            nameTextBox.Text = selectedItem.Name;
-            stockNumeric.Value = selectedItem.Stock;
-            priceNumeric.Value = selectedItem.AvgPricePerKg;
-        }
+        // if (dataGridView.CurrentRow?.DataBoundItem is ItemDto selectedItem)
+        // {
+        //     nameTextBox.Text = selectedItem.Name;
+        //     stockNumeric.Value = selectedItem.Stock;
+        //     priceNumeric.Value = selectedItem.AvgPricePerKg;
+        // }
     }
 
     private void ClearInputs()

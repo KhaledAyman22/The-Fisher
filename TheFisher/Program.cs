@@ -45,7 +45,7 @@ public static class Program
         services.AddDbContext<FisherDbContext>(ServiceLifetime.Transient);
 
         // Services
-        services.AddTransient<IOrderService, OrderService>();
+        services.AddTransient<ISalesService, SalesService>();
         services.AddTransient<IPurchaseService, PurchaseService>();
         services.AddTransient<ICollectionService, CollectionService>();
         services.AddTransient<IClientService, ClientService>();

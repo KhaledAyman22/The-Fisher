@@ -14,18 +14,17 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
             .IsRequired()
             .HasMaxLength(100);
             
-        builder.Property(i => i.Stock)
+        builder.Property(i => i.InHouseStock)
             .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
-            
-        builder.Property(i => i.CommissionedStock)
+            .HasDefaultValue(0)
+            .IsRequired();            
+        
+               
+        builder.Property(i => i.AveragePrice)
             .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
-
-        builder.Property(i => i.AvgPricePerKg)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
-            
+            .HasDefaultValue(0)
+            .IsRequired();            
+        
         builder.HasMany(i => i.Orders)
             .WithOne(o => o.Item)
             .HasForeignKey(o => o.ItemId)

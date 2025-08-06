@@ -20,20 +20,20 @@ public partial class ReportsForm : Form
     {
         try
         {
-            if (_reportType.Contains("by Dealer"))
-            {
-                var dealers = await _reportsService.GetDealersForFilterAsync();
-                filterComboBox.DataSource = dealers;
-                filterComboBox.DisplayMember = "Name";
-                filterComboBox.ValueMember = "Id";
-            }
-            else if (_reportType.Contains("by Client"))
-            {
-                var clients = await _reportsService.GetClientsForFilterAsync();
-                filterComboBox.DataSource = clients;
-                filterComboBox.DisplayMember = "Name";
-                filterComboBox.ValueMember = "Id";
-            }
+            // if (_reportType.Contains("by Dealer"))
+            // {
+            //     var dealers = await _reportsService.GetDealersForFilterAsync();
+            //     filterComboBox.DataSource = dealers;
+            //     filterComboBox.DisplayMember = "Name";
+            //     filterComboBox.ValueMember = "Id";
+            // }
+            // else if (_reportType.Contains("by Client"))
+            // {
+            //     var clients = await _reportsService.GetClientsForFilterAsync();
+            //     filterComboBox.DataSource = clients;
+            //     filterComboBox.DisplayMember = "Name";
+            //     filterComboBox.ValueMember = "Id";
+            // }
         }
         catch (Exception ex)
         {
@@ -47,30 +47,30 @@ public partial class ReportsForm : Form
         {
             object dataSource = null;
 
-            switch (_reportType)
-            {
-                case "Today's Purchases":
-                    dataSource = await _reportsService.GetTodaysPurchasesAsync();
-                    break;
-
-                case "Today's Collections":
-                    dataSource = await _reportsService.GetTodaysCollectionsAsync();
-                    break;
-
-                case "Purchases by Dealer":
-                    if (filterComboBox?.SelectedValue != null)
-                    {
-                        dataSource = await _reportsService.GetPurchasesByDealerAsync((int)filterComboBox.SelectedValue);
-                    }
-                    break;
-
-                case "Collections by Client":
-                    if (filterComboBox?.SelectedValue != null)
-                    {
-                        dataSource = await _reportsService.GetCollectionsByClientAsync((int)filterComboBox.SelectedValue);
-                    }
-                    break;
-            }
+            // switch (_reportType)
+            // {
+            //     case "Today's Purchases":
+            //         dataSource = await _reportsService.GetTodaysPurchasesAsync();
+            //         break;
+            //
+            //     case "Today's Collections":
+            //         dataSource = await _reportsService.GetTodaysCollectionsAsync();
+            //         break;
+            //
+            //     case "Purchases by Dealer":
+            //         if (filterComboBox?.SelectedValue != null)
+            //         {
+            //             dataSource = await _reportsService.GetPurchasesByDealerAsync((int)filterComboBox.SelectedValue);
+            //         }
+            //         break;
+            //
+            //     case "Collections by Client":
+            //         if (filterComboBox?.SelectedValue != null)
+            //         {
+            //             dataSource = await _reportsService.GetCollectionsByClientAsync((int)filterComboBox.SelectedValue);
+            //         }
+            //         break;
+            // }
 
             dataGridView.DataSource = dataSource;
                 

@@ -5,10 +5,6 @@ namespace TheFisher.BLL.IServices;
 
 public interface IPurchaseService
 {
-    Task<Purchase> CreatePurchaseAsync(PurchaseCreateDto purchaseCreateDto);
-    Task<IEnumerable<Purchase>> GetTodaysPurchasesAsync();
-    Task<IEnumerable<Purchase>> GetPurchasesByDealerAsync(int dealerId);
-    
-    // Statistics methods for dashboard
-    Task<decimal> GetMoneyOwedToDealersAsync();
+    Task CreateDailyPurchasesAsync(List<PurchaseDto> purchases);
+    Task<IEnumerable<PurchaseDto>> GetPurchasesAsync(DateTime date, int dealerId);
 }

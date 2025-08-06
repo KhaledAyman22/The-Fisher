@@ -6,6 +6,6 @@ public class Client
     public string Name { get; set; } = string.Empty;
     public decimal OutstandingBalance { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
     public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 }

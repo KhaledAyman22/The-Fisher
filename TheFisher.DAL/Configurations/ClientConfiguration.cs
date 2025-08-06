@@ -18,7 +18,7 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m);
             
-        builder.HasMany(c => c.Orders)
+        builder.HasMany(c => c.Sales)
             .WithOne(o => o.Client)
             .HasForeignKey(o => o.ClientId)
             .OnDelete(DeleteBehavior.Restrict);

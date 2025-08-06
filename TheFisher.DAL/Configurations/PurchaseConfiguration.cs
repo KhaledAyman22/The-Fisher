@@ -18,27 +18,15 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.Property(p => p.UnitPrice)
             .HasColumnType("decimal(18,2)");
         
-        builder.Property(p => p.CommissionPercent)
-            .HasColumnType("decimal(18,2)");
-        
         builder.Property(p => p.TransportationFees)
             .HasColumnType("decimal(18,2)");
         
         builder.Property(p => p.Tax)
             .HasColumnType("decimal(18,2)");
             
-        builder.Property(p => p.TotalWeight)
+        builder.Property(p => p.Units)
             .HasColumnType("decimal(18,2)")
             .HasDefaultValue(0m)
-            .IsRequired();
-            
-        builder.Property(p => p.WeightAvailable)
-            .HasColumnType("decimal(18,2)")
-            .HasDefaultValue(0m);
-            
-        builder.Property(p => p.Type)
-            .HasConversion<string>()
-            .HasMaxLength(20)
             .IsRequired();
             
         builder.HasOne(p => p.Dealer)
@@ -49,11 +37,6 @@ public class PurchaseConfiguration : IEntityTypeConfiguration<Purchase>
         builder.HasOne(p => p.Item)
             .WithMany(i => i.Purchases)
             .HasForeignKey(p => p.ItemId)
-            .OnDelete(DeleteBehavior.Restrict);
-            
-        builder.HasMany(p => p.OrderPurchases)
-            .WithOne(op => op.Purchase)
-            .HasForeignKey(op => op.PurchaseId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 } 

@@ -4,10 +4,12 @@ public class Item
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public decimal Stock { get; set; }
-    public decimal CommissionedStock { get; set; }
-    public decimal AvgPricePerKg { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public decimal InHouseStock { get; set; }
+
+    public decimal AveragePrice { get; set; }
+
+    public virtual ICollection<Sale> Orders { get; set; } = new List<Sale>();
     public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+    public virtual ICollection<DealerItem> DealerItems { get; set; } = new List<DealerItem>();
 }

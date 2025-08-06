@@ -8,18 +8,18 @@ namespace TheFisher;
 public partial class MainForm : Form
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IOrderService _orderService;
+    private readonly ISalesService _salesService;
     private readonly IPurchaseService _purchaseService;
     private readonly ICollectionService _collectionService;
 
     // Dashboard controls
     private System.Windows.Forms.Timer _refreshTimer = null!;
 
-    public MainForm(IServiceProvider serviceProvider, IOrderService orderService, IPurchaseService purchaseService, ICollectionService collectionService)
+    public MainForm(IServiceProvider serviceProvider, ISalesService salesService, IPurchaseService purchaseService, ICollectionService collectionService)
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
-        _orderService = orderService;
+        _salesService = salesService;
         _purchaseService = purchaseService;
         _collectionService = collectionService;
 
@@ -80,23 +80,23 @@ public partial class MainForm : Form
     {
         try
         {
-            // Update date
-            dateLabel.Text = $"اليوم: {DateTime.Now:dddd، MMMM dd، yyyy}";
-
-            // Load statistics sequentially to avoid connection conflicts
-            var revenue = await _orderService.GetCurrentMonthRevenueAsync();
-            var dealers = await _purchaseService.GetMoneyOwedToDealersAsync();
-            var clients = await _orderService.GetMoneyClientsOweAsync();
-            var collections = await _collectionService.GetCurrentMonthCollectionsAsync();
-
-            // Update labels on UI thread
-            this.Invoke(() =>
-            {
-                revenueLabel.Text = $"${revenue:N2}";
-                owedToDealersLabel.Text = $"${dealers:N2}";
-                clientsOweLabel.Text = $"${clients:N2}";
-                collectionsLabel.Text = $"${collections:N2}";
-            });
+            // // Update date
+            // dateLabel.Text = $"اليوم: {DateTime.Now:dddd، MMMM dd، yyyy}";
+            //
+            // // Load statistics sequentially to avoid connection conflicts
+            // var revenue = await _salesService.GetCurrentMonthRevenueAsync();
+            // var dealers = await _purchaseService.GetMoneyOwedToDealersAsync();
+            // var clients = await _salesService.GetMoneyClientsOweAsync();
+            // var collections = await _collectionService.GetCurrentMonthCollectionsAsync();
+            //
+            // // Update labels on UI thread
+            // this.Invoke(() =>
+            // {
+            //     revenueLabel.Text = $"${revenue:N2}";
+            //     owedToDealersLabel.Text = $"${dealers:N2}";
+            //     clientsOweLabel.Text = $"${clients:N2}";
+            //     collectionsLabel.Text = $"${collections:N2}";
+            // });
         }
         catch (Exception ex)
         {
@@ -130,7 +130,8 @@ public partial class MainForm : Form
         var form = new PurchaseForm(
             _serviceProvider.GetRequiredService<IPurchaseService>(),
             _serviceProvider.GetRequiredService<IDealerService>(),
-            _serviceProvider.GetRequiredService<IItemService>()
+            _serviceProvider.GetRequiredService<IItemService>(),
+            _serviceProvider.GetRequiredService<IClientService>()
         );
         form.ShowDialog();
         LoadStatistics();
@@ -139,7 +140,7 @@ public partial class MainForm : Form
     private void ShowOrderForm(object? sender, EventArgs e)
     {
         var form = new OrderForm(
-            _serviceProvider.GetRequiredService<IOrderService>(),
+            _serviceProvider.GetRequiredService<ISalesService>(),
             _serviceProvider.GetRequiredService<IClientService>(),
             _serviceProvider.GetRequiredService<IItemService>()
         );
@@ -152,7 +153,7 @@ public partial class MainForm : Form
         var form = new CollectionForm(
             _serviceProvider.GetRequiredService<ICollectionService>(),
             _serviceProvider.GetRequiredService<IClientService>(),
-            _serviceProvider.GetRequiredService<IOrderService>()
+            _serviceProvider.GetRequiredService<ISalesService>()
         );
         form.ShowDialog();
         LoadStatistics();
